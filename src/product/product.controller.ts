@@ -5,16 +5,18 @@ import {
 	HttpStatus, 
 	Param, 
 	Body, 
-	Post, 
-	Request, 
+	Post,
 	Patch, 
-	Delete
+	Delete,
+	UseGuards
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('products')
+@UseGuards(JwtAuthGuard)
 @Controller('products')
 export class ProductController {
 	constructor(private readonly productService: ProductService){}
@@ -25,13 +27,15 @@ export class ProductController {
 	 * @access  Public
 	 */
 	@Post()
+	
 	@ApiOperation({ summary: 'Create new product' })
 	@ApiResponse({ status: 403, description: 'forbidden' })
 	async create(@Response() res, @Body() productDto: ProductDto) {
 		const product = await this.productService.create(productDto);
 		return res.status(HttpStatus.CREATED).json({
+			statusCode: HttpStatus.CREATED,
 			message: 'The Product has been successfully created.',
-			product
+			data: product
 		});
 	}
 
@@ -41,13 +45,18 @@ export class ProductController {
 	 * @access  Public
 	 */
 	@Get()
+	
 	@ApiResponse({
-	       status: 200,
+	       status: HttpStatus.OK,
 	       description: 'Get all product' 
 	})
 	async findAll(@Response() res) {
 		const product = await this.productService.findAll();
-		return res.status(HttpStatus.OK).json(product);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success get products`,
+			data: product
+		});
 	}
 
 	/**
@@ -56,14 +65,19 @@ export class ProductController {
          * @access   Public
 	 **/
 	@Get('find')
+	
 	@ApiResponse({
-		status: 200,
+		status: HttpStatus.OK,
 		description: 'Get product by condition(filter)'
 	})
-	async find(@Response() res, @Body() body){
+	async findOne(@Response() res, @Body() body){
 		const filter = body;
 		const product = await this.productService.findOne(filter);
-		return res.status(HttpStatus.OK).json(product);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success get product`,
+			data: product
+		});
 	}
 
 	/**
@@ -72,13 +86,18 @@ export class ProductController {
 	 * @access   Public
 	 */
 	 @Get(':id')
+	 
 	 @ApiResponse({
-		 status: 200,
+		 status: HttpStatus.OK,
 		 description: 'Get product by ID'
 	 })
-	 async findById(@Response() res, @Param() param)  {
-		const product = await this.productService.findById(param.id);
-		return res.status(HttpStatus.OK).json(product);
+	 async findById(@Param('id') id: string, @Response() res)  {
+		const product = await this.productService.findById(id);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success get product by id ${id}`,
+			data: product
+		});
 	 }
 	
 	 /**
@@ -87,17 +106,22 @@ export class ProductController {
 	  * @access  Public
 	  **/
 	  @Patch(':id')
+	  
 	  @ApiResponse({ 
-		  status: 200,
+		  status: HttpStatus.OK,
 		  description: 'Update product'
 	  })
 	  async update(
-		  @Param() param,
+		  @Param('id') id: string,
 		  @Response() res,
-		  @Body() body
+		  @Body() newProductDto: ProductDto
 	  ){
-	  	const product = this.productService.update(param.id, body);
-		return res.status(HttpStatus.OK).json(product);
+	  	const product = await this.productService.update(id, newProductDto);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: 'The Product has been successfully updated.',
+			data: product
+		});
 	  }
 
 	  /**
@@ -106,12 +130,19 @@ export class ProductController {
 	   * @access  Public
 	   **/
 	  @Delete(':id')
+	  
 	  @ApiResponse({ 
-		  status: 200,
+		  status: HttpStatus.OK,
 		  description: 'Delete product' 
 	  })
-	  async delete(@Param() param, @Response() res){
-	  	const product = await this.productService.delete(param.id);
-		return res.status(HttpStatus.OK).json(product);
+	  async delete(@Param('id') id: string, @Response() res){
+		const product = await this.productService.delete(id);
+		
+		if (product == 'ok') {
+			return res.status(HttpStatus.OK).json({
+				statusCode: HttpStatus.OK,
+				message: `Success remove product by id ${id}`
+			});
+		}
 	  }
 }

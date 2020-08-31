@@ -12,4 +12,4 @@ export const ProductSchema = new mongoose.Schema({
     created_by: {type: String},
     updated_at: {type: Date},
     updated_by: {type: String},
-});
+},{ versionKey: false });

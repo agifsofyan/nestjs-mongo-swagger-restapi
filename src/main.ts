@@ -1,12 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+// import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
-	//app.useGlobalPipes(new ValidationPipe());
+	app.enableCors({
+		origin: "*",
+		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		allowedHeaders: "Content-Type, Accept",
+	});
+
+	// app.useGlobalPipes(new ValidationPipe());
 	app.setGlobalPrefix('/api/v1')
 
 	const options = new DocumentBuilder()
@@ -16,12 +22,8 @@ async function bootstrap() {
 		.addTag('API')
 		.build();
 
-	const document = SwaggerModule.createDocument(app, options, {
-		include: [
-			AppModule
-		]
-	});
-	SwaggerModule.setup('api', app, document);
+	const document = SwaggerModule.createDocument(app, options);
+	SwaggerModule.setup('api/doc', app, document);
 
 	const PORT = process.env.PORT || 3000;
 

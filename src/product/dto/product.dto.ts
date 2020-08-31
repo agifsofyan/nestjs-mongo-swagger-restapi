@@ -7,6 +7,8 @@ import {
     Min
 } from 'class-validator';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { IsDate } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class ProductDto {
    // ID
@@ -81,6 +83,8 @@ export class ProductDto {
 
     // Created At
     @ApiProperty()
+    @Type(() => Date)
+    @IsDate()
     readonly created_at: Date;
 
     // Created By
@@ -89,6 +93,8 @@ export class ProductDto {
 
     // Updated At
     @ApiProperty()
+    @Type(() => Date)
+    @IsDate()
     readonly updated_at: Date;
 
     // Updated By

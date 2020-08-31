@@ -24,24 +24,35 @@ export class ProductService {
 		try{
 		    result = await this.productModel.findById(id);
 		}catch(error){
-		    throw new NotFoundException('Could not find product');
+		    throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 
 		if(!result){
-			throw new NotFoundException('Could not find product');
+			throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 
 		return result;
 	}
 
 	async findOne(options: object): Promise<IProduct> {
-		return await this.productModel.findOne(options).exec();
+		const product = await this.productModel.findOne(options).exec();
+
+		if(!product){
+			throw new NotFoundException(`Could nod find product with your condition`);
+		}
+
+		return product;
 	}
 
 	async update(id: string, newProduct: ProductDto): Promise<IProduct> {
-		const product = await this.productModel.findById(id).exec();
+		let result;
+		try{
+		    result = await this.productModel.findById(id);
+		}catch(error){
+		    throw new NotFoundException(`Could nod find product with id ${id}`);
+		}
 
-		if(!product._id){
+		if(!result){
 			throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 
@@ -52,7 +63,7 @@ export class ProductService {
 	async delete(id: string): Promise<string> {
 		try{
 			await this.productModel.findByIdAndRemove(id).exec();
-			return 'The product has been deleted';
+			return 'ok';
 		}catch(err){
 			throw new NotImplementedException('The product could not be deleted');
 		}

@@ -20,3 +20,7 @@ export const Connection = MongooseModule.forRoot(uri, {
 	useFindAndModify: false,
 	useUnifiedTopology: true,
 });
+
+export const jwtSecret = process.env.JWT_SECRET
+
+export const jwtExp = `${process.env.JWT_EXPIRED}d` //in days

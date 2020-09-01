@@ -19,7 +19,8 @@ export const UsersSchema = new mongoose.Schema({
     },
     roles: {
         type: String, 
-        required: true
+        required: true,
+        enum: [ "admin", "mentor", "root" ]
     },
     created_at: {
         type: Date,

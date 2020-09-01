@@ -3,7 +3,8 @@ import * as mongoose from 'mongoose';
 export const ProductSchema = new mongoose.Schema({
     type: {type: 
         String, 
-        required: true
+        required: true,
+        enum: [ "webinar", "digital", "ecommerce", "bonus" ]
     },
     name: {
         type: String, 

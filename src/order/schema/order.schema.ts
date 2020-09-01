@@ -7,7 +7,8 @@ export const OrderSchema = new mongoose.Schema({
     },
     type: {
         type: String, 
-        required: true
+        required: true,
+        enum: [ "wa", "web" ]
     },
     qty: {
         type: Number, 
@@ -19,7 +20,8 @@ export const OrderSchema = new mongoose.Schema({
     },
     payment_status: {
         type: String, 
-        required: true
+        required: true,
+        enum: [ "paid", "unpaid" ]
     },
     paid_at: {
         type: Date

@@ -14,7 +14,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 
-@ApiTags('users')
+@ApiTags('Users')
 @UseGuards(RolesGuard)
 @Controller('users')
 export class UsersController {
@@ -27,8 +27,8 @@ export class UsersController {
 	 */
     @Post()
     @UseGuards(AuthGuard('jwt'))
-	@Roles('administrator')
-	@ApiOperation({ summary: 'Create new product' })
+	@Roles('Administrator')
+	@ApiOperation({ summary: 'Create new user' })
 	@ApiHeader({
         name: 'Bearer',
         description: 'Authentication token.'

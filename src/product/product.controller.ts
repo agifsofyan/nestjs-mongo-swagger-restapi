@@ -17,7 +17,7 @@ import { ApiTags, ApiOperation, ApiHeader } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
-@ApiTags('products')
+@ApiTags('Products')
 @UseGuards(RolesGuard)
 @Controller('products')
 export class ProductController {
@@ -31,7 +31,7 @@ export class ProductController {
 	@Post()
 	
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('administrator')
+	@Roles('Administrator')
 	@ApiOperation({ summary: 'Create new product' })
 	@ApiHeader({
         name: 'Bearer',
@@ -119,7 +119,7 @@ export class ProductController {
 	@Patch(':id')
 	
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('administrator')
+	@Roles('Administrator')
 	@ApiOperation({ summary: 'Update product by id' })
 	@ApiHeader({
 		name: 'Bearer',
@@ -150,7 +150,7 @@ export class ProductController {
 	@Delete(':id')
 
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('administrator')
+	@Roles('Administrator')
 	@ApiOperation({ summary: 'Delete product' })
 	@ApiHeader({
 		name: 'Bearer',

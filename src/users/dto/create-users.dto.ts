@@ -1,30 +1,27 @@
 import {
     IsNotEmpty,
     MinLength,
-    IsNumber,
     IsString,
-    Min,
-    Max
+    MaxLength,
+    IsEmail
 } from 'class-validator';
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { IsDate } from 'class-validator';
-import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class UsersDto {
-   // ID
-   @ApiHideProperty()
-   readonly _id: number;
+export class CreateUsersDTO {
+    // ID
+    // @ApiHideProperty()
+    // readonly _id: number;
 
-   // Username
+    // Name
     @ApiProperty({
         example: 'Dinda',
-        description: 'Username',
+        description: 'Name',
         format: 'string'
     })
     @IsNotEmpty()
     @IsString()
     @MinLength(4)
-	readonly username: string;
+	readonly name: string;
 
     // Email
     @ApiProperty({
@@ -34,20 +31,20 @@ export class UsersDto {
     })
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @IsEmail()
     readonly email: string;
 
     // No Hp
     @ApiProperty({
         example: '08989900272',
-        description: 'No Hp',
+        description: 'Phone Number',
         format: 'number'
     })
     @IsNotEmpty()
-    @IsNumber()
-    @Min(9)
-    @Max(13)
-    readonly nohp: string;
+    @IsString()
+    @MinLength(9)
+    @MaxLength(13)
+    readonly phone_number: string;
 
     // Password
     @ApiProperty({
@@ -59,19 +56,4 @@ export class UsersDto {
     @IsString()
     @MinLength(6)
     readonly password: string;
-
-    // Roles
-    @ApiProperty({
-        example: 'admin',
-        description: 'Roles',
-        format: 'string'
-    })
-    @IsString()
-    readonly roles: string;
-
-    // Created At
-    @ApiProperty()
-    @Type(() => Date)
-    @IsDate()
-    readonly created_at: Date;
 }

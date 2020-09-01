@@ -1,32 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { 
+    Injectable, 
+    BadRequestException 
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
-export type User = any;
+import { CreateUsersDTO } from './dto/create-users.dto';
+import { IUser } from './interface/users.interface';
 
 @Injectable()
 export class UsersService {
-    private readonly users: User[];
+    constructor(@InjectModel('User') private readonly userModel: Model<IUser>) {}
 
-    constructor() {
-        this.users = [
-            {
-            userId: 1,
-            username: 'john',
-            password: 'changeme',
-            },
-            {
-            userId: 2,
-            username: 'chris',
-            password: 'secret',
-            },
-            {
-            userId: 3,
-            username: 'maria',
-            password: 'guess',
-            },
-        ];
-    }
+    async createUser(createUsersDTO: CreateUsersDTO): Promise<IUser> {
+        const user = new this.userModel(createUsersDTO);
 
-    async findOne(username: string): Promise<User | undefined> {
-        return this.users.find(user => user.username === username);
+        // Check if user email is already exist
+        const isEmailExist = await this.userModel.findOne({ email: user.email });
+        if (isEmailExist) {
+            throw new BadRequestException('That email is already exist.');
+        }
+
+        await user.save();
+        return user;
     }
 }

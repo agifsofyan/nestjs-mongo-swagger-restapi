@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
-export const UsersSchema = new mongoose.Schema({
+export const UserSchema = new mongoose.Schema({
     name: {type: String},
     email: {type: String, required: true},
     phone_number: {type: String, required: true},
@@ -11,7 +11,7 @@ export const UsersSchema = new mongoose.Schema({
     updated_at: {type: Date}
 }, { collection: 'user_admins' });
 
-UsersSchema.pre('save', async function(next: mongoose.HookNextFunction) {
+UserSchema.pre('save', async function(next: mongoose.HookNextFunction) {
     try {
         if (!this.isModified('password')) {
             return next();

@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-// import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
@@ -12,23 +12,23 @@ async function bootstrap() {
 		allowedHeaders: "Content-Type, Accept",
 	});
 
-	// app.useGlobalPipes(new ValidationPipe());
+	app.useGlobalPipes(new ValidationPipe());
 	app.setGlobalPrefix('/api/v1')
 
 	const options = new DocumentBuilder()
-		.setTitle('laruno-backend-api[backoffice]-v1')
-		.setDescription(`RestAPI Laruno to Backoffice in mode: ${process.env.API_ENV}.`)
+		.setTitle('laruno-backoffice-api-v1')
+		.setDescription(`API ${process.env.API_ENV}.`)
 		.setVersion('1.0')
 		.addTag('API')
 		.build();
 
 	const document = SwaggerModule.createDocument(app, options);
-	SwaggerModule.setup('api/doc', app, document);
+	SwaggerModule.setup('api/v1/docs', app, document);
 
 	const PORT = process.env.PORT || 3000;
 
 	await app.listen(PORT);
 
-	console.log(`[API] laruno-backend-api[backoffice] started running in ${process.env.API_ENV} mode on port ${PORT}.`);
+	console.log(`[API] laruno-backoffice-api started running in ${process.env.API_ENV} mode on port ${PORT}.`);
 }
 bootstrap();

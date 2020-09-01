@@ -1,7 +1,7 @@
 import { 
 	Controller, 
 	Get, 
-	Response, 
+	Res, 
 	HttpStatus, 
 	Param, 
 	Body, 
@@ -10,10 +10,10 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
-import { ApiTags, ApiResponse, ApiOperation, ApiHeader } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ApiTags, ApiOperation, ApiHeader } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
@@ -30,7 +30,7 @@ export class ProductController {
 	 */
 	@Post()
 	
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(AuthGuard('jwt'))
 	@Roles('administrator')
 	@ApiOperation({ summary: 'Create new product' })
 	@ApiHeader({
@@ -38,7 +38,7 @@ export class ProductController {
         description: 'Authentication token.'
     })
 	// @ApiResponse({ status: 403, description: 'forbidden' })
-	async create(@Response() res, @Body() productDto: ProductDto) {
+	async create(@Res() res, @Body() productDto: ProductDto) {
 		const product = await this.productService.create(productDto);
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
@@ -59,7 +59,7 @@ export class ProductController {
 	// 	status: HttpStatus.OK,
 	// 	description: 'Get all product' 
 	// })
-	async findAll(@Response() res) {
+	async findAll(@Res() res) {
 		const product = await this.productService.findAll();
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
@@ -80,7 +80,7 @@ export class ProductController {
 	// 	status: HttpStatus.OK,
 	// 	description: 'Get product by condition (filter)'
 	// })
-	async findOne(@Response() res, @Body() body){
+	async findOne(@Res() res, @Body() body){
 		const filter = body;
 		const product = await this.productService.findOne(filter);
 		return res.status(HttpStatus.OK).json({
@@ -102,7 +102,7 @@ export class ProductController {
 	// 	status: HttpStatus.OK,
 	// 	description: 'Get product by id'
 	// })
-	async findById(@Param('id') id: string, @Response() res)  {
+	async findById(@Param('id') id: string, @Res() res)  {
 		const product = await this.productService.findById(id);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
@@ -118,7 +118,7 @@ export class ProductController {
 	 **/
 	@Patch(':id')
 	
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(AuthGuard('jwt'))
 	@Roles('administrator')
 	@ApiOperation({ summary: 'Update product by id' })
 	@ApiHeader({
@@ -131,7 +131,7 @@ export class ProductController {
 	// })
 	async update(
 		@Param('id') id: string,
-		@Response() res,
+		@Res() res,
 		@Body() newProductDto: ProductDto
 	) {
 		const product = await this.productService.update(id, newProductDto);
@@ -149,7 +149,7 @@ export class ProductController {
 	 **/
 	@Delete(':id')
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(AuthGuard('jwt'))
 	@Roles('administrator')
 	@ApiOperation({ summary: 'Delete product' })
 	@ApiHeader({
@@ -160,7 +160,7 @@ export class ProductController {
 	// 	status: HttpStatus.OK,
 	// 	description: 'Delete product' 
 	// })
-	async delete(@Param('id') id: string, @Response() res){
+	async delete(@Param('id') id: string, @Res() res){
 		const product = await this.productService.delete(id);
 		
 		if (product == 'ok') {

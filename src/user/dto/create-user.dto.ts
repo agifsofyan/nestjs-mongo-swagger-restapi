@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUsersDTO {
+export class CreateUserDTO {
     // ID
     // @ApiHideProperty()
     // readonly _id: number;

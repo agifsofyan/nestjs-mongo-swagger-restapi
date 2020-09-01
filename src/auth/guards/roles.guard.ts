@@ -5,10 +5,10 @@ import {
   UnauthorizedException 
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtAuthGuard } from '../jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class RolesGuard extends JwtAuthGuard {
+export class RolesGuard extends AuthGuard('jwt') {
   constructor(private readonly reflector: Reflector) {
     super();
   }

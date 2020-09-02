@@ -17,9 +17,10 @@ export class ProductDto {
 
    // Type
     @ApiProperty({
-        example: 'public',
+        example: 'webinar',
         description: 'Type',
-        format: 'string'
+        format: 'string',
+        enum: [ 'webinar', 'digital', 'ecommerce', 'bonus' ]
     })
     @IsNotEmpty()
     @IsString()

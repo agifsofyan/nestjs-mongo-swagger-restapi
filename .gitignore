@@ -33,5 +33,13 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+<<<<<<< HEAD
+#unitest
+*.pec.ts
+*.*pec.ts
+*/*.pec.ts
+*/*.*.pec.ts
+=======
 # Miscellaneous
 .env
+>>>>>>> 5d23c2cd5742178ed1f14b82cdb0c82b781f752c

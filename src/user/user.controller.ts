@@ -34,7 +34,7 @@ export class UsersController {
         description: 'Authentication token.'
     })
     async addUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
-        const user = await this.userService.createUser(createUserDTO);
+        const user = await this.userService.create(createUserDTO);
         return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
 			message: 'User created successfully.',

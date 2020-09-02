@@ -4,6 +4,7 @@ import { Strategy } from 'passport-jwt';
 
 import { AuthService } from '../auth.service';
 import { IJwtPayload } from './../interfaces/jwt-payload.interface';
+import { jwtSecret } from '../../config/configuration';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -11,7 +12,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         super({
             jwtFromRequest: authService.returnJwtExtractor(),
             ignoreExpiration: false,
-            secretOrKey: process.env.JWT_SECRET,
+            secretOrKey: jwtSecret,
         });
     }
 

@@ -10,6 +10,7 @@ import * as Cryptr from 'cryptr';
 import { IUser } from '../user/interfaces/user.interface';
 import { IRefreshToken } from './interfaces/refresh-token.interface';
 import { IJwtPayload } from './interfaces/jwt-payload.interface';
+import { jwtSecret, jwtExp } from '../config/configuration';
 
 @Injectable()
 export class AuthService {
@@ -19,11 +20,11 @@ export class AuthService {
         @InjectModel('User') private readonly userModel: Model<IUser>,
         @InjectModel('RefreshToken') private readonly refreshTokenModel: Model<IRefreshToken>
     ) {
-        this.cryptr = new Cryptr(process.env.ENCRYPT_JWT_SECRET);
+        this.cryptr = new Cryptr(jwtSecret);
     }
 
     async createAccessToken(userId: string) {
-        const accessToken = sign({ userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
+        const accessToken = sign({ userId }, jwtSecret, { expiresIn: jwtExp });
         return this.encryptText(accessToken);
     }
 
@@ -69,7 +70,7 @@ export class AuthService {
             token = req.body.token.replace(' ', '');
         }
 
-        const cryptr = new Cryptr(process.env.ENCRYPT_JWT_SECRET);
+        const cryptr = new Cryptr(jwtSecret);
         if (token) {
             try {
                 token = cryptr.decrypt(token);

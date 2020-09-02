@@ -7,6 +7,7 @@ import { UserSchema } from '../user/schemas/user.schema';
 import { RefreshTokenSchema } from './schemas/refresh-token.schema';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { jwtSecret, jwtExp } from '../config/configuration';
 
 @Module({
   imports: [
@@ -15,8 +16,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       { name: 'RefreshToken', schema: RefreshTokenSchema },
     ]),
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.JWT_EXPIRATION },
+      secret: jwtSecret,
+      signOptions: { expiresIn: jwtExp },
     }),
     PassportModule
   ],

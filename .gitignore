@@ -39,15 +39,5 @@ lerna-debug.log*
 */*.pec.ts
 */*.*.pec.ts
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 453c919... hide .env
-=======
->>>>>>> 737ac51... merge rebase auth & order
 # Miscellaneous
-=======
-#environtmen
->>>>>>> 67c8f03... hide .env
 .env

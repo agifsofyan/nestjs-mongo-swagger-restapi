@@ -40,6 +40,9 @@ lerna-debug.log*
 */*.*.pec.ts
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 453c919... hide .env
 # Miscellaneous
 =======
 #environtmen

@@ -3,6 +3,7 @@ import {
 	Get, 
 	Res, 
 	HttpStatus, 
+	Req,
 	Param, 
 	Body, 
 	Post,
@@ -59,8 +60,8 @@ export class ProductController {
 	// 	status: HttpStatus.OK,
 	// 	description: 'Get all product' 
 	// })
-	async findAll(@Res() res) {
-		const product = await this.productService.findAll();
+	async findAll(@Req() req, @Res() res) {
+		const product = await this.productService.findAll(req.query);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success get products`,

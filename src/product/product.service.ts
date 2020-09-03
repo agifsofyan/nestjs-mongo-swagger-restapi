@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import { Product as IProduct } from './interface/product.interface';
 import { ProductDto } from './dto/product.dto';
-
+import { Query } from './options/product.query';
 @Injectable()
 export class ProductService {
 
@@ -15,8 +15,25 @@ export class ProductService {
 		return await createProduct.save();
 	}
 
-	async findAll(): Promise<IProduct[]> {
-		return await this.productModel.find().exec();
+	async findAll(options: Query): Promise<IProduct[]> {
+		const offset = (options.offset == 0 ? options.offset : (options.offset - 1));
+		const skip = offset * options.limit;
+
+		if(options.fields){ 
+			return await this.productModel
+			.find({[options.fields]: { $regex: `.*${options.text}.*` }}, (err, res) => {
+				return res;
+			})
+			.skip(Number(skip))
+			.limit(Number(options.limit))
+			.exec();
+		}else{
+			return await this.productModel
+			.find()
+			.skip(Number(skip))
+			.limit(Number(options.limit))
+			.exec();
+		}
 	}
 
 	async findById(id: string): Promise<IProduct> {

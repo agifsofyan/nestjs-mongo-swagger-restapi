@@ -67,8 +67,6 @@ export class ProductDto {
 
     // Time Periode
     @ApiProperty()
-    // @IsNotEmpty()
-    // @IsString()
     readonly time_period: string;
 
     // Price

@@ -102,27 +102,5 @@ export class OrderDto {
         description: 'Agent Id',
         format: 'string'
     })
-    @Type(() => Date)
-    @IsDate()
     readonly agent_id: string;
-
-    // Created At
-    @ApiProperty({
-        example: '2010-03-02',
-        description: 'Created At',
-        format: 'date'
-    })
-    @Type(() => Date)
-    @IsDate()
-    readonly created_at: Date;
-
-    // Updated At
-    @ApiProperty({
-        example: '2017-03-01',
-        description: 'Updated At',
-        format: 'date'
-    })
-    @Type(() => Date)
-    @IsDate()
-    readonly updated_at: Date;
 }

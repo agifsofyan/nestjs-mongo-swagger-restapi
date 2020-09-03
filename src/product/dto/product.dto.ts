@@ -82,21 +82,9 @@ export class ProductDto {
     @Min(4)
     readonly price: number;
 
-    // Created At
-    @ApiProperty()
-    @Type(() => Date)
-    @IsDate()
-    readonly created_at: Date;
-
     // Created By
     @ApiProperty()
     readonly created_by: string;
-
-    // Updated At
-    @ApiProperty()
-    @Type(() => Date)
-    @IsDate()
-    readonly updated_at: Date;
 
     // Updated By
     @ApiProperty()

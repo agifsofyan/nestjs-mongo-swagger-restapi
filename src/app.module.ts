@@ -8,7 +8,7 @@ import { UserModule } from './user/user.module';
 
 @Module({
 	imports: [
-		Connection,
+            Connection,
 	    AuthModule,
 	    UserModule
 	],

@@ -8,6 +8,9 @@ const {
 	DB_PORT, 
 	DB_NAME, 
 	DB_AUTH,
+	JWT_SECRET,
+	JWT_EXPIRATION,
+	JWT_ENCRYPT_SECRETKEY
 } = process.env;
 
 const uri = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=${DB_AUTH}`;
@@ -21,6 +24,6 @@ export const Connection = MongooseModule.forRoot(uri, {
 	useUnifiedTopology: true,
 });
 
-export const jwtSecret = process.env.JWT_SECRET
-
-export const jwtExp = `${process.env.JWT_EXPIRED}d` //in days
+export const JWT_SECRET_KEY = `${JWT_SECRET}`;
+export const JWT_ENCRYPT_SECRET_KEY = `${JWT_ENCRYPT_SECRETKEY}`;
+export const JWT_EXPIRATION_TIME = `${JWT_EXPIRATION}`;

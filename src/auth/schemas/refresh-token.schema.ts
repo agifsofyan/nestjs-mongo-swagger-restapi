@@ -6,16 +6,7 @@ export const RefreshTokenSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    refreshToken: {
-        type: String,
-        required: true,
-    },
-    ip: {
-        type: String,
-        required: true,
-    },
-    browser: {
-        type: String,
-        required: true,
-    }
-}, { collection: 'user_refresh_tokens' });
+    refreshToken: { type: String, required: true },
+    ip: { type: String, required: true },
+    browser: { type: String, required: true }
+}, { collection: 'admin_refresh_tokens' });

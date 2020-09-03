@@ -8,10 +8,6 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDTO {
-    // ID
-    // @ApiHideProperty()
-    // readonly _id: number;
-
     // Name
     @ApiProperty({
         example: 'Dinda',
@@ -55,5 +51,5 @@ export class CreateUserDTO {
     @IsNotEmpty()
     @IsString()
     @MinLength(6)
-    readonly password: string;
+    password: string;
 }

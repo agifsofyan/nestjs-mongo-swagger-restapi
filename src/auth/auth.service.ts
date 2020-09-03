@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
-import { sign } from 'jsonwebtoken';
+// import { sign } from 'jsonwebtoken';
 
 import { v4 } from 'uuid';
 import { Request } from 'express';
@@ -10,7 +11,7 @@ import * as Cryptr from 'cryptr';
 import { IUser } from '../user/interfaces/user.interface';
 import { IRefreshToken } from './interfaces/refresh-token.interface';
 import { IJwtPayload } from './interfaces/jwt-payload.interface';
-import { jwtSecret, jwtExp } from '../config/configuration';
+import { JWT_ENCRYPT_SECRET_KEY } from '../config/configuration';
 
 @Injectable()
 export class AuthService {
@@ -18,13 +19,15 @@ export class AuthService {
 
     constructor(
         @InjectModel('User') private readonly userModel: Model<IUser>,
-        @InjectModel('RefreshToken') private readonly refreshTokenModel: Model<IRefreshToken>
+        @InjectModel('RefreshToken') private readonly refreshTokenModel: Model<IRefreshToken>,
+        private readonly jwtService: JwtService
     ) {
-        this.cryptr = new Cryptr(jwtSecret);
+        this.cryptr = new Cryptr(JWT_ENCRYPT_SECRET_KEY);
     }
 
     async createAccessToken(userId: string) {
-        const accessToken = sign({ userId }, jwtSecret, { expiresIn: jwtExp });
+        // const accessToken = sign({ userId }, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRATION_TIME });
+        const accessToken = this.jwtService.sign({ userId });
         return this.encryptText(accessToken);
     }
 
@@ -70,7 +73,7 @@ export class AuthService {
             token = req.body.token.replace(' ', '');
         }
 
-        const cryptr = new Cryptr(jwtSecret);
+        const cryptr = new Cryptr(JWT_ENCRYPT_SECRET_KEY);
         if (token) {
             try {
                 token = cryptr.decrypt(token);
@@ -81,11 +84,11 @@ export class AuthService {
         return token;
     }
 
+    private encryptText(text: string): string {
+        return this.cryptr.encrypt(text);
+    }
+    
     returnJwtExtractor() {
         return this.jwtExtractor;
-    }
-
-    encryptText(text: string): string {
-        return this.cryptr.encrypt(text);
     }
 }

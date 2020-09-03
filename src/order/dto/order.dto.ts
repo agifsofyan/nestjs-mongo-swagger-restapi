@@ -16,7 +16,7 @@ export class OrderDto {
 
    // Order Date
     @ApiProperty({
-        example: '2019-10-08',
+        example: '2019-31-08',
         description: 'Order Date',
         format: 'date'
     })
@@ -102,5 +102,9 @@ export class OrderDto {
         description: 'Agent Id',
         format: 'string'
     })
+<<<<<<< HEAD
+=======
+    @IsString()
+>>>>>>> 5beddbc... update order
     readonly agent_id: string;
 }

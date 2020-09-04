@@ -102,9 +102,6 @@ export class OrderDto {
         description: 'Agent Id',
         format: 'string'
     })
-<<<<<<< HEAD
-=======
     @IsString()
->>>>>>> 5beddbc... update order
     readonly agent_id: string;
 }

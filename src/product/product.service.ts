@@ -19,11 +19,11 @@ export class ProductService {
 		const offset = (options.offset == 0 ? options.offset : (options.offset - 1));
 		const skip = offset * options.limit;
 
-		if(options.fields){ 
+		if(options.fields){
 			return await this.productModel
-			.find({[options.fields]: { $regex: `.*${options.text}.*` }}, (err, res) => {
-				return res;
-			})
+			//.find({[options.fields]: { $regex: `.*${String(options.priceValue)}.*` }}, (err, res) => {
+				
+			.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
 			.skip(Number(skip))
 			.limit(Number(options.limit))
 			.exec();

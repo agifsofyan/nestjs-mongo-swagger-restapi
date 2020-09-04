@@ -9,6 +9,8 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JWT_SECRET_KEY, JWT_EXPIRATION_TIME } from '../config/configuration';
 
+console.log('exp: ', JWT_EXPIRATION_TIME);
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -18,6 +20,7 @@ import { JWT_SECRET_KEY, JWT_EXPIRATION_TIME } from '../config/configuration';
     JwtModule.register({
       secret: JWT_SECRET_KEY,
       signOptions: { expiresIn: JWT_EXPIRATION_TIME },
+      //signOptions: { expiresIn: "30d" },
     }),
     PassportModule
   ],

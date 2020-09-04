@@ -9,8 +9,6 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JWT_SECRET_KEY, JWT_EXPIRATION_TIME } from '../config/configuration';
 
-console.log('exp: ', JWT_EXPIRATION_TIME);
-
 @Module({
   imports: [
     MongooseModule.forFeature([

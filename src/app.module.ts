@@ -10,7 +10,7 @@ import { OrderModule } from './order/order.module';
 
 @Module({
 	imports: [
-            Connection,
+        Connection,
 	    AuthModule,
 	    UserModule,
 	    ProductModule,

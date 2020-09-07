@@ -64,53 +64,53 @@ export class ProductController {
 	})
 
 	// Swagger Parameter [optional]
-	// @ApiQuery({
-	// 	name: 'sortval',
-	// 	required: false,
-	// 	explode: true,
-	// 	type: String,
-	// 	isArray: false
-	// })
+	@ApiQuery({
+		name: 'sortval',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
 
-	// @ApiQuery({
-	// 	name: 'sortby',
-	// 	required: false,
-	// 	explode: true,
-	// 	type: String,
-	// 	isArray: false
-	// })
+	@ApiQuery({
+		name: 'sortby',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
 
-	// @ApiQuery({
-	// 	name: 'value',
-	// 	required: false,
-	// 	explode: true,
-	// 	type: String,
-	// 	isArray: false
-	// })
+	@ApiQuery({
+		name: 'value',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
 
-	// @ApiQuery({
-	// 	name: 'fields',
-	// 	required: false,
-	// 	explode: true,
-	// 	type: String,
-	// 	isArray: false
-	// })
+	@ApiQuery({
+		name: 'fields',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
 
-	// @ApiQuery({
-	// 	name: 'limit',
-	// 	required: false,
-	// 	explode: true,
-	// 	type: Number,
-	// 	isArray: false
-	// })
+	@ApiQuery({
+		name: 'limit',
+		required: false,
+		explode: true,
+		type: Number,
+		isArray: false
+	})
 
-	// @ApiQuery({ 
-	// 	name: 'offset', 
-	// 	required: false, 
-	// 	explode: true, 
-	// 	type: Number, 
-	// 	isArray: false 
-	// })
+	@ApiQuery({ 
+		name: 'offset', 
+		required: false, 
+		explode: true, 
+		type: Number, 
+		isArray: false 
+	})
 
 	async findAll(@Req() req, @Res() res) {
 		const product = await this.productService.findAll(req.query);

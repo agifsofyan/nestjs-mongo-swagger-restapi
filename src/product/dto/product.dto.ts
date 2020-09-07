@@ -37,7 +37,7 @@ export class ProductDto {
         description: 'Name',
         format: 'form'
     })
-    readonly name: string;
+     name: string;
 
     // Short Desc
     @IsString()
@@ -47,7 +47,7 @@ export class ProductDto {
         description: 'Short Description',
         format: 'string'
     })
-    readonly short_desc: string;
+     short_desc: string;
 
     // Description
     @IsString()
@@ -57,7 +57,7 @@ export class ProductDto {
         description: 'Full Description',
         format: 'string'
     })
-    readonly description: string;
+     description: string;
 
     // Time Periode
     @ApiProperty({
@@ -65,7 +65,7 @@ export class ProductDto {
         description: 'Time Periode',
         format: 'string'
     })
-    readonly time_period: string;
+     time_period: string;
 
     // Price
     @IsNotEmpty()
@@ -76,7 +76,7 @@ export class ProductDto {
         description: 'Price',
         format: 'number'
     })
-    readonly price: number;
+     price: number;
 
     // Created By
     @ApiProperty({
@@ -84,7 +84,7 @@ export class ProductDto {
 	    description: 'Created By',
 	    format: 'string'
     })
-    readonly created_by: string;
+     created_by: string;
 
     // Updated By
     @ApiProperty({
@@ -92,5 +92,5 @@ export class ProductDto {
 	    description: 'Updated By',
 	    format: 'string'
     })
-    readonly updated_by: string;
+     updated_by: string;
 }

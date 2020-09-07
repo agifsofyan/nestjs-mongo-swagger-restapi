@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { Product as IProduct } from './interface/product.interface';
 import { ProductDto } from './dto/product.dto';
 import { Query } from './options/product.query';
+
 @Injectable()
 export class ProductService {
 
@@ -99,7 +100,7 @@ export class ProductService {
 		return product;
 	}
 
-	async update(id: string, NewProduct: ProductDto): Promise<IProduct> {
+	async update(id: string, NewProduct: Partial<ProductDto>): Promise<IProduct> {
 		let result;
 		
 		// Check ID
@@ -113,7 +114,8 @@ export class ProductService {
 			throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 
-        //await this.productModel.findByIdAndUpdate(id, NewProduct);
+		await this.productModel.findByIdAndUpdate(id, NewProduct);
+		// await this.productModel.findOneAndUpdate({id: id}, {NewProduct}).exec();
 		return await this.productModel.findById(id).exec();
 	}
 

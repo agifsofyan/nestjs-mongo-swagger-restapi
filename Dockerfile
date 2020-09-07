@@ -14,5 +14,5 @@ FROM node:latest
 COPY --from=base /app/package.json ./
 COPY --from=dev /app/dist/ ./dist/
 COPY --from=base /app/node_modules/ ./node_modules/
-EXPOSE 5000
+EXPOSE 7000
 CMD ["node", "dist/main.js"]

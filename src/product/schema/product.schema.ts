@@ -1,17 +1,24 @@
 import * as mongoose from 'mongoose';
+import * as slug from 'mongoose-slug-updater';
+
+mongoose.plugin(slug);
 
 export const ProductSchema = new mongoose.Schema({
-    type: {type: 
-        String, 
+    type: {
+	    type: String, 
         required: true,
-        enum: [ "webinar", "digital", "ecommerce", "bonus" ]
+        enum: [ "webinar", "digital", "ecommerce", "bonus" ],
+	    default: "webinar"
     },
     name: {
         type: String, 
-        required: true
+        required: true,
+	    unique: true
     },
     slug: {
-        type: String
+        type: String,
+	    slug: "name",
+	    unique: true
     },
     short_desc: {
         type: String
@@ -26,18 +33,14 @@ export const ProductSchema = new mongoose.Schema({
         type: Number, 
         required: true
     },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
     created_by: {
         type: String
     },
-    updated_at: {
-        type: Date,
-        default: Date.now
-    },
     updated_by: {
-        type: String
+    	type: String
     },
-},{ versionKey: false });
+},{ 
+	collection: 'products',
+	versionKey: false, 
+	timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }, 
+});

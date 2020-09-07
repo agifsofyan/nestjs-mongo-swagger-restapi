@@ -8,7 +8,8 @@ export const OrderSchema = new mongoose.Schema({
     type: {
         type: String, 
         required: true,
-        enum: [ "wa", "web" ]
+        enum: [ "wa", "web" ],
+        default: 'web'
     },
     qty: {
         type: Number, 
@@ -21,7 +22,8 @@ export const OrderSchema = new mongoose.Schema({
     payment_status: {
         type: String, 
         required: true,
-        enum: [ "paid", "unpaid" ]
+        enum: [ "paid", "unpaid" ],
+        default: 'unpaid'
     },
     paid_at: {
         type: Date
@@ -35,12 +37,8 @@ export const OrderSchema = new mongoose.Schema({
     agent_id: {
         type: String
     },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now
-    },
-},{ versionKey: false });
+},{ 
+    collection: 'orders',
+    versionKey: false, 
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+});

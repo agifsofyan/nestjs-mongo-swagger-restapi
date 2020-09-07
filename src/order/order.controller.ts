@@ -12,11 +12,13 @@ import {
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderDto } from './dto/order.dto';
-import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
-//import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ApiTags, ApiOperation, ApiHeader, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @ApiTags('orders')
-//@UseGuards(JwtAuthGuard)
+@UseGuards(RolesGuard)
 @Controller('orders')
 export class OrderController {
     
@@ -28,8 +30,13 @@ export class OrderController {
      * @access  Public
      */
     @Post()
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
     @ApiOperation({ summary: 'Create new order' })
-    @ApiResponse({ status: 403, description: 'forbidden' })
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
+    })
     async create(@Response() res, @Body() orderDto: OrderDto) {
         const order = await this.orderService.create(orderDto);
         return res.status(HttpStatus.CREATED).json({
@@ -45,9 +52,11 @@ export class OrderController {
      * @access  Public
      */
     @Get()
-    @ApiResponse({
-            status: HttpStatus.OK,
-            description: 'Get all order' 
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
     })
     async findAll(@Response() res) {
         const order = await this.orderService.findAll();
@@ -64,9 +73,11 @@ export class OrderController {
          * @access   Public
      **/
     @Get('find')
-    @ApiResponse({
-        status: HttpStatus.OK,
-        description: 'Get order by condition(filter)'
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
     })
     async findOne(@Response() res, @Body() body){
         const filter = body;
@@ -84,9 +95,11 @@ export class OrderController {
      * @access   Public
      */
     @Get(':id')
-    @ApiResponse({
-        status: HttpStatus.OK,
-        description: 'Get order by ID'
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
     })
     async findById(@Param('id') id: string, @Response() res)  {
         const order = await this.orderService.findById(id);
@@ -103,9 +116,11 @@ export class OrderController {
      * @access  Public
      **/
     @Patch(':id')
-    @ApiResponse({ 
-        status: HttpStatus.OK,
-        description: 'Update order'
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
     })
     async update(
         @Param('id') id: string,
@@ -126,9 +141,11 @@ export class OrderController {
      * @access  Public
      **/
     @Delete(':id')
-    @ApiResponse({ 
-        status: HttpStatus.OK,
-        description: 'Delete order' 
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
     })
     async delete(@Param('id') id: string, @Response() res){
         const order = await this.orderService.delete(id);

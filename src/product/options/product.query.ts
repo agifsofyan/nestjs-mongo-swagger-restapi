@@ -3,4 +3,6 @@ export class Query {
 	limit?: number;
 	fields?: string;
 	value?: string;
+	sortby?: string;
+	sortval?: string;
 }

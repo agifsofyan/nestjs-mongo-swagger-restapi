@@ -30,13 +30,13 @@ export class UserController {
 	 * @access  Public
 	 */
     @Post('add')
-    //@UseGuards(AuthGuard('jwt'))
-	//@Roles('Administrator')
+    @UseGuards(AuthGuard('jwt'))
+	@Roles('Administrator')
 	@ApiOperation({ summary: 'Add new administrator' })
-	//@ApiHeader({
-        //name: 'Bearer',
-        //description: 'Authentication token.'
-    //})
+	@ApiHeader({
+        	name: 'x-auth-token',
+        	description: 'token.'
+    })
     async addUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
         const user = await this.userService.create(createUserDTO);
         return res.status(HttpStatus.CREATED).json({

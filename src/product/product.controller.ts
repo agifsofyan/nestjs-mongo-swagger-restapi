@@ -14,7 +14,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
-import { ApiTags, ApiOperation, ApiHeader } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
@@ -22,23 +22,22 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 @UseGuards(RolesGuard)
 @Controller('products')
 export class ProductController {
-	constructor(private readonly productService: ProductService){}
-	
+	constructor(private readonly productService: ProductService) { }
+
 	/**
 	 * @route   POST /api/v1/products
 	 * @desc    Create a new product
 	 * @access  Public
 	 */
 	@Post()
-	
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
 	@ApiOperation({ summary: 'Create new product' })
 	@ApiHeader({
-        name: 'Bearer',
-        description: 'Authentication token.'
-    })
-	// @ApiResponse({ status: 403, description: 'forbidden' })
+		name: 'x-auth-token',
+		description: 'token.'
+	})
+
 	async create(@Res() res, @Body() productDto: ProductDto) {
 		const product = await this.productService.create(productDto);
 		return res.status(HttpStatus.CREATED).json({
@@ -54,12 +53,65 @@ export class ProductController {
 	 * @access  Public
 	 */
 	@Get()
-	
+	@UseGuards(AuthGuard('jwt'))
+	@Roles('Administrator')
 	@ApiOperation({ summary: 'Get all product' })
-	// @ApiResponse({
-	// 	status: HttpStatus.OK,
-	// 	description: 'Get all product' 
+
+	// Swagger Header [required]
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token'
+	})
+
+	// Swagger Parameter [optional]
+	// @ApiQuery({
+	// 	name: 'sortval',
+	// 	required: false,
+	// 	explode: true,
+	// 	type: String,
+	// 	isArray: false
 	// })
+
+	// @ApiQuery({
+	// 	name: 'sortby',
+	// 	required: false,
+	// 	explode: true,
+	// 	type: String,
+	// 	isArray: false
+	// })
+
+	// @ApiQuery({
+	// 	name: 'value',
+	// 	required: false,
+	// 	explode: true,
+	// 	type: String,
+	// 	isArray: false
+	// })
+
+	// @ApiQuery({
+	// 	name: 'fields',
+	// 	required: false,
+	// 	explode: true,
+	// 	type: String,
+	// 	isArray: false
+	// })
+
+	// @ApiQuery({
+	// 	name: 'limit',
+	// 	required: false,
+	// 	explode: true,
+	// 	type: Number,
+	// 	isArray: false
+	// })
+
+	// @ApiQuery({ 
+	// 	name: 'offset', 
+	// 	required: false, 
+	// 	explode: true, 
+	// 	type: Number, 
+	// 	isArray: false 
+	// })
+
 	async findAll(@Req() req, @Res() res) {
 		const product = await this.productService.findAll(req.query);
 		return res.status(HttpStatus.OK).json({
@@ -75,12 +127,13 @@ export class ProductController {
 	 * @access   Public
 	 **/
 	@Get('find')
-	
+	@UseGuards(AuthGuard('jwt'))
+	@Roles('Administrator')
 	@ApiOperation({ summary: 'Filter product' })
-	// @ApiResponse({
-	// 	status: HttpStatus.OK,
-	// 	description: 'Get product by condition (filter)'
-	// })
+	@ApiHeader({
+	 	name: 'x-auth-token',
+	 	description: 'token'
+	})
 	async findOne(@Res() res, @Body() body){
 		const filter = body;
 		const product = await this.productService.findOne(filter);
@@ -97,12 +150,13 @@ export class ProductController {
 	 * @access   Public
 	 */
 	@Get(':id')
-	
+	@UseGuards(AuthGuard('jwt'))
+	@Roles('Administrator')
 	@ApiOperation({ summary: 'Get product by id' })
-	// @ApiResponse({
-	// 	status: HttpStatus.OK,
-	// 	description: 'Get product by id'
-	// })
+	@ApiHeader({
+		name: 'x-auth-token',
+	 	description: 'token'
+	})
 	async findById(@Param('id') id: string, @Res() res)  {
 		const product = await this.productService.findById(id);
 		return res.status(HttpStatus.OK).json({
@@ -118,18 +172,13 @@ export class ProductController {
 	 * @access  Public
 	 **/
 	@Patch(':id')
-	
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
 	@ApiOperation({ summary: 'Update product by id' })
 	@ApiHeader({
-		name: 'Bearer',
-		description: 'Authentication token.'
+		name: 'x-auth-token',
+		description: 'token.'
 	})
-	// @ApiResponse({ 
-	// 	status: HttpStatus.OK,
-	// 	description: 'Update product'
-	// })
 	async update(
 		@Param('id') id: string,
 		@Res() res,
@@ -149,18 +198,13 @@ export class ProductController {
 	 * @access  Public
 	 **/
 	@Delete(':id')
-
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
 	@ApiOperation({ summary: 'Delete product' })
 	@ApiHeader({
-		name: 'Bearer',
-		description: 'Authentication token.'
+		name: 'x-auth-token',
+		description: 'token.'
 	})
-	// @ApiResponse({ 
-	// 	status: HttpStatus.OK,
-	// 	description: 'Delete product' 
-	// })
 	async delete(@Param('id') id: string, @Res() res){
 		const product = await this.productService.delete(id);
 		

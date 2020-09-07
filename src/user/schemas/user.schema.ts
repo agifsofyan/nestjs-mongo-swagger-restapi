@@ -9,7 +9,7 @@ export const UserSchema = new mongoose.Schema({
     roles: { type: [String], default: ['user'] },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date }
-}, { collection: 'admins' });
+}, { versionKey: false, collection: 'admins' });
 
 UserSchema.pre('save', async function(next: mongoose.HookNextFunction) {
     try {

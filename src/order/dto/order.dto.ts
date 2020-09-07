@@ -6,7 +6,7 @@ import {
     IsEnum,
     Min
 } from 'class-validator';
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -21,22 +21,19 @@ export enum EnumPayment {
 }
 
 export class OrderDto {
-   // ID
-   @ApiHideProperty()
-   readonly _id: number;
-
    // Order Date
     @Type(() => Date)
     @IsDate()
     @ApiProperty({
-        example: '2019-31-08',
+        example: "2018-06-22T08:00:19Z",
         description: 'Order Date',
-        format: 'date'
+        format: 'date-time',
+        type: 'string'
     })
-    readonly order_date: Date;
+    order_date: Date;
 
     // Type
-    @IsEnum(EnumType)
+    @IsEnum(EnumType, { message: 'Type value is: wa, web' })
     @IsNotEmpty()
     @IsString()
     @MinLength(5)
@@ -55,7 +52,7 @@ export class OrderDto {
         description: 'Quantity',
         format: 'number'
     })
-    readonly qty: number;
+    qty: number;
     
     // Number
     @IsNotEmpty()
@@ -66,10 +63,10 @@ export class OrderDto {
         description: 'Total Price',
         format: 'number'
     })
-    readonly total_price: number;
+    total_price: number;
     
     // Payment Status
-    @IsEnum(EnumPayment)
+    @IsEnum(EnumPayment, { message: 'Payment value is: paid, unpaid' })
     @IsNotEmpty()
     @IsString()
     @ApiProperty({
@@ -83,21 +80,23 @@ export class OrderDto {
     @Type(() => Date)
     @IsDate()
     @ApiProperty({
-        example: '2020-08-05',
+        example: "2018-06-22T08:00:19Z",
         description: 'Paid At',
-        format: 'date'
+        format: 'date-time',
+        type: 'string'
     })
-    readonly paid_at: Date;
+    paid_at: Date;
     
     // Due Date
     @Type(() => Date)
     @IsDate()
     @ApiProperty({
-        example: '2020-08-05',
+        example: "2018-06-22T08:00:19Z",
         description: 'Due Date',
-        format: 'date'
+        format: 'date-time',
+        type: 'string'
     })
-    readonly due_date: Date;
+    due_date: Date;
     
     // Customer Id
     @IsNotEmpty()
@@ -107,7 +106,7 @@ export class OrderDto {
         description: 'Customer Id',
         format: 'string'
     })
-    readonly customer_id: string;
+    customer_id: string;
     
     // Agent Id
     @IsString()
@@ -116,5 +115,5 @@ export class OrderDto {
         description: 'Agent Id',
         format: 'string'
     })
-    readonly agent_id: string;
+    agent_id: string;
 }

@@ -1,7 +1,6 @@
 import {
     IsNotEmpty,
     MinLength,
-    MaxLength,
     IsNumber,
     IsString,
     Min,
@@ -18,7 +17,7 @@ export enum AppState {
 
 export class ProductDto {
    // Type
-    @IsEnum(AppState)
+    @IsEnum(AppState, { message: 'Type value is: webinar, digital, ecommerce, bonus' })
     @IsNotEmpty()
     @IsString()
     @ApiProperty({
@@ -37,7 +36,7 @@ export class ProductDto {
         description: 'Name',
         format: 'form'
     })
-     name: string;
+    name: string;
 
     // Short Desc
     @IsString()
@@ -47,7 +46,7 @@ export class ProductDto {
         description: 'Short Description',
         format: 'string'
     })
-     short_desc: string;
+    short_desc: string;
 
     // Description
     @IsString()
@@ -57,7 +56,7 @@ export class ProductDto {
         description: 'Full Description',
         format: 'string'
     })
-     description: string;
+    description: string;
 
     // Time Periode
     @ApiProperty({
@@ -65,7 +64,7 @@ export class ProductDto {
         description: 'Time Periode',
         format: 'string'
     })
-     time_period: string;
+    time_period: string;
 
     // Price
     @IsNotEmpty()
@@ -76,7 +75,7 @@ export class ProductDto {
         description: 'Price',
         format: 'number'
     })
-     price: number;
+    price: number;
 
     // Created By
     @ApiProperty({
@@ -84,7 +83,7 @@ export class ProductDto {
 	    description: 'Created By',
 	    format: 'string'
     })
-     created_by: string;
+    created_by: string;
 
     // Updated By
     @ApiProperty({
@@ -92,5 +91,5 @@ export class ProductDto {
 	    description: 'Updated By',
 	    format: 'string'
     })
-     updated_by: string;
+    updated_by: string;
 }

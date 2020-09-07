@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 
 import { Product as IProduct } from './interface/product.interface';
 import { ProductDto } from './dto/product.dto';
-import { Query } from './options/product.query';
+import { Query } from '../utils/OptQuery';
 
 @Injectable()
 export class ProductService {
@@ -115,7 +115,6 @@ export class ProductService {
 		}
 
 		await this.productModel.findByIdAndUpdate(id, NewProduct);
-		// await this.productModel.findOneAndUpdate({id: id}, {NewProduct}).exec();
 		return await this.productModel.findById(id).exec();
 	}
 

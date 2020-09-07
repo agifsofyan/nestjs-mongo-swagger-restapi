@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 
 import { IOrder } from './interface/order.interface';
 import { OrderDto } from './dto/order.dto';
+import { Query } from '../utils/OptQuery';
 
 @Injectable()
 export class OrderService {
@@ -15,8 +16,52 @@ export class OrderService {
 		return await createOrder.save();
 	}
 
-	async findAll(): Promise<IOrder[]> {
-		return await this.orderModel.find().exec();
+	async findAll(options: Query): Promise<IOrder[]> {
+		const offset = (options.offset == 0 ? options.offset : (options.offset - 1));
+		const skip = offset * options.limit;
+		const sortval = (options.sortval == 'asc') ? 1 : -1;
+
+		if (options.sortby){
+			if (options.fields) {
+
+				return await this.orderModel
+					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+					.sort({ [options.sortby]: sortval })
+					.exec();
+
+			} else {
+
+				return await this.orderModel
+					.find()
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+					.sort({ [options.sortby]: sortval })
+					.exec();
+
+			}
+		}else{
+			if (options.fields) {
+
+				return await this.orderModel
+					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+					.exec();
+
+			} else {
+
+				return await this.orderModel
+					.find()
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+					.exec();
+
+			}
+		}
+
+		// return await this.orderModel.find().exec();
 	}
 
 	async findById(id: string): Promise<IOrder> {

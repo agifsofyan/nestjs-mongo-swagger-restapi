@@ -1,13 +1,32 @@
 version: "3.7"
 
 services:
+  db:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - default
+    ports:
+      - "27017:27017"
+
   api:
     build:
       context: .
       dockerfile: Dockerfile
-    image: "laruno/backoffice-api-dev:latest"
-    container_name: client-api-dev
+    image: "laruno/backoffice-api:latest"
+    container_name: backoffice-api
     restart: unless-stopped
     env_file: .env
+    networks:
+      - default
     ports:
       - "7000:7000"
+    depends_on:
+      - db
+    
+networks:
+  default:
+    external:
+      name: gateway

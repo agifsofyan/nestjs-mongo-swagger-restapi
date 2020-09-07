@@ -39,5 +39,5 @@ lerna-debug.log*
 */*.pec.ts
 */*.*.pec.ts
 
-# Environtment
+# Miscellaneous
 .env

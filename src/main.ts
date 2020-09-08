@@ -6,11 +6,11 @@ import { AppModule } from './app.module';
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
-	app.enableCors({
-		origin: "*",
-		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-		allowedHeaders: "Content-Type, Accept",
-	});
+	// app.enableCors({
+	// 	origin: "*",
+	// 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+	// 	allowedHeaders: "Content-Type, Accept",
+	// });
 
 	app.useGlobalPipes(new ValidationPipe());
 	app.setGlobalPrefix('/api/v1')
@@ -26,6 +26,8 @@ async function bootstrap() {
 	SwaggerModule.setup('api/v1/docs', app, document);
 
 	const PORT = process.env.PORT || 3000;
+
+	app.enableCors();
 
 	await app.listen(PORT);
 

@@ -7,7 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { Product as IProduct } from './interface/product.interface';
+import { IProduct } from './interface/product.interface';
 import { ProductDto } from './dto/product.dto';
 import { Query } from '../utils/OptQuery';
 

@@ -31,8 +31,12 @@ export const OrderSchema = new mongoose.Schema({
     due_date: {
         type: Date
     },
-    customer_id: {
-        type: String
+    // customer_id: {
+    //     type: String
+    // },
+    customer: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Product'
     },
     agent_id: {
         type: String

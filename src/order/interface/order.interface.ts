@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { IProduct } from '../../product/interface/product.interface';
 
 export interface IOrder extends Document {
     order_date: Date;
@@ -9,6 +10,7 @@ export interface IOrder extends Document {
     paid_at: Date;
     due_date: Date;
     customer_id: string;
-    product_id: string;
+    readonly product: IProduct;
+    // product_id: string;
     agent_id: string;
 }

@@ -169,46 +169,46 @@ export class OrderController {
      * @desc    Update order by Id
      * @access  Public
      **/
-    @Patch(':id')
-    @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
-    @ApiHeader({
-        name: 'x-auth-token',
-        description: 'token.'
-    })
-    async update(
-        @Param('id') id: string,
-        @Res() res,
-        @Body() newOrderDto: OrderDto
-    ){
-        const order = await this.orderService.update(id, newOrderDto);
-        return res.status(HttpStatus.OK).json({
-            statusCode: HttpStatus.OK,
-            message: 'The Order has been successfully updated.',
-            data: order
-        });
-    }
+    // @Patch(':id')
+    // @UseGuards(AuthGuard('jwt'))
+    // @Roles('Administrator')
+    // @ApiHeader({
+    //     name: 'x-auth-token',
+    //     description: 'token.'
+    // })
+    // async update(
+    //     @Param('id') id: string,
+    //     @Res() res,
+    //     @Body() newOrderDto: OrderDto
+    // ){
+    //     const order = await this.orderService.update(id, newOrderDto);
+    //     return res.status(HttpStatus.OK).json({
+    //         statusCode: HttpStatus.OK,
+    //         message: 'The Order has been successfully updated.',
+    //         data: order
+    //     });
+    // }
 
     /**
      * @route   Delete /api/v1/orders/:id
      * @desc    Delete order by ID
      * @access  Public
      **/
-    @Delete(':id')
-    @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
-    @ApiHeader({
-        name: 'x-auth-token',
-        description: 'token.'
-    })
-    async delete(@Param('id') id: string, @Res() res){
-        const order = await this.orderService.delete(id);
+    // @Delete(':id')
+    // @UseGuards(AuthGuard('jwt'))
+    // @Roles('Administrator')
+    // @ApiHeader({
+    //     name: 'x-auth-token',
+    //     description: 'token.'
+    // })
+    // async delete(@Param('id') id: string, @Res() res){
+    //     const order = await this.orderService.delete(id);
         
-        if (order == 'ok') {
-            return res.status(HttpStatus.OK).json({
-                statusCode: HttpStatus.OK,
-                message: `Success remove order by id ${id}`
-            });
-        }
-    }
+    //     if (order == 'ok') {
+    //         return res.status(HttpStatus.OK).json({
+    //             statusCode: HttpStatus.OK,
+    //             message: `Success remove order by id ${id}`
+    //         });
+    //     }
+    // }
 }

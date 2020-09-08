@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-// import { ITopic } from '../../product/interface/product.interface';
+import { ITopic } from '../../topic/interface/topic.interface';
 
 export interface IProduct extends Document {
      type: string;
@@ -7,11 +7,13 @@ export interface IProduct extends Document {
      slug: string;
      visibility: string;
      upsale: string;
-     // readonly topic: IProduct;
+     topic: ITopic[];
      short_desc: string;
      description: string;
      time_period: string;
-     price: string; 
+     price: string;
+     form_type: string;
+     image_url: string;
      created_by: string;
      updated_by: string;
 }

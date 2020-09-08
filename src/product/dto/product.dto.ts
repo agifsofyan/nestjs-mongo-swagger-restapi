@@ -1,23 +1,38 @@
 import {
     IsNotEmpty,
     MinLength,
-    IsNumber,
     IsString,
-    Min,
     IsEnum
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export enum AppState { 
+export enum EnumType { 
 	Webinar = 'webinar', 
 	Digital = 'digital', 
 	Ecommerce = 'ecommerce', 
 	Bonus = 'bonus', 
 }
 
+export enum VisibilityEnum { 
+	Publish = 'publish', 
+	Private = 'private',
+}
+
+export enum UpSaleEnum { 
+	Normal = 'normal', 
+	Upsale = 'upsale',
+	Upgrade = 'upgrade',
+	Crossale = 'crossale',
+}
+
+export enum FormEnum { 
+	Simple = 'simple', 
+	Full = 'full',
+}
+
 export class ProductDto {
-   // Type
-    @IsEnum(AppState, { message: 'Type value is: webinar, digital, ecommerce, bonus' })
+    // Type
+    @IsEnum(EnumType, { message: 'Type value is: webinar, digital, ecommerce, bonus' })
     @IsNotEmpty()
     @IsString()
     @ApiProperty({
@@ -25,7 +40,7 @@ export class ProductDto {
         description: 'Type',
         enum: ['webinar', 'digital', 'ecommerce', 'bonus'] 
     })
-    type: AppState;
+    type: EnumType;
 
     // Name
     @IsNotEmpty()
@@ -37,6 +52,42 @@ export class ProductDto {
         format: 'form'
     })
     name: string;
+
+    // Visibility
+    @IsEnum(VisibilityEnum, { message: 'Type value is: publish, private' })
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+        example: 'publish',
+        description: 'Visibility',
+        enum: ['publish', 'private'],
+        default: 'publish'
+    })
+    visibility: VisibilityEnum;
+    
+    // Upsale
+    @IsEnum(UpSaleEnum, { message: 'Type value is: normal, upsale, upgrade, crossale' })
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+        example: 'normal',
+        description: 'Upsale',
+        enum: ['normal', 'upsale', 'upgrade', 'crossale'],
+        default: 'normal'
+    })
+    upsale: UpSaleEnum;
+    
+    // Form Type
+    @IsEnum(FormEnum, { message: 'Type value is: simple, full' })
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+        example: 'publish',
+        description: 'Form Type',
+        enum: ['simple', 'full'],
+        default: 'simple'
+    })
+    form_type: FormEnum;
 
     // Short Desc
     @IsString()
@@ -76,6 +127,25 @@ export class ProductDto {
         format: 'string'
     })
     price: string;
+
+    // Topic
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+        example: "Career",
+        description: 'Topic',
+        format: 'string'
+    })
+    topic: string;
+
+     // Image URL
+     @IsString()
+     @ApiProperty({
+         example: "http://sample/image.jpg",
+         description: 'Image Url',
+         format: 'string'
+     })
+    image_url: string;
 
     // Created By
     @ApiProperty({

@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { IProduct } from './interface/product.interface';
+import { ITopic } from '../topic/interface/topic.interface';
 import { ProductDto } from './dto/product.dto';
 import { Query } from '../utils/OptQuery';
 
@@ -100,23 +101,33 @@ export class ProductService {
 		return product;
 	}
 
-	async update(id: string, NewProduct: Partial<ProductDto>): Promise<IProduct> {
-		let result;
+	// async update(id: string, NewProduct: Partial<ProductDto>): Promise<IProduct> {
+	// 	let result;
 		
-		// Check ID
-		try{
-		    result = await this.productModel.findById(id);
-		}catch(error){
-		    throw new NotFoundException(`Could nod find product with id ${id}`);
-		}
+	// 	// Check ID
+	// 	try{
+	// 	    result = await this.productModel.findById(id);
+	// 	}catch(error){
+	// 	    throw new NotFoundException(`Could nod find product with id ${id}`);
+	// 	}
 
-		if(!result){
-			throw new NotFoundException(`Could nod find product with id ${id}`);
-		}
+	// 	if(!result){
+	// 		throw new NotFoundException(`Could nod find product with id ${id}`);
+	// 	}
 
-		await this.productModel.findByIdAndUpdate(id, NewProduct);
-		return await this.productModel.findById(id).exec();
-	}
+	// 	await this.productModel.findByIdAndUpdate(id, NewProduct);
+	// 	return await this.productModel.findById(id).exec();
+	// }
+
+	async createUpdate(productDTO: any, itopic: ITopic): Promise<IProduct> {
+        const product = await this.productModel.findOneAndUpdate(
+            { itopic },
+            { $set: productDTO },
+            { new: true, upsert: true }
+		);
+		
+        return product;
+    }
 
 	async delete(id: string): Promise<string> {
 		try{

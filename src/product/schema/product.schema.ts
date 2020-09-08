@@ -20,6 +20,25 @@ export const ProductSchema = new mongoose.Schema({
 	    slug: "name",
 	    unique: true
     },
+    visibility: {
+        type: String,
+        enum: [ "publish", "private" ],
+	    default: "publish"
+    },
+    upsale: {
+        type: String,
+        enum: ['normal', 'upsale', 'upgrade', 'crossale'],
+	    default: "normal"
+    },
+    topic: [{ name: String }],
+    form_type: {
+        type: String, 
+        enum: ['simple', 'full'],
+        default: "simple"
+    },
+    image_url: {
+        type: String
+    },
     short_desc: {
         type: String
     },

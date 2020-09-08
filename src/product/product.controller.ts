@@ -11,12 +11,14 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ProductService } from './product.service';
-import { ProductDto } from './dto/product.dto';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { ProductService } from './product.service';
+import { ProductDto } from './dto/product.dto';
+import { DTopic } from '../topic/topic.decorator';
+import { ITopic } from '../topic/interface/topic.interface';
 
 @ApiTags('Products')
 @UseGuards(RolesGuard)
@@ -179,18 +181,22 @@ export class ProductController {
 		name: 'x-auth-token',
 		description: 'token.'
 	})
-	async update(
-		@Param('id') id: string,
-		@Res() res,
-		@Body() newProductDto: ProductDto
-	) {
-		const product = await this.productService.update(id, newProductDto);
-		return res.status(HttpStatus.OK).json({
-			statusCode: HttpStatus.OK,
-			message: 'The Product has been successfully updated.',
-			data: product
-		});
-	}
+	async createUpdateProfile(@Body() createproductDTO: ProductDto, @DTopic() topic: ITopic) {
+        return await this.productService.createUpdate(createproductDTO, topic);
+    }
+
+	// async update(
+	// 	@Param('id') id: string,
+	// 	@Res() res,
+	// 	@Body() newProductDto: ProductDto
+	// ) {
+	// 	const product = await this.productService.update(id, newProductDto);
+	// 	return res.status(HttpStatus.OK).json({
+	// 		statusCode: HttpStatus.OK,
+	// 		message: 'The Product has been successfully updated.',
+	// 		data: product
+	// 	});
+	// }
 
 	/**
 	 * @route   Delete /api/v1/products/:id

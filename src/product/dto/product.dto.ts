@@ -68,10 +68,10 @@ export class ProductDto {
 
     // Price
     @IsNotEmpty()
-    @IsNumber()
+    @IsString()
     @MinLength(4)
     @ApiProperty({
-        example: 150000,
+        example: "150000",
         description: 'Price',
         format: 'string'
     })

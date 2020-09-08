@@ -4,7 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule, { cors: true });
 
 	// app.enableCors({
 	// 	origin: "*",
@@ -27,7 +27,7 @@ async function bootstrap() {
 
 	const PORT = process.env.PORT || 3000;
 
-	app.enableCors();
+	// app.enableCors();
 
 	await app.listen(PORT);
 

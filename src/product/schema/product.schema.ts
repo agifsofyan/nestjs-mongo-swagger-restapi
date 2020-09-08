@@ -30,7 +30,7 @@ export const ProductSchema = new mongoose.Schema({
         type: String
     },
     price: {
-        type: Number, 
+        type: String, 
         required: true
     },
     created_by: {

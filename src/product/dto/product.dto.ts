@@ -2,8 +2,10 @@ import {
     IsNotEmpty,
     MinLength,
     IsString,
-    IsEnum
+    IsEnum,
+    IsDate
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum EnumType { 
@@ -18,7 +20,7 @@ export enum VisibilityEnum {
 	Private = 'private',
 }
 
-export enum UpSaleEnum { 
+export enum SaleMethodEnum { 
 	Normal = 'normal', 
 	Upsale = 'upsale',
 	Upgrade = 'upgrade',
@@ -65,24 +67,12 @@ export class ProductDto {
     })
     visibility: VisibilityEnum;
     
-    // Upsale
-    @IsEnum(UpSaleEnum, { message: 'Type value is: normal, upsale, upgrade, crossale' })
-    @IsNotEmpty()
-    @IsString()
-    @ApiProperty({
-        example: 'normal',
-        description: 'Upsale',
-        enum: ['normal', 'upsale', 'upgrade', 'crossale'],
-        default: 'normal'
-    })
-    upsale: UpSaleEnum;
-    
     // Form Type
     @IsEnum(FormEnum, { message: 'Type value is: simple, full' })
     @IsNotEmpty()
     @IsString()
     @ApiProperty({
-        example: 'publish',
+        example: 'simple',
         description: 'Form Type',
         enum: ['simple', 'full'],
         default: 'simple'
@@ -130,11 +120,18 @@ export class ProductDto {
 
     // Topic
     @IsNotEmpty()
-    @IsString()
+    // @IsString()
     @ApiProperty({
-        example: "Career",
+        example: [
+            {
+              "_id": "5f573ce648d45f4578599b75"
+            },
+            {
+              "_id": "5f573d0548d45f4578599b76"
+            }
+        ],
         description: 'Topic',
-        format: 'string'
+        // format: 'string'
     })
     topic: string;
 
@@ -146,6 +143,15 @@ export class ProductDto {
          format: 'string'
      })
     image_url: string;
+
+    // Video URL
+    @IsString()
+    @ApiProperty({
+        example: "http://sample/video.mp4",
+        description: 'Video Url',
+        format: 'string'
+    })
+   video_url: string;
 
     // Created By
     @ApiProperty({
@@ -162,4 +168,65 @@ export class ProductDto {
 	    format: 'string'
     })
     updated_by: string;
+
+    // Start At
+    @Type(() => Date)
+    @IsDate()
+    @ApiProperty({
+        example: "2018-06-22T08:00:19Z",
+        description: 'Start At',
+        format: 'date-time',
+        type: 'string'
+    })
+    start_at: Date;
+
+    // End At
+    @Type(() => Date)
+    @IsDate()
+    @ApiProperty({
+        example: "2018-06-22T08:00:19Z",
+        description: 'End At',
+        format: 'date-time',
+        type: 'string'
+    })
+    end_at: Date;
+
+     // Location
+     @IsString()
+     @ApiProperty({
+         example: "Gading Serpong",
+         description: 'Location',
+         format: 'string'
+     })
+    location: string;
+
+    // Sale Method / Upsale
+    @IsEnum(SaleMethodEnum, { message: 'Type value is: normal, upsale, upgrade, crossale' })
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+        example: 'normal',
+        description: 'Upsale',
+        enum: ['normal', 'upsale', 'upgrade', 'crossale'],
+        default: 'normal'
+    })
+    sale_method: SaleMethodEnum;
+
+    // Product Redirect
+    @IsString()
+    @ApiProperty({
+        example: "Ebook WLEM",
+        description: 'Product Redirect',
+        format: 'string'
+    })
+    product_redirect: string;
+
+    // Seller
+    // @IsString()
+    // @ApiProperty({
+    //     example: "",
+    //     description: 'Product Redirect',
+    //     format: 'string'
+    // })
+    // seller: string;
 }

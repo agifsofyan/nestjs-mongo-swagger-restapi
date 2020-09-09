@@ -11,6 +11,7 @@ import { IProduct } from './interface/product.interface';
 import { ITopic } from '../topic/interface/topic.interface';
 import { ProductDto } from './dto/product.dto';
 import { Query } from '../utils/OptQuery';
+import { ReverseString } from '../utils/StringManipulation';
 
 @Injectable()
 export class ProductService {
@@ -18,16 +19,22 @@ export class ProductService {
 	constructor(@InjectModel('Product') private readonly productModel: Model<IProduct>) {}
 
 	async create(productDto: ProductDto): Promise<IProduct> {
-		const createProduct = new this.productModel(productDto);
+		const product = new this.productModel(productDto);
 
 		// Check if product name is already exist
-        const isProductNameExist = await this.productModel.findOne({ name: createProduct.name });
+        const isProductNameExist = await this.productModel.findOne({ name: product.name });
         	
 		if (isProductNameExist) {
         	throw new BadRequestException('That product name (slug) is already exist.');
-        }
+		}
+		
+		const name = product.name
 
-		return await createProduct.save();
+		const code = ReverseString(name); // to convert Product Code
+
+        product.code = code;
+
+		return await product.save();
 	}
 
 	async findAll(options: Query): Promise<IProduct[]> {

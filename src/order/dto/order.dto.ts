@@ -1,14 +1,14 @@
 import {
     IsNotEmpty,
     MinLength,
-    IsNumber,
     IsString,
+    IsNumber,
     IsEnum,
+    IsDate,
     Min
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export enum EnumType {
     Wa = 'wa',

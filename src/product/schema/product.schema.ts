@@ -4,6 +4,9 @@ import * as slug from 'mongoose-slug-updater';
 mongoose.plugin(slug);
 
 export const ProductSchema = new mongoose.Schema({
+    code: {
+        type: String
+    },
     type: {
 	    type: String, 
         required: true,
@@ -25,18 +28,22 @@ export const ProductSchema = new mongoose.Schema({
         enum: [ "publish", "private" ],
 	    default: "publish"
     },
-    upsale: {
-        type: String,
-        enum: ['normal', 'upsale', 'upgrade', 'crossale'],
-	    default: "normal"
-    },
-    topic: [{ name: String }],
+    // topic: [{ name: String }], // ref: Topic
+    topic: [
+        {
+            ref: 'Topic',
+            type: mongoose.Schema.Types.ObjectId,
+        }
+    ],
     form_type: {
         type: String, 
         enum: ['simple', 'full'],
         default: "simple"
     },
     image_url: {
+        type: String // Array
+    },
+    video_url: {
         type: String
     },
     short_desc: {
@@ -58,8 +65,31 @@ export const ProductSchema = new mongoose.Schema({
     updated_by: {
     	type: String
     },
+    start_at: {
+        type: Date,
+        default: Date.now
+    },
+    end_at: {
+        type: Date,
+        default: Date.now
+    },
+    location: {
+        type: String
+    },
+    sale_method: {
+        type: String,
+        enum: ['normal', 'upsale', 'upgrade', 'crossale'],
+	    default: "normal"
+    },
+    product_redirect: {
+        type: String // Array
+    },
+    // seller: {
+    //     type: String // ref: User (Id & Name)
+    // }
 },{ 
 	collection: 'products',
 	versionKey: false, 
 	timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }, 
 });
+

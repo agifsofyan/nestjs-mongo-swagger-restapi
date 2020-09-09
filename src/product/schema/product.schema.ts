@@ -5,7 +5,8 @@ mongoose.plugin(slug);
 
 export const ProductSchema = new mongoose.Schema({
     code: {
-        type: String
+        type: String,
+        unique: true
     },
     type: {
 	    type: String, 
@@ -28,13 +29,11 @@ export const ProductSchema = new mongoose.Schema({
         enum: [ "publish", "private" ],
 	    default: "publish"
     },
-    // topic: [{ name: String }], // ref: Topic
-    topic: [
-        {
-            ref: 'Topic',
-            type: mongoose.Schema.Types.ObjectId,
-        }
-    ],
+    topic: [{ name: String }], // ref: Topic
+    // topic: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Topic'
+    // },
     form_type: {
         type: String, 
         enum: ['simple', 'full'],
@@ -73,7 +72,7 @@ export const ProductSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    location: {
+    media_url: {
         type: String
     },
     sale_method: {
@@ -93,3 +92,9 @@ export const ProductSchema = new mongoose.Schema({
 	timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }, 
 });
 
+// ProductSchema.virtual('topic', {
+//     ref: 'Topic',
+//     localField: '_id',
+//     foreignField: 'topic',
+//     justOne: false // set true for one-to-one relationship
+// })

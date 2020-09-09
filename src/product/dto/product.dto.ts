@@ -124,16 +124,17 @@ export class ProductDto {
     @ApiProperty({
         example: [
             {
-              "_id": "5f573ce648d45f4578599b75"
+              "name": "Career"
             },
             {
-              "_id": "5f573d0548d45f4578599b76"
+              "name": "Business"
             }
         ],
+        // example: '5f573ce648d45f4578599b75',
         description: 'Topic',
-        // format: 'string'
+        format: 'array'
     })
-    topic: string;
+    topic: object;
 
      // Image URL
      @IsString()
@@ -191,14 +192,14 @@ export class ProductDto {
     })
     end_at: Date;
 
-     // Location
+     // Media Url
      @IsString()
      @ApiProperty({
-         example: "Gading Serpong",
-         description: 'Location',
+         example: "https://zoom.us/j/2697925165?_x_zm_rtaid=58knpEjNRpOiZWECLYlkcA.1599641870607.036d146a5990bf44527a2edee2775bae&_x_zm_rhtaid=36#success",
+         description: 'Media Url',
          format: 'string'
      })
-    location: string;
+     media_url: string;
 
     // Sale Method / Upsale
     @IsEnum(SaleMethodEnum, { message: 'Type value is: normal, upsale, upgrade, crossale' })

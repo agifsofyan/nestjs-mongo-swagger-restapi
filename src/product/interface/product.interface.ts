@@ -8,6 +8,7 @@ export interface IProduct extends Document {
      slug: string; // Unique
      visibility: string; // Enum
      topic: ITopic[]; // Array ref: Topic
+     // topic: string;
      short_desc: string;
      description: string;
      time_period: string;
@@ -19,7 +20,7 @@ export interface IProduct extends Document {
      updated_by: string;
      start_at: Date;
      end_at: Date;
-     location: string;
+     media_url: string;
      sale_method: string; // enum
      product_redirect: string; // Array
      section: string; // Disclamer / Sub Paragraf(point)

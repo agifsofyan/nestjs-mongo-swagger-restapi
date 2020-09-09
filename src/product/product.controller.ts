@@ -181,22 +181,6 @@ export class ProductController {
 		name: 'x-auth-token',
 		description: 'token.'
 	})
-	// async createUpdateProfile(@Body() createproductDTO: ProductDto, @DTopic() topic: ITopic) {
-    //     return await this.productService.createUpdate(createproductDTO, topic);
-    // }
-
-	// async update(
-	// 	@Param('id') id: string,
-	// 	@Res() res,
-	// 	@Body() newProductDto: ProductDto
-	// ) {
-	// 	const product = await this.productService.update(id, newProductDto);
-	// 	return res.status(HttpStatus.OK).json({
-	// 		statusCode: HttpStatus.OK,
-	// 		message: 'The Product has been successfully updated.',
-	// 		data: product
-	// 	});
-	// }
 
 	/**
 	 * @route   Delete /api/v1/products/:id

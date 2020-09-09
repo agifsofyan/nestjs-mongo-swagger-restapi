@@ -38,6 +38,7 @@ export class OrderController {
         name: 'x-auth-token',
         description: 'token.'
     })
+
     async create(@Res() res, @Body() orderDto: OrderDto) {
         const order = await this.orderService.create(orderDto);
         return res.status(HttpStatus.CREATED).json({
@@ -55,6 +56,7 @@ export class OrderController {
     @Get()
     @UseGuards(AuthGuard('jwt'))
     @Roles('Administrator')
+
     @ApiOperation({ summary: 'Get all orders' })
     
     // Swagger Header [required]
@@ -109,9 +111,8 @@ export class OrderController {
 		required: false, 
 		explode: true, 
 		type: Number, 
-		isArray: false 
-    })
-    
+		isArray: false
+
     async findAll(@Req() req, @Res() res) {
         const order = await this.orderService.findAll(req.query);
         return res.status(HttpStatus.OK).json({
@@ -189,11 +190,6 @@ export class OrderController {
     //     });
     // }
 
-    /**
-     * @route   Delete /api/v1/orders/:id
-     * @desc    Delete order by ID
-     * @access  Public
-     **/
     // @Delete(':id')
     // @UseGuards(AuthGuard('jwt'))
     // @Roles('Administrator')
@@ -202,8 +198,7 @@ export class OrderController {
     //     description: 'token.'
     // })
     // async delete(@Param('id') id: string, @Res() res){
-    //     const order = await this.orderService.delete(id);
-        
+    //     const order = await this.orderService.delete(id);        
     //     if (order == 'ok') {
     //         return res.status(HttpStatus.OK).json({
     //             statusCode: HttpStatus.OK,

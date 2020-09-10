@@ -8,6 +8,8 @@ import {
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
+import { ITopic } from '../../topic/interface/topic.interface';
+
 export enum EnumType { 
 	Webinar = 'webinar', 
 	Digital = 'digital', 
@@ -32,7 +34,7 @@ export enum FormEnum {
 	Full = 'full',
 }
 
-export class ProductDto {
+export class CreateProductDTO {
     // Type
     @IsEnum(EnumType, { message: 'Type value is: webinar, digital, ecommerce, bonus' })
     @IsNotEmpty()
@@ -120,21 +122,15 @@ export class ProductDto {
 
     // Topic
     @IsNotEmpty()
-    // @IsString()
     @ApiProperty({
         example: [
-            {
-              "name": "Career"
-            },
-            {
-              "name": "Business"
-            }
+            "5f59442b7aebd32d4f1f0167",
+            "5f59443c7aebd32d4f1f0168"
         ],
-        // example: '5f573ce648d45f4578599b75',
-        description: 'Topic',
+        description: 'Select From Field Topic',
         format: 'array'
     })
-    topic: object;
+    topic: [string];
 
      // Image URL
      @IsString()
@@ -231,3 +227,5 @@ export class ProductDto {
     // })
     // seller: string;
 }
+
+export type UpdateProductDTO = Partial<CreateProductDTO>;

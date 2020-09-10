@@ -12,7 +12,7 @@ import {
 	UseGuards
 } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { OrderDto } from './dto/order.dto';
+import { CreateOrderDTO, UpdateOrderDTO } from './dto/order.dto';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -39,8 +39,8 @@ export class OrderController {
         description: 'token.'
     })
 
-    async create(@Res() res, @Body() orderDto: OrderDto) {
-        const order = await this.orderService.create(orderDto);
+    async create(@Res() res, @Body() createOrderDto: CreateOrderDTO) {
+        const order = await this.orderService.create(createOrderDto);
         return res.status(HttpStatus.CREATED).json({
             statusCode: HttpStatus.CREATED,
             message: 'The Order has been successfully created.',
@@ -112,6 +112,7 @@ export class OrderController {
 		explode: true, 
 		type: Number, 
 		isArray: false
+	})
 
     async findAll(@Req() req, @Res() res) {
         const order = await this.orderService.findAll(req.query);
@@ -166,44 +167,46 @@ export class OrderController {
     }
     
     /**
-     * @route   Patch /api/v1/orders/:id
-     * @desc    Update order by Id
-     * @access  Public
-     **/
-    // @Patch(':id')
-    // @UseGuards(AuthGuard('jwt'))
-    // @Roles('Administrator')
-    // @ApiHeader({
-    //     name: 'x-auth-token',
-    //     description: 'token.'
-    // })
-    // async update(
-    //     @Param('id') id: string,
-    //     @Res() res,
-    //     @Body() newOrderDto: OrderDto
-    // ){
-    //     const order = await this.orderService.update(id, newOrderDto);
-    //     return res.status(HttpStatus.OK).json({
-    //         statusCode: HttpStatus.OK,
-    //         message: 'The Order has been successfully updated.',
-    //         data: order
-    //     });
-    // }
+    * @route   Patch /api/v1/orders/:id
+    * @desc    Update order by Id
+    * @access  Public
+    **/
 
-    // @Delete(':id')
-    // @UseGuards(AuthGuard('jwt'))
-    // @Roles('Administrator')
-    // @ApiHeader({
-    //     name: 'x-auth-token',
-    //     description: 'token.'
-    // })
-    // async delete(@Param('id') id: string, @Res() res){
-    //     const order = await this.orderService.delete(id);        
-    //     if (order == 'ok') {
-    //         return res.status(HttpStatus.OK).json({
-    //             statusCode: HttpStatus.OK,
-    //             message: `Success remove order by id ${id}`
-    //         });
-    //     }
-    // }
+    @Patch(':id')
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
+    @ApiOperation({ summary: 'Update order by id' })
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
+    })
+    async update(
+        @Param('id') id: string,
+        @Res() res,
+        @Body() updateOrderDto: UpdateOrderDTO
+    ) {
+        const order = await this.orderService.update(id, updateOrderDto);
+        return res.status(HttpStatus.OK).json({
+            statusCode: HttpStatus.OK,
+            message: 'The Topic has been successfully updated.',
+            data: order
+        });
+    }
+
+    @Delete(':id')
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('Administrator')
+    @ApiHeader({
+        name: 'x-auth-token',
+        description: 'token.'
+    })
+    async delete(@Param('id') id: string, @Res() res){
+         const order = await this.orderService.delete(id);        
+         if (order == 'ok') {
+             return res.status(HttpStatus.OK).json({
+                 statusCode: HttpStatus.OK,
+                 message: `Success remove order by id ${id}`
+             });
+         }
+    }
 }

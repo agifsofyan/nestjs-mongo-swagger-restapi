@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import { IProduct } from '../product/interface/product.interface';
 import { IOrder } from './interface/order.interface';
-import { OrderDto } from './dto/order.dto';
+import { CreateOrderDTO, UpdateOrderDTO } from './dto/order.dto';
 import { Query } from '../utils/OptQuery';
 
 @Injectable()
@@ -12,9 +12,8 @@ export class OrderService {
 
 	constructor(@InjectModel('Order') private readonly orderModel: Model<IOrder>) {}
 
-	async create(orderDto: OrderDto): Promise<IOrder> {
-	// async create(orderDto: any, product: IProduct): Promise<IOrder> {
-		const createOrder = new this.orderModel(orderDto);
+	async create(createOrderDto: CreateOrderDTO): Promise<IOrder> {
+		const createOrder = new this.orderModel(createOrderDto);
 		return await createOrder.save();
 	}
 
@@ -90,28 +89,28 @@ export class OrderService {
 		return Order;
 	}
 
-	// async update(id: string, newOrder: OrderDto): Promise<IOrder> {
-	// 	let result;
-	// 	try{
-	// 	    result = await this.orderModel.findById(id);
-	// 	}catch(error){
-	// 	    throw new NotFoundException(`Could nod find Order with id ${id}`);
-	// 	}
+	async update(id: string, updateOrderDto: UpdateOrderDTO): Promise<IOrder> {
+	 	let result;
+	 	try{
+	 	    result = await this.orderModel.findById(id);
+	 	}catch(error){
+	 	    throw new NotFoundException(`Could nod find Order with id ${id}`);
+	 	}
 
-	// 	if(!result){
-	// 		throw new NotFoundException(`Could nod find Order with id ${id}`);
-	// 	}
+	 	if(!result){
+	 		throw new NotFoundException(`Could nod find Order with id ${id}`);
+	 	}
 
-	// 	await this.orderModel.findByIdAndUpdate(id, newOrder).exec();
-	// 	return await this.orderModel.findById(id).exec();
-	// }
+	 	await this.orderModel.findByIdAndUpdate(id, updateOrderDto).exec();
+	 	return await this.orderModel.findById(id).exec();
+	}
 
-	// async delete(id: string): Promise<string> {
-	// 	try{
-	// 		await this.orderModel.findByIdAndRemove(id).exec();
-	// 		return 'ok';
-	// 	}catch(err){
-	// 		throw new NotImplementedException('The Order could not be deleted');
-	// 	}
-	// }
+	async delete(id: string): Promise<string> {
+	 	try{
+	 		await this.orderModel.findByIdAndRemove(id).exec();
+	 		return 'ok';
+	 	}catch(err){
+	 		throw new NotImplementedException('The Order could not be deleted');
+	 	}
+	}
 }

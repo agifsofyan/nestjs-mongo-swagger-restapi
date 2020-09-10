@@ -1,14 +1,12 @@
 import { Document } from 'mongoose';
-import { ITopic } from '../../topic/interface/topic.interface';
 
 export interface IProduct extends Document {
      code: string;
      type: string; // Enum
      name: string; // Unique
-     slug: string; // Unique
+     // slug: string; // Unique
      visibility: string; // Enum
-     topic: ITopic[]; // Array ref: Topic
-     // topic: string;
+     topic: [string];
      short_desc: string;
      description: string;
      time_period: string;

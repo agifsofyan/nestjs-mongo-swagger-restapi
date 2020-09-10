@@ -16,7 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ProductService } from './product.service';
-import { ProductDto } from './dto/product.dto';
+import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 // import { DTopic } from '../topic/topic.decorator';
 // import { ITopic } from '../topic/interface/topic.interface';
 
@@ -40,8 +40,8 @@ export class ProductController {
 		description: 'token.'
 	})
 
-	async create(@Res() res, @Body() productDto: ProductDto) {
-		const product = await this.productService.create(productDto);
+	async create(@Res() res, @Body() createProductDto: CreateProductDTO) {
+		const product = await this.productService.create(createProductDto);
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
 			message: 'The Product has been successfully created.',
@@ -181,6 +181,18 @@ export class ProductController {
 		name: 'x-auth-token',
 		description: 'token.'
 	})
+	async update(
+		@Param('id') id: string,
+		@Res() res,
+		@Body() updateProductDto: UpdateProductDTO
+	) {
+		const product = await this.productService.update(id, updateProductDto);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: 'The Product has been successfully updated.',
+			data: product
+		});
+	}
 
 	/**
 	 * @route   Delete /api/v1/products/:id

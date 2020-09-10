@@ -20,7 +20,7 @@ export enum EnumPayment {
     Unpaid = 'unpaid',
 }
 
-export class OrderDto {
+export class CreateOrderDTO {
    // Order Date
     @Type(() => Date)
     @IsDate()
@@ -118,3 +118,5 @@ export class OrderDto {
     agent_id: string;
 
 }
+
+export type UpdateOrderDTO = Partial<CreateOrderDTO>;

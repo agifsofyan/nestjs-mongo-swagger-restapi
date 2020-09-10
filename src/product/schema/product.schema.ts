@@ -29,11 +29,10 @@ export const ProductSchema = new mongoose.Schema({
         enum: [ "publish", "private" ],
 	    default: "publish"
     },
-    topic: [{ name: String }], // ref: Topic
-    // topic: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Topic'
-    // },
+    topic: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Topic'
+    }],
     form_type: {
         type: String, 
         enum: ['simple', 'full'],
@@ -92,9 +91,8 @@ export const ProductSchema = new mongoose.Schema({
 	timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }, 
 });
 
-// ProductSchema.virtual('topic', {
+// ProductSchema.virtual('topics', {
 //     ref: 'Topic',
 //     localField: '_id',
 //     foreignField: 'topic',
-//     justOne: false // set true for one-to-one relationship
-// })
+// });

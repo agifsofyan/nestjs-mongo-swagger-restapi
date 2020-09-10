@@ -12,11 +12,7 @@ export const TopicSchema = new mongoose.Schema({
     slug: {
         type: String,
 	    slug: "name"
-    },
-    // product: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Product'
-    // }
+    }
 },{ 
 	collection: 'topics',
 	versionKey: false, 

@@ -17,8 +17,6 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ProductService } from './product.service';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
-// import { DTopic } from '../topic/topic.decorator';
-// import { ITopic } from '../topic/interface/topic.interface';
 
 @ApiTags('Products')
 @UseGuards(RolesGuard)

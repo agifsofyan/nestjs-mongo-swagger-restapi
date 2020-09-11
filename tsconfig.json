@@ -10,6 +10,12 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
-  }
+    "rootDir": "./src",
+    "incremental": true,
+    "allowJs": true,
+    "paths": {
+      "*": ["*", "generated/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist","certs","uploads","storage"]
 }

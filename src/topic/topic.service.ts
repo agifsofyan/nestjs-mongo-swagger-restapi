@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { ITopic } from './interface/topic.interface';
-import { TopicDto } from './dto/topic.dto';
+import { CreateTopicDTO, UpdateTopicDTO } from './dto/topic.dto';
 import { Query } from '../utils/OptQuery';
 
 @Injectable()
@@ -16,8 +16,8 @@ export class TopicService {
 
 	constructor(@InjectModel('Topic') private readonly topicModel: Model<ITopic>) {}
 
-	async create(topicDto: TopicDto): Promise<ITopic> {
-		const createTopic = new this.topicModel(topicDto);
+	async create(createTopicDto: CreateTopicDTO): Promise<ITopic> {
+		const createTopic = new this.topicModel(createTopicDto);
 
 		// Check if topic name is already exist
         const isTopicNameExist = await this.topicModel.findOne({ name: createTopic.name });
@@ -90,7 +90,7 @@ export class TopicService {
 		return result;
 	}
 
-	async update(id: string, NewTopic: Partial<TopicDto>): Promise<ITopic> {
+	async update(id: string, updateTopicDto: UpdateTopicDTO): Promise<ITopic> {
 		let result;
 		
 		// Check ID
@@ -104,7 +104,7 @@ export class TopicService {
 			throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
-		await this.topicModel.findByIdAndUpdate(id, NewTopic);
+		await this.topicModel.findByIdAndUpdate(id, updateTopicDto);
 		return await this.topicModel.findById(id).exec();
 	}
 

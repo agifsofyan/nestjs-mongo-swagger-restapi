@@ -11,13 +11,13 @@ export const OrderSchema = new mongoose.Schema({
         enum: [ "wa", "web" ],
         default: 'web'
     },
-    qty: {
-        type: Number, 
-        required: true
-    },
+    //qty: {
+    //    type: Number, 
+    //    default: 1
+    //},
     total_price: {
         type: Number, 
-        required: true
+        default: 0
     },
     payment_status: {
         type: String, 
@@ -31,16 +31,25 @@ export const OrderSchema = new mongoose.Schema({
     due_date: {
         type: Date
     },
-    // customer_id: {
-    //     type: String
-    // },
-    customer: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Product'
-    },
+    //customer: {
+    //  type: mongoose.Types.ObjectId,
+    //    ref: 'Customer'
+    //},
     agent_id: {
         type: String
     },
+    products:[
+    	{
+		product: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Product',
+		},
+		quantity: {
+			type: Number,
+			default: 1,
+		}
+	}
+    ]
 },{ 
     collection: 'orders',
     versionKey: false, 

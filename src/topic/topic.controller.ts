@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { TopicService } from './topic.service';
-import { TopicDto } from './dto/topic.dto';
+import { CreateTopicDTO, UpdateTopicDTO } from './dto/topic.dto';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -38,8 +38,8 @@ export class TopicController {
 		description: 'token.'
 	})
 
-	async create(@Res() res, @Body() topicDto: TopicDto) {
-		const topic = await this.topicService.create(topicDto);
+	async create(@Res() res, @Body() createTopicDto: CreateTopicDTO) {
+		const topic = await this.topicService.create(createTopicDto);
 
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
@@ -160,9 +160,9 @@ export class TopicController {
 	async update(
 		@Param('id') id: string,
 		@Res() res,
-		@Body() newTopicDto: TopicDto
+		@Body() updateTopicDto: UpdateTopicDTO
 	) {
-		const topic = await this.topicService.update(id, newTopicDto);
+		const topic = await this.topicService.update(id, updateTopicDto);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: 'The Topic has been successfully updated.',

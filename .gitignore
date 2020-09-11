@@ -41,3 +41,6 @@ lerna-debug.log*
 
 # Miscellaneous
 .env
+
+# Lock Compiler
+package-lock.json

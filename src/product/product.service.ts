@@ -11,7 +11,7 @@ import { IProduct } from './interface/product.interface';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 import { TopicService } from '../topic/topic.service';
 import { Query } from '../utils/OptQuery';
-import { ReverseString, StringPlusUnique } from '../utils/StringManipulation';
+import { ReverseString } from '../utils/StringManipulation';
 
 @Injectable()
 export class ProductService {

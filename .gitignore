@@ -43,4 +43,10 @@ lerna-debug.log*
 .env
 
 # Lock Compiler
-package-lock.json
+package-lock.json=
+
+# Storage (image and video)
+/storage
+
+# Server Key
+/certs

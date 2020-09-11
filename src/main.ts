@@ -1,10 +1,19 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+import {NestFastifyApplication} from '@nestjs/platform-fastify';
+// import { FastifyAdapterConf } from './config/multer.configuration';
+
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule, { cors: true });
+
+	// const app: INestApplication = await NestFactory.create<NestFastifyApplication>(
+    //     AppModule,
+    //     // FastifyAdapterConf,
+    // );
+    app.enableCors();
 
 	// app.enableCors({
 	// 	origin: "*",
@@ -26,8 +35,6 @@ async function bootstrap() {
 	SwaggerModule.setup('api/v1/docs', app, document);
 
 	const PORT = process.env.PORT || 3000;
-
-	// app.enableCors();
 
 	await app.listen(PORT);
 

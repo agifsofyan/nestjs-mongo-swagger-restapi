@@ -30,6 +30,17 @@ export class ProductService {
 		if (isProductNameExist) {
         	throw new BadRequestException('That product name (slug) is already exist.')
 		}
+
+		var arrayTopic = createProductDto.topic
+
+		console.log('arrayCode: ', arrayTopic)
+
+		for (let i = 0; i < arrayTopic.length; i++) {
+			const isTopicExist = await this.topicService.findById(arrayTopic[i])
+			if (! isTopicExist) {
+				throw new BadRequestException()
+			}
+		}
 		
 		// ctreate Product Code
 		const name = product.name

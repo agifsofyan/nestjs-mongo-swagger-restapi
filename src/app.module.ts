@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { TopicModule } from './topic/topic.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
 	imports: [
@@ -16,7 +17,8 @@ import { TopicModule } from './topic/topic.module';
 	    UserModule,
 	    ProductModule,
 	    OrderModule,
-	    TopicModule
+	    TopicModule,
+	    MediaModule
 	],
 	controllers: [AppController],
   	providers: [AppService],

@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, INestApplication } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-import {NestFastifyApplication} from '@nestjs/platform-fastify';
+// import { NestFastifyApplication } from '@nestjs/platform-fastify';
 // import { FastifyAdapterConf } from './config/multer.configuration';
 
 async function bootstrap() {
@@ -26,7 +26,7 @@ async function bootstrap() {
 
 	const options = new DocumentBuilder()
 		.setTitle('laruno-backoffice-api-v1')
-		.setDescription(`API ${process.env.API_ENV}.`)
+		.setDescription(`API ${process.env.NODE_ENV}.`)
 		.setVersion('1.0')
 		.addTag('API')
 		.build();
@@ -34,10 +34,10 @@ async function bootstrap() {
 	const document = SwaggerModule.createDocument(app, options);
 	SwaggerModule.setup('api/v1/docs', app, document);
 
-	const PORT = process.env.PORT || 3000;
+	const PORT = process.env.BACKOFFICE_API_PORT || 3000;
 
 	await app.listen(PORT);
 
-	console.log(`[API] laruno-backoffice-api started running in ${process.env.API_ENV} mode on port ${PORT}.`);
+	console.log(`[API] laruno-backoffice-api started running in ${process.env.NODE_ENV} mode on port ${PORT}.`);
 }
 bootstrap();

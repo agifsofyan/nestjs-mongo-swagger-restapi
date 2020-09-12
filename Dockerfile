@@ -1,27 +1,36 @@
-FROM node:latest AS base
+# DEVELOPMENT
 
-WORKDIR /app
+FROM node:latest AS dev
 
-COPY package.json ./
+ENV NODE_ENV=development
+
+WORKDIR /laruno-backoffice/app
+
+COPY package*.json ./
 
 RUN npm install
 
-FROM base AS dev
+COPY . .
 
-COPY .eslintrc.js \
-  .prettierrc \
-  nest-cli.json \
-  tsconfig.* \
-  ./
-COPY ./src/ ./src/
+RUN npm run build
 
-RUN npm run build 
+# PRODUCTION
 
-FROM node:latest
+FROM node:latest AS production
 
-COPY --from=base /app/package.json ./
-COPY --from=dev /app/dist/ ./dist/
-COPY --from=base /app/node_modules/ ./node_modules/
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-EXPOSE 7000
-CMD ["node", "dist/main.js"]
+WORKDIR /laruno-backoffice/app
+
+COPY package*.json ./
+
+RUN npm install --only=production
+
+COPY . .
+
+COPY --from=development /laruno-backoffice/app/dist ./dist
+
+EXPOSE 5000
+
+CMD ["npm", "run", "start:prod"]

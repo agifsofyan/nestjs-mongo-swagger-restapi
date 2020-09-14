@@ -12,7 +12,14 @@ import {
   
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { 
+	ApiTags, 
+	ApiOperation, 
+	ApiHeader, 
+	ApiQuery,
+	ApiConsumes,
+	ApiBody
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -33,10 +40,44 @@ export class MediaController {
     @UseGuards(AuthGuard('jwt'))
     @Roles('Administrator')
     @ApiOperation({ summary: 'Single Upload' })
+
     @ApiHeader({
       name: 'x-auth-token',
       description: 'token.'
     })
+
+    @ApiConsumes('multipart/form-data')
+    
+    @ApiBody({
+    	"schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Multiple File Upload",
+                      "format": "binary"
+                    }
+                  }
+                }
+	}
+    })
+
+    //@UseInterceptors(FileInterceptor('image',
+    //{
+      //  storage: diskStorage('storage/images'),
+        //limits: {
+          //  fileSize: 20971520, // 20Mb
+        //},
+       // fileFilter: (req, file, cb) => {
+         //   constnestjs mimeTypeList = ['image/png', 'image/jpeg', 'image/giff'];
+
+           // return mimeTypeList.some(item => item === file.mimetype)
+             //   ? cb(null, true)
+               // : cb(null, false);
+        //},
+    //}))
   
     @UseInterceptors(
       FileInterceptor('image', {
@@ -47,6 +88,7 @@ export class MediaController {
         fileFilter: imageFileFilter,
       }),
     )
+
     async uploadedFile(@UploadedFile() file) {
         const response = {
             originalname: file.originalname,

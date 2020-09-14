@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
-import * as slug from 'mongoose-slug-updater';
+//import * as slug from 'mongoose-slug-updater';
 
-mongoose.plugin(slug);
+//mongoose.plugin(slug);
 
 export const ProductSchema = new mongoose.Schema({
     code: {
@@ -16,13 +16,12 @@ export const ProductSchema = new mongoose.Schema({
     },
     name: {
         type: String, 
-        required: true,
-	    unique: true
+        required: true
     },
     slug: {
         type: String,
-	    slug: "name",
-	    unique: true
+	//slug: 'slug',
+	unique: true
     },
     visibility: {
         type: String,
@@ -33,22 +32,20 @@ export const ProductSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Topic'
     }],
-    form_type: {
-        type: String, 
-        enum: ['simple', 'full'],
-        default: "simple"
-    },
     image_url: {
         type: String // Array
     },
     video_url: {
         type: String
     },
-    short_desc: {
+    headline: {
         type: String
     },
     description: {
         type: String
+    },
+    feedback: {
+	type: String
     },
     time_period: {
         type: String
@@ -63,16 +60,17 @@ export const ProductSchema = new mongoose.Schema({
     updated_by: {
     	type: String
     },
-    start_at: {
-        type: Date,
-        default: Date.now
+    date: {
+    	type: String
     },
-    end_at: {
-        type: Date,
-        default: Date.now
+    start_time: {
+       	type: String
     },
-    media_url: {
+    end_time: {
         type: String
+    },
+    client_url: {
+      	type: String
     },
     sale_method: {
         type: String,
@@ -82,9 +80,21 @@ export const ProductSchema = new mongoose.Schema({
     product_redirect: {
         type: String // Array
     },
-    // seller: {
-    //     type: String // ref: User (Id & Name)
-    // }
+    reseller: {
+         type: String // ref: User (Id & Name)
+     },
+    image_bonus_url: [{
+	type: String
+    }],   
+    image_text_url: [{
+	type: String
+    }],
+    image_product_url: [{
+	type: String
+    }],
+    section: {
+	type: String
+    },
 },{ 
 	collection: 'products',
 	versionKey: false, 

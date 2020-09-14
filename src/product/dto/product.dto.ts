@@ -29,11 +29,6 @@ export enum SaleMethodEnum {
 	Crossale = 'crossale',
 }
 
-export enum FormEnum { 
-	Simple = 'simple', 
-	Full = 'full',
-}
-
 export class CreateProductDTO {
     // Type
     @IsEnum(EnumType, { message: 'Type value is: webinar, digital, ecommerce, bonus' })
@@ -51,11 +46,21 @@ export class CreateProductDTO {
     @IsString()
     @MinLength(5)
     @ApiProperty({
-        example: 'Bisnis Market',
+        example: 'Bisnis Market Pasar Modal 2020',
         description: 'Name',
         format: 'form'
     })
     name: string;
+
+    // Slug
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+	example: 'Bisnis Market 2020',
+	description: 'Slug',
+	format: 'string'
+    })
+    slug: string;
 
     // Visibility
     @IsEnum(VisibilityEnum, { message: 'Type value is: publish, private' })
@@ -68,38 +73,36 @@ export class CreateProductDTO {
         default: 'publish'
     })
     visibility: VisibilityEnum;
-    
-    // Form Type
-    @IsEnum(FormEnum, { message: 'Type value is: simple, full' })
-    @IsNotEmpty()
-    @IsString()
-    @ApiProperty({
-        example: 'simple',
-        description: 'Form Type',
-        enum: ['simple', 'full'],
-        default: 'simple'
-    })
-    form_type: FormEnum;
 
-    // Short Desc
+    // Headline
     @IsString()
     @MinLength(5)
     @ApiProperty({
         example: 'Bisnis Market to young generation',
-        description: 'Short Description',
+        description: 'Headline',
         format: 'string'
     })
-    short_desc: string;
+    headline: string;
 
     // Description
     @IsString()
     @MinLength(5)
     @ApiProperty({
         example: 'Bisnis Market to young generation in the world',
-        description: 'Full Description',
+	description: 'Full Description',
         format: 'string'
     })
     description: string;
+
+    // Feedback (what you learn)
+    @IsString()
+    @MinLength(5)
+    @ApiProperty({
+        example: 'Why You Learn our',
+	description: 'Feedback (why your learn)',
+        format: 'string'
+    })
+    feedback: string;
 
     // Time Periode
     @ApiProperty({
@@ -132,13 +135,13 @@ export class CreateProductDTO {
     })
     topic: [string];
 
-     // Image URL
-     @IsString()
-     @ApiProperty({
+    // Image URL
+    @IsString()
+    @ApiProperty({
          example: "http://sample/image.jpg",
          description: 'Image Url',
          format: 'string'
-     })
+    })"http://sample/image-product.jpg"
     image_url: string;
 
     // Video URL
@@ -166,36 +169,43 @@ export class CreateProductDTO {
     })
     updated_by: string;
 
-    // Start At
-    @Type(() => Date)
-    @IsDate()
-    @ApiProperty({
-        example: "2018-06-22T08:00:19Z",
-        description: 'Start At',
-        format: 'date-time',
-        type: 'string'
-    })
-    start_at: Date;
+    // Webinar Date
+    //@IsDate()
+    //@Type(() => Date)
+    @ApiProperty({  
+    	example: "2020-10-25",
+        description: 'Webinar Date',                     
+        format: 'date',                 
+	type: 'string'                                    
+    })                                     
+    date: string;
 
-    // End At
-    @Type(() => Date)
-    @IsDate()
+    // Start Time
+    //@IsString()
     @ApiProperty({
-        example: "2018-06-22T08:00:19Z",
+        example: "05:00",
+        description: 'Start Time',
+        format: 'string'
+    })
+    start_time: string;
+
+    // End Time
+    //@IsString()
+    @ApiProperty({
+        example: "21:32",
         description: 'End At',
-        format: 'date-time',
-        type: 'string'
+        format: 'string'
     })
-    end_at: Date;
+    end_time: string;
 
-     // Media Url
-     @IsString()
+     // Client Url
+    // @IsString()
      @ApiProperty({
          example: "https://zoom.us/j/2697925165?_x_zm_rtaid=58knpEjNRpOiZWECLYlkcA.1599641870607.036d146a5990bf44527a2edee2775bae&_x_zm_rhtaid=36#success",
          description: 'Media Url',
          format: 'string'
      })
-     media_url: string;
+    client_url: string;
 
     // Sale Method / Upsale
     @IsEnum(SaleMethodEnum, { message: 'Type value is: normal, upsale, upgrade, crossale' })
@@ -218,14 +228,47 @@ export class CreateProductDTO {
     })
     product_redirect: string;
 
-    // Seller
-    // @IsString()
-    // @ApiProperty({
-    //     example: "",
-    //     description: 'Product Redirect',
-    //     format: 'string'
-    // })
-    // seller: string;
+    // ReSeller
+     @IsString()
+     @ApiProperty({
+         example: "",
+         description: 'Re Seller',
+         format: 'string'
+     })
+     reseller: string;
+    
+    // Image Bonus URL
+    @ApiProperty({
+         example: ["http://sample/image-bonus1.jpg", "http://sample/image-bonus2.jpg"],
+         description: 'Image bonus Url',
+         format: 'array'
+    })
+    image_bonus_url: [string];
+
+    // Image Text Url
+    @ApiProperty({
+         example:["http://sample/image-text1.jpg", "http://sample/image-text2.jpg"],
+         description: 'Image Text Url',
+         format: 'array'
+    })
+    image_text_url: [string];
+
+    // Image Product URL
+    @ApiProperty({
+         example: ["http://sample/image-product1.jpg", "http://sample/image-product2.jpg"],
+         description: 'Image Product Url',
+         format: 'array'
+    })
+    image_product_url: [string];
+
+    // Section
+    @IsString()
+    @ApiProperty({
+        example: 'Section in the paragraf of young generation in the world',
+	description: 'section',
+        format: 'string'
+    })
+    section: string;
 }
 
 export type UpdateProductDTO = Partial<CreateProductDTO>;

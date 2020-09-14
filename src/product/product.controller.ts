@@ -43,7 +43,7 @@ export class ProductController {
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
 			message: 'The Product has been successfully created.',
-			data: product
+			data: product    	
 		});
 	}
 
@@ -104,7 +104,7 @@ export class ProductController {
 		isArray: false
 	})
 
-	@ApiQuery({ 
+	@ApiQuery({
 		name: 'offset', 
 		required: false, 
 		explode: true, 

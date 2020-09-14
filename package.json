@@ -40,7 +40,7 @@
     "fastify-multer": "^2.0.2",
     "fastify-multipart": "^3.2.0",
     "fastify-swagger": "^3.3.0",
-    "mongoose": "^5.10.4",
+    "mongoose": "^5.10.5",
     "mongoose-slug-updater": "^3.2.3",
     "multer": "^1.4.2",
     "multer-ftp": "^1.2.0",

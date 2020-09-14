@@ -12,6 +12,7 @@ import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 import { TopicService } from '../topic/topic.service';
 import { Query } from '../utils/OptQuery';
 import { ReverseString } from '../utils/StringManipulation';
+import { TimeValidation } from '../utils/CustomValidation';
 
 @Injectable()
 export class ProductService {
@@ -24,16 +25,22 @@ export class ProductService {
 	async create(createProductDto: CreateProductDTO): Promise<IProduct> {
 		const product = new this.productModel(createProductDto)
 
+		const { name, slug, start_time, end_time } = product
+		
+		console.log('start_time', start_time)
+		// Make Product Slug
+		const makeSlug = slug.replace(' ', '-')
+				
 		// Check if product name is already exist
-		const isProductNameExist = await this.productModel.findOne({ name: product.name })
+		const isProductSlugExist = await this.productModel.findOne({ slug: makeSlug })
         	
-		if (isProductNameExist) {
-        	throw new BadRequestException('That product name (slug) is already exist.')
+		if (isProductSlugExist) {
+        	throw new BadRequestException('That product slug is already exist.')
 		}
+		
+		product.slug = makeSlug
 
 		var arrayTopic = createProductDto.topic
-
-		console.log('arrayCode: ', arrayTopic)
 
 		for (let i = 0; i < arrayTopic.length; i++) {
 			const isTopicExist = await this.topicService.findById(arrayTopic[i])
@@ -42,22 +49,24 @@ export class ProductService {
 			}
 		}
 		
-		// ctreate Product Code
-		const name = product.name
-
+		// create Product Code
 		var makeCode = ReverseString(name) // to convert Product Code
 
-		// const isCodeExist = await this.productModel.findOne({ code: makeCode })
+		product.code = makeCode
 
-		// if (isCodeExist) {
-		// 	var changeCode = StringPlusUnique(makeCode)
+		if(start_time){
 
-		// 	product.code = changeCode
-		// 	// console.log('changeCode:', changeCode)
-		// }else{
-			product.code = makeCode
-		// 	console.log('makeCode:', makeCode)
-		// }
+			const checkStartTime = TimeValidation(start_time)
+			const checkEndTime = TimeValidation(end_time)
+
+			if(!checkStartTime) {
+				throw new BadRequestException('Start time field not valid, ex: 09:59')
+			}
+
+			if(!checkEndTime){
+				throw new BadRequestException('End time field not valid, ex: 10:59')
+			}
+		}
 
 		return await product.save()
 	}

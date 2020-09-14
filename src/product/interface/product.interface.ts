@@ -1,27 +1,32 @@
 import { Document } from 'mongoose';
+import { IWebinar } from './webinar.interface';
 
 export interface IProduct extends Document {
      code: string;
      type: string; // Enum
-     name: string; // Unique
-     // slug: string; // Unique
+     name: string;
+     slug: string; // Unique
      visibility: string; // Enum
      topic: [string];
-     short_desc: string;
+     headline: string;
      description: string;
+     feedback: string;
      time_period: string;
      price: string;
-     form_type: string; // Enum
      image_url: string; // Array
      video_link: string;
      created_by: string;
      updated_by: string;
-     start_at: Date;
-     end_at: Date;
-     media_url: string;
+     //webinar: IWebinar;
+     date: string;
+     start_time: string;
+     end_time: string;
+     client_url: string;
      sale_method: string; // enum
      product_redirect: string; // Array
-     section: string; // Disclamer / Sub Paragraf(point)
-     feedback: string;
-     //seller: string; // ref: User (Id & Name)
+     reseller: string; // ref: User (Id & Name)
+     image_bonus_url: [string];
+     image_text_url: [string];
+     image_product_url: [string];
+     section: string;
 }

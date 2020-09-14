@@ -7,12 +7,19 @@ import {
     UploadedFiles,
     UseGuards,
     Res,
-    Param,
+    Param
 } from '@nestjs/common';
   
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { 
+	ApiTags, 
+	ApiOperation, 
+	ApiHeader, 
+	ApiQuery,
+	ApiConsumes,
+	ApiBody
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -32,20 +39,42 @@ export class MediaController {
     @Post()
     @UseGuards(AuthGuard('jwt'))
     @Roles('Administrator')
-    @ApiOperation({ summary: 'Single Upload' })
+    
     @ApiHeader({
-      name: 'x-auth-token',
-      description: 'token.'
+	name: 'x-auth-token',
+	description: 'token'
     })
+
+    @ApiOperation({ summary: 'Single Upload' })
+    
+    @ApiConsumes('multipart/form-data')
+    //@UseInterceptors(FileInterceptor('file'))
+    //@Path("./storage/images")
+    @ApiBody({
+        type: 'multipart/form-data',
+        required: true,
+        schema: {
+          type: 'object',
+          properties: {
+            file: {
+              type: 'string',
+              format: 'binary'
+            }
+         }
+        }
+    })
+    //uploadFile(@UploadedFile() file) {
+    //    return file;
+    //}
   
     @UseInterceptors(
-      FileInterceptor('image', {
+    	FileInterceptor('image', {
         storage: diskStorage({
           destination: './storage/images',
           filename: editFileName,
         }),
         fileFilter: imageFileFilter,
-      }),
+     }),
     )
     async uploadedFile(@UploadedFile() file) {
         const response = {
@@ -53,8 +82,6 @@ export class MediaController {
             filename: file.filename,
             path: 'storage/images'
         };
-
-        console.log('exception', response)
 
         return response;
     }

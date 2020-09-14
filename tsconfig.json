@@ -17,5 +17,6 @@
       "*": ["*", "generated/*"]
     }
   },
-  "exclude": ["node_modules", "dist", "certs", "uploads", "storage"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts", "certs", "uploads", "storage"]
 }

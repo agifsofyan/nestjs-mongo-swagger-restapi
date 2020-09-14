@@ -2726,11 +2726,6 @@
         "signature": "482b8f0d35a3d453500a15b6c6057c1e4c40baa4329b39da9e1026d8e1de4329",
         "affectsGlobalScope": false
       },
-      "./src/product/interface/webinar.interface.ts": {
-        "version": "5edffe84a653b89f18a126c386d02d269fa118de889110d78627bedb3ed1fc12",
-        "signature": "9de511f854c025a9db105997e81e25691c8e450a5b41d9651941359846acadce",
-        "affectsGlobalScope": false
-      },
       "./src/product/interface/product.interface.ts": {
         "version": "a81b461020c4ef3414e0304263d9c422d47120b331d4ade07735ea0b3e8f3dd6",
         "signature": "f0438ffc124346f9a70e9143c4f697af96dbc737142bc9009746f5236543e441",
@@ -3284,11 +3279,6 @@
       "./src/media.old/media.module.ts": {
         "version": "114e1e218ced9d2316e73b0b93b0e87867c19c57cd0a6525c18018ee6f4c77a5",
         "signature": "7511a389505669f877f4c4a5eb7715fba76b8d1fc7a8c9b1bcdedebd0c5db123",
-        "affectsGlobalScope": false
-      },
-      "./src/product/schema/webinar.schema.ts": {
-        "version": "247f09b6b1b6929be3eef578417dd4e8eff53c310d1c6226e3392c0d8633cfba",
-        "signature": "bbd42854c0e21389f09208e414df8334e0b41db3d818b2a68dfe5818515dd794",
         "affectsGlobalScope": false
       },
       "./src/topic/topic.decorator.ts": {
@@ -9737,15 +9727,6 @@
         "./node_modules/@types/node/ts3.1/fs.d.ts",
         "./node_modules/@types/node/ts3.1/util.d.ts",
         "./node_modules/@types/node/ts3.4/fs.d.ts",
-        "./node_modules/@types/node/ts3.4/util.d.ts",
-        "./src/product/interface/webinar.interface.ts"
-      ],
-      "./src/product/interface/webinar.interface.ts": [
-        "./node_modules/@types/graceful-fs/index.d.ts",
-        "./node_modules/@types/mongoose/index.d.ts",
-        "./node_modules/@types/node/ts3.1/fs.d.ts",
-        "./node_modules/@types/node/ts3.1/util.d.ts",
-        "./node_modules/@types/node/ts3.4/fs.d.ts",
         "./node_modules/@types/node/ts3.4/util.d.ts"
       ],
       "./src/product/product.controller.ts": [
@@ -9796,14 +9777,6 @@
         "./src/utils/StringManipulation.ts"
       ],
       "./src/product/schema/product.schema.ts": [
-        "./node_modules/@types/graceful-fs/index.d.ts",
-        "./node_modules/@types/mongoose/index.d.ts",
-        "./node_modules/@types/node/ts3.1/fs.d.ts",
-        "./node_modules/@types/node/ts3.1/util.d.ts",
-        "./node_modules/@types/node/ts3.4/fs.d.ts",
-        "./node_modules/@types/node/ts3.4/util.d.ts"
-      ],
-      "./src/product/schema/webinar.schema.ts": [
         "./node_modules/@types/graceful-fs/index.d.ts",
         "./node_modules/@types/mongoose/index.d.ts",
         "./node_modules/@types/node/ts3.1/fs.d.ts",
@@ -15871,9 +15844,6 @@
       "./src/product/interface/product.interface.ts": [
         "./node_modules/@types/mongoose/index.d.ts"
       ],
-      "./src/product/interface/webinar.interface.ts": [
-        "./node_modules/@types/mongoose/index.d.ts"
-      ],
       "./src/product/product.controller.ts": [
         "./src/product/dto/product.dto.ts",
         "./src/product/product.service.ts"
@@ -15886,9 +15856,6 @@
         "./src/utils/OptQuery.ts"
       ],
       "./src/product/schema/product.schema.ts": [
-        "./node_modules/@types/mongoose/index.d.ts"
-      ],
-      "./src/product/schema/webinar.schema.ts": [
         "./node_modules/@types/mongoose/index.d.ts"
       ],
       "./src/topic/interface/topic.interface.ts": [
@@ -16614,13 +16581,23 @@
       "./src/order/order.service.ts",
       "./src/order/schema/order.schema.ts",
       "./src/product/dto/product.dto.ts",
-      "./src/product/interface/product.interface.ts",
-      "./src/product/interface/webinar.interface.ts",
+      [
+        "./src/product/interface/product.interface.ts",
+        [
+          {
+            "file": "./src/product/interface/product.interface.ts",
+            "start": 62,
+            "length": 21,
+            "messageText": "Cannot find module './webinar.interface' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./src/product/product.controller.ts",
       "./src/product/product.module.ts",
       "./src/product/product.service.ts",
       "./src/product/schema/product.schema.ts",
-      "./src/product/schema/webinar.schema.ts",
       "./src/topic/dto/topic.dto.ts",
       "./src/topic/interface/topic.interface.ts",
       "./src/topic/schema/topic.schema.ts",

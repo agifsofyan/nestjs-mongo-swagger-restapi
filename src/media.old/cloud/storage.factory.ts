@@ -16,8 +16,8 @@ export class StorageFactory {
 
                             cb(null, true);
                         },
-                    },
-                );
+                });
+                
             case TYPE_STORAGE.AWS: {
                 return new AwsStorageAdapter({
                     fileFilter(req, file, cb) {

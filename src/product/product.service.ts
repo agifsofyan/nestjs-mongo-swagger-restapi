@@ -22,23 +22,25 @@ export class ProductService {
 		private readonly topicService: TopicService
 	) {}
 
-	async create(createProductDto: CreateProductDTO): Promise<IProduct> {
+	async create(createProductDto: any): Promise<IProduct> {
 		const product = new this.productModel(createProductDto)
 
-		const { name, slug, start_time, end_time } = product
+		console.log('createProductDto', createProductDto)
+		console.log('product', product)
+
+		const { name, date, start_time, end_time, client_url } = createProductDto
 		
-		console.log('start_time', start_time)
 		// Make Product Slug
-		const makeSlug = slug.replace(' ', '-')
+		// const makeSlug = slug.replace(' ', '-')
 				
 		// Check if product name is already exist
-		const isProductSlugExist = await this.productModel.findOne({ slug: makeSlug })
+		const isProductSlugExist = await this.productModel.findOne({ slug: product.slug })
         	
 		if (isProductSlugExist) {
         	throw new BadRequestException('That product slug is already exist.')
 		}
 		
-		product.slug = makeSlug
+		// product.slug = makeSlug
 
 		var arrayTopic = createProductDto.topic
 
@@ -66,6 +68,13 @@ export class ProductService {
 			if(!checkEndTime){
 				throw new BadRequestException('End time field not valid, ex: 10:59')
 			}
+		}
+
+		if (date !== undefined || date !== '') {
+			product.webinar.date = date;
+			product.webinar.start_time = start_time;
+			product.webinar.end_time = end_time;
+			product.webinar.client_url = client_url;
 		}
 
 		return await product.save()

@@ -1,5 +1,4 @@
 import { Document } from 'mongoose';
-import { IWebinar } from './webinar.interface';
 
 export interface IProduct extends Document {
      code: string;
@@ -17,11 +16,12 @@ export interface IProduct extends Document {
      video_link: string;
      created_by: string;
      updated_by: string;
-     //webinar: IWebinar;
-     date: string;
-     start_time: string;
-     end_time: string;
-     client_url: string;
+     webinar: {
+          date: string;
+          start_time: string;
+          end_time: string;
+          client_url: string;
+     }
      sale_method: string; // enum
      product_redirect: string; // Array
      reseller: string; // ref: User (Id & Name)

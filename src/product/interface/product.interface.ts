@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { IWebinar } from './webinar.interface';
+// import { IWebinar } from './webinar.interface';
 
 export interface IProduct extends Document {
      code: string;

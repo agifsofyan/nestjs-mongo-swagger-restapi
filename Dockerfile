@@ -31,6 +31,6 @@ COPY . .
 
 COPY --from=dev /laruno-backoffice/app/dist ./dist
 
-EXPOSE 5000
+EXPOSE 7000
 
 CMD ["npm", "run", "start:prod"]

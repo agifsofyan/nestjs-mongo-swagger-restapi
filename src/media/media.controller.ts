@@ -7,7 +7,7 @@ import {
     UploadedFiles,
     UseGuards,
     Res,
-    Param
+    Param,
 } from '@nestjs/common';
   
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
@@ -39,49 +39,64 @@ export class MediaController {
     @Post()
     @UseGuards(AuthGuard('jwt'))
     @Roles('Administrator')
-    
+    @ApiOperation({ summary: 'Single Upload' })
+
     @ApiHeader({
-	name: 'x-auth-token',
-	description: 'token'
+      name: 'x-auth-token',
+      description: 'token.'
     })
 
-    @ApiOperation({ summary: 'Single Upload' })
-    
     @ApiConsumes('multipart/form-data')
-    //@UseInterceptors(FileInterceptor('file'))
-    //@Path("./storage/images")
+    
     @ApiBody({
-        type: 'multipart/form-data',
-        required: true,
-        schema: {
-          type: 'object',
-          properties: {
-            file: {
-              type: 'string',
-              format: 'binary'
-            }
-         }
-        }
+    	"schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Multiple File Upload",
+                      "format": "binary"
+                    }
+                  }
+                }
+	}
     })
-    //uploadFile(@UploadedFile() file) {
-    //    return file;
-    //}
+
+    //@UseInterceptors(FileInterceptor('image',
+    //{
+      //  storage: diskStorage('storage/images'),
+        //limits: {
+          //  fileSize: 20971520, // 20Mb
+        //},
+       // fileFilter: (req, file, cb) => {
+         //   constnestjs mimeTypeList = ['image/png', 'image/jpeg', 'image/giff'];
+
+           // return mimeTypeList.some(item => item === file.mimetype)
+             //   ? cb(null, true)
+               // : cb(null, false);
+        //},
+    //}))
   
     @UseInterceptors(
-    	FileInterceptor('image', {
+      FileInterceptor('image', {
         storage: diskStorage({
           destination: './storage/images',
           filename: editFileName,
         }),
         fileFilter: imageFileFilter,
-     }),
+      }),
     )
+
     async uploadedFile(@UploadedFile() file) {
         const response = {
             originalname: file.originalname,
             filename: file.filename,
             path: 'storage/images'
         };
+
+        console.log('exception', response)
 
         return response;
     }

@@ -50,3 +50,7 @@ package-lock.json=
 
 # Server Key
 /certs
+
+# build info
+*.tsbuildinfo
+*.*.tsbuildinfo

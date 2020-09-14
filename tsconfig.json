@@ -17,5 +17,5 @@
       "*": ["*", "generated/*"]
     }
   },
-  "exclude": ["node_modules", "dist", "certs", "uploads", "storage"]
+  "exclude": ["certs", "uploads", "storage"]
 }

@@ -29,7 +29,7 @@ RUN npm install --only=production
 
 COPY . .
 
-COPY --from=development /laruno-backoffice/app/dist ./dist
+COPY --from=dev /laruno-backoffice/app/dist ./dist
 
 EXPOSE 5000
 

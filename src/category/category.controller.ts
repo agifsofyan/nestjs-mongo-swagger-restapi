@@ -11,51 +11,52 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { CategoryService } from './category.service';
+import { CreateCategoryDTO, UpdateCategoryDTO } from './dto/category.dto';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { ProductService } from './product.service';
-import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 
-@ApiTags('Products')
+@ApiTags('Categories')
 @UseGuards(RolesGuard)
-@Controller('products')
-export class ProductController {
-	constructor(private readonly productService: ProductService) { }
+@Controller('categories')
+export class CategoryController {
+	constructor(private readonly categoryService: CategoryService) { }
 
 	/**
-	 * @route   POST /api/v1/products
-	 * @desc    Create a new product
+	 * @route   POST /api/v1/categorys
+	 * @desc    Create a new category
 	 * @access  Public
 	 */
 	@Post()
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Create new product' })
+	@ApiOperation({ summary: 'Create new category' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
 	})
 
-	async create(@Res() res, @Body() createProductDto: CreateProductDTO) {
-		const product = await this.productService.create(createProductDto);
+	async create(@Res() res, @Body() createCategoryDto: CreateCategoryDTO) {
+		const category = await this.categoryService.create(createCategoryDto);
+
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
-			message: 'The Product has been successfully created.',
-			data: product    	
+			message: 'The Category has been successfully created.',
+			data: category
 		});
 	}
 
 	/**
-	 * @route   GET /api/v1/products
-	 * @desc    Get all product
+	 * @route   GET /api/v1/categorys
+	 * @desc    Get all category
 	 * @access  Public
 	 */
 	@Get()
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Get all product & Search anything' })
+	@ApiOperation({ summary: 'Get all category' })
 
 	// Swagger Header [required]
 	@ApiHeader({
@@ -104,7 +105,7 @@ export class ProductController {
 		isArray: false
 	})
 
-	@ApiQuery({
+	@ApiQuery({ 
 		name: 'offset', 
 		required: false, 
 		explode: true, 
@@ -113,80 +114,45 @@ export class ProductController {
 	})
 
 	async findAll(@Req() req, @Res() res) {
-		const product = await this.productService.findAll(req.query);
+		const category = await this.categoryService.findAll(req.query);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get products`,
-			data: product
+			message: `Success get categorys`,
+			data: category
 		});
 	}
 
 	/**
-	 * @route    GET
-	 * @desc     Get product by condition (filter)
-	 * @access   Public
-	 **/
-	@Get('find')
-	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
-
-	@ApiOperation({ summary: 'Search and show one' })
-
-	@ApiHeader({
-	 	name: 'x-auth-token',
-	 	description: 'token'
-	})
-
-	// Swagger Parameter [optional]
-	@ApiQuery({
-		name: 'search anything',
-		required: false,
-		explode: true,
-		type: String,
-		isArray: false
-	})
-
-	async findOne(@Res() res, @Body() body){
-		const filter = body;
-		const product = await this.productService.findOne(filter);
-		return res.status(HttpStatus.OK).json({
-			statusCode: HttpStatus.OK,
-			message: `Success get product`,
-			data: product
-		});
-	}
-
-	/**
-	 * @route    Get /api/v1/products/:id
-	 * @desc     Get product by ID
+	 * @route    Get /api/v1/categorys/:id
+	 * @desc     Get category by ID
 	 * @access   Public
 	 */
 	@Get(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Get product by id' })
+	@ApiOperation({ summary: 'Get category by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
 	 	description: 'token'
 	})
 	async findById(@Param('id') id: string, @Res() res)  {
-		const product = await this.productService.findById(id);
+		const category = await this.categoryService.findById(id);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get product by id ${id}`,
-			data: product
+			message: `Success get category by id ${id}`,
+			data: category
 		});
 	}
 	
 	/**
-	 * @route   Patch /api/v1/products/:id
-	 * @desc    Update product by Id
+	 * @route   Patch /api/v1/categorys/:id
+	 * @desc    Update category by Id
 	 * @access  Public
 	 **/
 	@Patch(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Update product by id' })
+	@ApiOperation({ summary: 'Update category by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
@@ -194,36 +160,36 @@ export class ProductController {
 	async update(
 		@Param('id') id: string,
 		@Res() res,
-		@Body() updateProductDto: UpdateProductDTO
+		@Body() updateCategoryDto: UpdateCategoryDTO
 	) {
-		const product = await this.productService.update(id, updateProductDto);
+		const category = await this.categoryService.update(id, updateCategoryDto);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: 'The Product has been successfully updated.',
-			data: product
+			message: 'The Category has been successfully updated.',
+			data: category
 		});
 	}
 
 	/**
-	 * @route   Delete /api/v1/products/:id
-	 * @desc    Delete product by ID
+	 * @route   Delete /api/v1/categorys/:id
+	 * @desc    Delete category by ID
 	 * @access  Public
 	 **/
 	@Delete(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Delete product' })
+	@ApiOperation({ summary: 'Delete category' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
 	})
 	async delete(@Param('id') id: string, @Res() res){
-		const product = await this.productService.delete(id);
+		const category = await this.categoryService.delete(id);
 		
-		if (product == 'ok') {
+		if (category == 'ok') {
 			return res.status(HttpStatus.OK).json({
 				statusCode: HttpStatus.OK,
-				message: `Success remove product by id ${id}`
+				message: `Success remove category by id ${id}`
 			});
 		}
 	}

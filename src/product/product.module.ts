@@ -6,21 +6,20 @@ import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { ProductSchema } from './schema/product.schema';
 
-import { TopicModule } from '../topic/topic.module';
-import { TopicService } from '../topic/topic.service';
-import { TopicController } from '../topic/topic.controller';
-import { TopicSchema } from '../topic/schema/topic.schema';
+import { CategoryModule } from '../category/category.module';
+import { CategoryService } from '../category/category.service';
+import { CategorySchema } from '../category/schema/category.schema';
 
 @Module({
 	imports: [
 		MongooseModule.forFeature([
 			{ name: 'Product', schema: ProductSchema },
-			{ name: 'Topic', schema: TopicSchema }
+			{ name: 'Category', schema: CategorySchema }
 		]),
 		AuthModule,
-		TopicModule
+		CategoryModule
 	],
 	controllers: [ProductController],
-  	providers: [ProductService, TopicService]
+  	providers: [ProductService, CategoryService]
 })
 export class ProductModule {}

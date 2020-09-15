@@ -57,7 +57,7 @@ export class OrderController {
     @UseGuards(AuthGuard('jwt'))
     @Roles('Administrator')
 
-    @ApiOperation({ summary: 'Get all orders' })
+    @ApiOperation({ summary: 'Get all orders & Search something' })
     
     // Swagger Header [required]
 	@ApiHeader({
@@ -130,11 +130,24 @@ export class OrderController {
      **/
     @Get('find')
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
-    @ApiHeader({
-        name: 'x-auth-token',
-        description: 'token.'
-    })
+	@Roles('Administrator')
+
+	@ApiOperation({ summary: 'Search and show one' })
+
+	@ApiHeader({
+	 	name: 'x-auth-token',
+	 	description: 'token'
+	})
+
+    // Swagger Parameter [optional]
+	@ApiQuery({
+		name: 'search anything',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
+
     async findOne(@Res() res, @Body() body){
         const filter = body;
         const order = await this.orderService.findOne(filter);

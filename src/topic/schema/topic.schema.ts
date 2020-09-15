@@ -11,7 +11,7 @@ export const TopicSchema = new mongoose.Schema({
     },
     slug: {
         type: String,
-        unique: true
+        unique: true,
 	    slug: "name"
     }
 },{ 

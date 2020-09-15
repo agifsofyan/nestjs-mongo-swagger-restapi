@@ -141,7 +141,7 @@ export class CreateProductDTO {
          example: "http://sample/image.jpg",
          description: 'Image Url',
          format: 'string'
-    })"http://sample/image-product.jpg"
+    })
     image_url: string;
 
     // Video URL
@@ -220,7 +220,7 @@ export class CreateProductDTO {
     sale_method: SaleMethodEnum;
 
     // Product Redirect
-    @IsString()
+    // @IsString()
     @ApiProperty({
         example: "Ebook WLEM",
         description: 'Product Redirect',

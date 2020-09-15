@@ -53,39 +53,20 @@ export class MediaController {
                 "type": "object",
                 "properties": {
                   "files": {
-                    "type": "array",
-                    "items": {
                       "type": "string",
                       "description": "Multiple File Upload",
                       "format": "binary"
-                    }
                   }
                 }
 	}
     })
 
-    //@UseInterceptors(FileInterceptor('image',
-    //{
-      //  storage: diskStorage('storage/images'),
-        //limits: {
-          //  fileSize: 20971520, // 20Mb
-        //},
-       // fileFilter: (req, file, cb) => {
-         //   constnestjs mimeTypeList = ['image/png', 'image/jpeg', 'image/giff'];
-
-           // return mimeTypeList.some(item => item === file.mimetype)
-             //   ? cb(null, true)
-               // : cb(null, false);
-        //},
-    //}))
-  
     @UseInterceptors(
       FileInterceptor('image', {
         storage: diskStorage({
           destination: './storage/images',
           filename: editFileName,
-        }),
-        fileFilter: imageFileFilter,
+        }),        
       }),
     )
 
@@ -110,6 +91,7 @@ export class MediaController {
     @UseGuards(AuthGuard('jwt'))
     @Roles('Administrator')
     @ApiOperation({ summary: 'Multiple Upload' })
+
     @ApiHeader({
       name: 'x-auth-token',
       description: 'token.'
@@ -124,6 +106,25 @@ export class MediaController {
         fileFilter: imageFileFilter,
       }),
     )
+
+    @ApiConsumes('multipart/form-data')
+
+    @ApiBody({
+    	"schema": {
+		"type": "object",
+		"properties": {
+			"files": {
+				"type": "array",
+				"items": {
+					"type": "string",
+					"description": "Multiple upload",
+					"format": "binary"
+				}
+			}	
+		}
+	}
+    })
+
     async uploadMultipleFiles(@UploadedFiles() files) {
       const response = [];
       files.forEach(file => {

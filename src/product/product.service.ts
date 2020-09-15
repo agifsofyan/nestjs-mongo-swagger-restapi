@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 
 import { IProduct } from './interface/product.interface';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
-import { TopicService } from '../topic/topic.service';
+import { CategoryService } from '../category/category.service';
 import { Query } from '../utils/OptQuery';
 import { ReverseString } from '../utils/StringManipulation';
 import { TimeValidation } from '../utils/CustomValidation';
@@ -19,19 +19,16 @@ export class ProductService {
 
 	constructor(
 		@InjectModel('Product') private readonly productModel: Model<IProduct>,
-		private readonly topicService: TopicService
+		private readonly categoryService: CategoryService
 	) {}
 
-	async create(createProductDto: any): Promise<IProduct> {
+	async create(createProductDto: CreateProductDTO): Promise<IProduct> {
 		const product = new this.productModel(createProductDto)
 
-		console.log('createProductDto', createProductDto)
-		console.log('product', product)
+		// console.log('createProductDto', createProductDto)
+		// console.log('product', product)
 
 		const { name, date, start_time, end_time, client_url } = createProductDto
-		
-		// Make Product Slug
-		// const makeSlug = slug.replace(' ', '-')
 				
 		// Check if product name is already exist
 		const isProductSlugExist = await this.productModel.findOne({ slug: product.slug })
@@ -39,14 +36,12 @@ export class ProductService {
 		if (isProductSlugExist) {
         	throw new BadRequestException('That product slug is already exist.')
 		}
-		
-		// product.slug = makeSlug
 
-		var arrayTopic = createProductDto.topic
+		var arrayCategory = createProductDto.topic
 
-		for (let i = 0; i < arrayTopic.length; i++) {
-			const isTopicExist = await this.topicService.findById(arrayTopic[i])
-			if (! isTopicExist) {
+		for (let i = 0; i < arrayCategory.length; i++) {
+			const isCategoryExist = await this.categoryService.findById(arrayCategory[i])
+			if (! isCategoryExist) {
 				throw new BadRequestException()
 			}
 		}
@@ -93,7 +88,7 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ [options.sortby]: sortval })
-					.populate('topic')
+					.populate('category')
 
 			} else {
 
@@ -102,7 +97,7 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ [options.sortby]: sortval })
-					.populate('topic')
+					.populate('category')
 
 			}
 		}else{
@@ -112,7 +107,7 @@ export class ProductService {
 					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
 					.skip(Number(skip))
 					.limit(Number(options.limit))
-					.populate('topic')
+					.populate('category')
 
 			} else {
 
@@ -120,7 +115,7 @@ export class ProductService {
 					.find()
 					.skip(Number(skip))
 					.limit(Number(options.limit))
-					.populate('topic')
+					.populate('category')
 			}
 		}
 	}
@@ -128,7 +123,7 @@ export class ProductService {
 	async findById(id: string): Promise<IProduct> {
 	 	let result
 		try{
-			result = await this.productModel.findById(id).populate('topic')
+			result = await this.productModel.findById(id).populate('category')
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
@@ -141,7 +136,7 @@ export class ProductService {
 	}
 
 	async findOne(options: object): Promise<IProduct> {
-		const product = await this.productModel.findOne(options).populate('topic')
+		const product = await this.productModel.findOne(options).populate('category')
 
 		if(!product){
 			throw new NotFoundException(`Could nod find product with your condition`)
@@ -162,10 +157,40 @@ export class ProductService {
 
 	 	if(!result){
 	 		throw new NotFoundException(`Could nod find product with id ${id}`);
-	 	}
+		}
+		 
+		const { name, date, start_time, end_time, client_url } = updateProductDto
+				
+		// Check if product name is already exist
+		
+		// create Product Code
+		var makeCode = ReverseString(name) // to convert Product Code
+
+		result.code = makeCode
+
+		if(start_time){
+
+			const checkStartTime = TimeValidation(start_time)
+			const checkEndTime = TimeValidation(end_time)
+
+			if(!checkStartTime) {
+				throw new BadRequestException('Start time field not valid, ex: 09:59')
+			}
+
+			if(!checkEndTime){
+				throw new BadRequestException('End time field not valid, ex: 10:59')
+			}
+		}
+
+		if (date !== undefined || date !== '') {
+			result.webinar.date = date;
+			result.webinar.start_time = start_time;
+			result.webinar.end_time = end_time;
+			result.webinar.client_url = client_url;
+		}
 
 		await this.productModel.findByIdAndUpdate(id, updateProductDto);
-		return await this.productModel.findById(id).populate('topic')
+		return await this.productModel.findById(id).populate('category')
 	}
 
 	async delete(id: string): Promise<string> {

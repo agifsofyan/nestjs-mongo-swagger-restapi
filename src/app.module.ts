@@ -7,8 +7,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
-import { TopicModule } from './topic/topic.module';
 import { MediaModule } from './media/media.module';
+import { FulfillmentModule } from './fulfillment/fulfillment.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
 	imports: [
@@ -17,8 +18,9 @@ import { MediaModule } from './media/media.module';
 	    UserModule,
 	    ProductModule,
 	    OrderModule,
-	    TopicModule,
-	    MediaModule
+		CategoryModule,
+		FulfillmentModule,
+	    MediaModule,
 	],
 	controllers: [AppController],
   	providers: [AppService],

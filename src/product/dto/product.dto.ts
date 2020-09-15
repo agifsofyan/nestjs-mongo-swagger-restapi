@@ -5,10 +5,8 @@ import {
     IsEnum,
     IsDate
 } from 'class-validator';
-import { Type } from 'class-transformer';
+// import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-
-import { ITopic } from '../../topic/interface/topic.interface';
 
 export enum EnumType { 
 	Webinar = 'webinar', 
@@ -19,7 +17,8 @@ export enum EnumType {
 
 export enum VisibilityEnum { 
 	Publish = 'publish', 
-	Private = 'private',
+    Private = 'private',
+    Draft  = 'draft',
 }
 
 export enum SaleMethodEnum { 
@@ -63,7 +62,7 @@ export class CreateProductDTO {
     slug: string;
 
     // Visibility
-    @IsEnum(VisibilityEnum, { message: 'Type value is: publish, private' })
+    @IsEnum(VisibilityEnum, { message: 'Type value is: publish, private, draft' })
     @IsNotEmpty()
     @IsString()
     @ApiProperty({
@@ -75,8 +74,8 @@ export class CreateProductDTO {
     visibility: VisibilityEnum;
 
     // Headline
-    @IsString()
-    @MinLength(5)
+    // @IsString()
+    // @MinLength(5)
     @ApiProperty({
         example: 'Bisnis Market to young generation',
         description: 'Headline',
@@ -95,8 +94,8 @@ export class CreateProductDTO {
     description: string;
 
     // Feedback (what you learn)
-    @IsString()
-    @MinLength(5)
+    // @IsString()
+    // @MinLength(5)
     @ApiProperty({
         example: 'Why You Learn our',
 	description: 'Feedback (why your learn)',
@@ -127,16 +126,16 @@ export class CreateProductDTO {
     @IsNotEmpty()
     @ApiProperty({
         example: [
-            "5f59442b7aebd32d4f1f0167",
-            "5f59443c7aebd32d4f1f0168"
+            "5f603a33ea0a1626403abe95",
+            "5f603a39ea0a1626403abe96"
         ],
         description: 'Select From Field Topic',
         format: 'array'
     })
-    topic: [string];
+    topic: [string]; // Topic from category table (collection)
 
     // Image URL
-    @IsString()
+    // @IsString()
     @ApiProperty({
          example: "http://sample/image.jpg",
          description: 'Image Url',
@@ -145,7 +144,7 @@ export class CreateProductDTO {
     image_url: string;
 
     // Video URL
-    @IsString()
+    // @IsString()
     @ApiProperty({
         example: "http://sample/video.mp4",
         description: 'Video Url',
@@ -229,7 +228,7 @@ export class CreateProductDTO {
     product_redirect: string;
 
     // ReSeller
-     @IsString()
+    //  @IsString()
      @ApiProperty({
          example: "",
          description: 'Re Seller',
@@ -262,7 +261,7 @@ export class CreateProductDTO {
     image_product_url: [string];
 
     // Section
-    @IsString()
+    // @IsString()
     @ApiProperty({
         example: 'Section in the paragraf of young generation in the world',
 	description: 'section',

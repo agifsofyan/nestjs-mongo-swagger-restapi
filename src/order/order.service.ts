@@ -48,6 +48,7 @@ export class OrderService {
 					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
 					.skip(Number(skip))
 					.limit(Number(options.limit))
+					.sort({ 'updated_at': 'desc' })
 					.exec();
 
 			} else {
@@ -56,6 +57,7 @@ export class OrderService {
 					.find()
 					.skip(Number(skip))
 					.limit(Number(options.limit))
+					.sort({ 'updated_at': 'desc' })
 					.exec();
 
 			}

@@ -25,12 +25,12 @@ export const ProductSchema = new mongoose.Schema({
     },
     visibility: {
         type: String,
-        enum: [ "publish", "private" ],
+        enum: [ "publish", "private", "draft" ],
 	    default: "publish"
     },
     topic: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Topic'
+        ref: 'Category'
     }],
 
     image_url: String,
@@ -85,8 +85,8 @@ export const ProductSchema = new mongoose.Schema({
 });
 
 
-// ProductSchema.virtual('topics', {
-//     ref: 'Topic',
+// ProductSchema.virtual('categories', {
+//     ref: 'Category',
 //     localField: '_id',
 //     foreignField: 'topic',
 // });

@@ -41,7 +41,7 @@ export class FulfillmentService {
 				throw new BadRequestException()
 			}
 		}
-		
+
 		var arrayCategory = createFulfillmentDto.category
 
 		for (let i = 0; i < arrayCategory.length; i++) {
@@ -88,6 +88,7 @@ export class FulfillmentService {
 					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
 					.skip(Number(skip))
 					.limit(Number(options.limit))
+					.sort({ 'updated_at': 'desc' })
 					.populate('category')
 					.populate('product')
 
@@ -97,6 +98,7 @@ export class FulfillmentService {
 					.find()
 					.skip(Number(skip))
 					.limit(Number(options.limit))
+					.sort({ 'updated_at': 'desc' })
 					.populate('category')
 					.populate('product')
 
@@ -131,6 +133,24 @@ export class FulfillmentService {
 
 		if(!result){
 			throw new NotFoundException(`Could nod find fulfillment with id ${id}`);
+		}
+
+		var arrayProduct = updateFulfillmentDto.product
+
+		for (let i = 0; i < arrayProduct.length; i++) {
+			const isProductExist = await this.productService.findById(arrayProduct[i])
+			if (! isProductExist) {
+				throw new BadRequestException()
+			}
+		}
+		
+		var arrayCategory = updateFulfillmentDto.category
+
+		for (let i = 0; i < arrayCategory.length; i++) {
+			const isCategoryExist = await this.categoryService.findById(arrayCategory[i])
+			if (! isCategoryExist) {
+				throw new BadRequestException()
+			}
 		}
 
 		await this.fulfillmentModel.findByIdAndUpdate(id, updateFulfillmentDto);

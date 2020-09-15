@@ -25,9 +25,6 @@ export class ProductService {
 	async create(createProductDto: CreateProductDTO): Promise<IProduct> {
 		const product = new this.productModel(createProductDto)
 
-		// console.log('createProductDto', createProductDto)
-		// console.log('product', product)
-
 		const { name, date, start_time, end_time, client_url } = createProductDto
 				
 		// Check if product name is already exist
@@ -38,6 +35,8 @@ export class ProductService {
 		}
 
 		var arrayCategory = createProductDto.topic
+
+		console.log('arrayCategory:', arrayCategory)
 
 		for (let i = 0; i < arrayCategory.length; i++) {
 			const isCategoryExist = await this.categoryService.findById(arrayCategory[i])
@@ -88,7 +87,7 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ [options.sortby]: sortval })
-					.populate('category')
+					.populate('topic')
 
 			} else {
 
@@ -97,7 +96,7 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ [options.sortby]: sortval })
-					.populate('category')
+					.populate('topic')
 
 			}
 		}else{
@@ -107,7 +106,8 @@ export class ProductService {
 					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
 					.skip(Number(skip))
 					.limit(Number(options.limit))
-					.populate('category')
+					.sort({ 'updated_at': 'desc' })
+					.populate('topic')
 
 			} else {
 
@@ -115,7 +115,8 @@ export class ProductService {
 					.find()
 					.skip(Number(skip))
 					.limit(Number(options.limit))
-					.populate('category')
+					.sort({ 'updated_at': 'desc' })
+					.populate('topic')
 			}
 		}
 	}

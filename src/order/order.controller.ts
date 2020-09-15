@@ -18,6 +18,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
+var role: "ADMIN";
+
 @ApiTags('Orders')
 @UseGuards(RolesGuard)
 @Controller('orders')
@@ -32,7 +34,7 @@ export class OrderController {
      */
     @Post()
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
     @ApiOperation({ summary: 'Create new order' })
     @ApiHeader({
         name: 'x-auth-token',
@@ -55,7 +57,7 @@ export class OrderController {
      */
     @Get()
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
 
     @ApiOperation({ summary: 'Get all orders & Search something' })
     
@@ -130,7 +132,7 @@ export class OrderController {
      **/
     @Get('find')
     @UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(role)
 
 	@ApiOperation({ summary: 'Search and show one' })
 
@@ -165,7 +167,7 @@ export class OrderController {
      */
     @Get(':id')
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
     @ApiHeader({
         name: 'x-auth-token',
         description: 'token.'
@@ -187,7 +189,7 @@ export class OrderController {
 
     @Patch(':id')
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
     @ApiOperation({ summary: 'Update order by id' })
     @ApiHeader({
         name: 'x-auth-token',
@@ -208,7 +210,7 @@ export class OrderController {
 
     @Delete(':id')
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
     @ApiHeader({
         name: 'x-auth-token',
         description: 'token.'

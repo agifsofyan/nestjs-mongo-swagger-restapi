@@ -12,51 +12,53 @@ import {
 	UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CategoryService } from './category.service';
-import { CreateCategoryDTO, UpdateCategoryDTO } from './dto/category.dto';
+import { RoleService } from './role.service';
+import { CreateRoleDTO, UpdateRoleDTO } from './dto/role.dto';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
-@ApiTags('Categories')
+// var roles = 'ADMIN'
+
+@ApiTags('Roles')
 @UseGuards(RolesGuard)
-@Controller('categories')
-export class CategoryController {
-	constructor(private readonly categoryService: CategoryService) { }
+@Controller('roles')
+export class RoleController {
+	constructor(private readonly roleService: RoleService) { }
 
 	/**
-	 * @route   POST /api/v1/categorys
-	 * @desc    Create a new category
+	 * @route   POST /api/v1/roles
+	 * @desc    Create a new role
 	 * @access  Public
 	 */
 	@Post()
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Create new category' })
+	@ApiOperation({ summary: 'Create new role' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
 	})
 
-	async create(@Res() res, @Body() createCategoryDto: CreateCategoryDTO) {
-		const category = await this.categoryService.create(createCategoryDto);
+	async create(@Res() res, @Body() createRoleDto: CreateRoleDTO) {
+		const role = await this.roleService.create(createRoleDto);
 
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
-			message: 'The Category has been successfully created.',
-			data: category
+			message: 'The Role has been successfully created.',
+			data: role
 		});
 	}
 
 	/**
-	 * @route   GET /api/v1/categorys
-	 * @desc    Get all category
+	 * @route   GET /api/v1/roles
+	 * @desc    Get all role
 	 * @access  Public
 	 */
 	@Get()
-	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
-	@ApiOperation({ summary: 'Get all category' })
+	// @UseGuards(AuthGuard('jwt'))
+	// @Roles('Administrator')
+	@ApiOperation({ summary: 'Get all role' })
 
 	// Swagger Header [required]
 	@ApiHeader({
@@ -114,45 +116,45 @@ export class CategoryController {
 	})
 
 	async findAll(@Req() req, @Res() res) {
-		const category = await this.categoryService.findAll(req.query);
+		const role = await this.roleService.findAll(req.query);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get categorys`,
-			data: category
+			message: `Success get roles`,
+			data: role
 		});
 	}
 
 	/**
-	 * @route    Get /api/v1/categorys/:id
-	 * @desc     Get category by ID
+	 * @route    Get /api/v1/roles/:id
+	 * @desc     Get role by ID
 	 * @access   Public
 	 */
 	@Get(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Get category by id' })
+	@ApiOperation({ summary: 'Get role by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
 	 	description: 'token'
 	})
 	async findById(@Param('id') id: string, @Res() res)  {
-		const category = await this.categoryService.findById(id);
+		const role = await this.roleService.findById(id);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get category by id ${id}`,
-			data: category
+			message: `Success get role by id ${id}`,
+			data: role
 		});
 	}
 	
 	/**
-	 * @route   Patch /api/v1/categorys/:id
-	 * @desc    Update category by Id
+	 * @route   Patch /api/v1/roles/:id
+	 * @desc    Update role by Id
 	 * @access  Public
 	 **/
 	@Patch(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Update category by id' })
+	@ApiOperation({ summary: 'Update role by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
@@ -160,36 +162,36 @@ export class CategoryController {
 	async update(
 		@Param('id') id: string,
 		@Res() res,
-		@Body() updateCategoryDto: UpdateCategoryDTO
+		@Body() updateRoleDto: UpdateRoleDTO
 	) {
-		const category = await this.categoryService.update(id, updateCategoryDto);
+		const role = await this.roleService.update(id, updateRoleDto);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: 'The Category has been successfully updated.',
-			data: category
+			message: 'The Role has been successfully updated.',
+			data: role
 		});
 	}
 
 	/**
-	 * @route   Delete /api/v1/categorys/:id
-	 * @desc    Delete category by ID
+	 * @route   Delete /api/v1/roles/:id
+	 * @desc    Delete role by ID
 	 * @access  Public
 	 **/
 	@Delete(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles('Administrator')
-	@ApiOperation({ summary: 'Delete category' })
+	@ApiOperation({ summary: 'Delete role' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
 	})
 	async delete(@Param('id') id: string, @Res() res){
-		const category = await this.categoryService.delete(id);
+		const role = await this.roleService.delete(id);
 		
-		if (category == 'ok') {
+		if (role == 'ok') {
 			return res.status(HttpStatus.OK).json({
 				statusCode: HttpStatus.OK,
-				message: `Success remove category by id ${id}`
+				message: `Success remove role by id ${id}`
 			});
 		}
 	}

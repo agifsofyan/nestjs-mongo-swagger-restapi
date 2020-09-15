@@ -3,9 +3,20 @@ import {
     MinLength,
     IsString,
     MaxLength,
-    IsEmail
+    IsEmail,
+    IsEnum
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
+export enum RolesEnum { 
+	SALES = 'SALES', 
+	ADMIN = 'ADMIN', 
+	CONTENT = 'CONTENT', 
+	FINANCE = 'FINANCE', 
+	MENTOR = 'MENTOR',
+	IT = 'IT', 
+	SUPERADMIN = 'SUPERADMIN',
+}
 
 export class CreateUserDTO {
     // Name
@@ -52,4 +63,14 @@ export class CreateUserDTO {
     @IsString()
     @MinLength(6)
     password: string;
+
+    // Role
+    @IsEnum(RolesEnum, { message: 'Type value is: SALES | ADMIN | CONTENT | FINANCE | MENTOR | IT | SUPERADMIN' })
+    @ApiProperty({
+        example: 'ADMIN',
+        description: 'Role',
+        format: 'string',
+        enum: ['SALES', 'ADMIN', 'CONTENT', 'FINANCE', 'MENTOR', 'IT', 'SUPERADMIN']
+    })
+    roles: RolesEnum;
 }

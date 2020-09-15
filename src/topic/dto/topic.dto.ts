@@ -4,7 +4,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateCategoryDTO {
+export class CreateTopicDTO {
     // Name
     @IsNotEmpty()
     @IsString()
@@ -16,4 +16,4 @@ export class CreateCategoryDTO {
     name: string;
 }
 
-export type UpdateCategoryDTO = Partial<CreateCategoryDTO>;
+export type UpdateTopicDTO = Partial<CreateTopicDTO>;

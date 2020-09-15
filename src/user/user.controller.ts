@@ -1,13 +1,14 @@
 import { 
     UseGuards,
     Controller,
+    Get,
     Res,
     Req,
     Post,
     Body,
     HttpStatus
 } from '@nestjs/common';
-import { ApiTags, ApiHeader, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
@@ -17,6 +18,8 @@ import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UserLoginDTO } from './dto/login.dto';
 import { RefreshAccessTokenDTO } from '../auth/dto/refresh-access-token.dto';
+
+var roles: "ADMIN";
 
 @ApiTags('Users')
 @UseGuards(RolesGuard)
@@ -31,7 +34,7 @@ export class UserController {
 	 */
     @Post('add')
     @UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(roles)
 	@ApiOperation({ summary: 'Add new administrator' })
 	@ApiHeader({
         	name: 'x-auth-token',
@@ -41,7 +44,7 @@ export class UserController {
         const user = await this.userService.create(createUserDTO);
         return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
-			message: 'User created successfully.',
+			message: 'Aministrator created successfully.',
 			data: user
 		});
     }
@@ -52,7 +55,7 @@ export class UserController {
      * @access  Public
      */
     @Post('login')
-    @ApiOperation({ summary: 'User Login' })
+    @ApiOperation({ summary: 'Aministrator Login' })
     async login(@Req() req: Request, @Body() userLoginDTO: UserLoginDTO) {
         return await this.userService.login(req, userLoginDTO);
     }
@@ -67,4 +70,78 @@ export class UserController {
     async refreshAccessToken(@Body() refreshAccessTokenDto: RefreshAccessTokenDTO) {
         return await this.userService.refreshAccessToken(refreshAccessTokenDto);
     }
+
+    /**
+	 * @route   GET /api/v1/users/all
+	 * @desc    Get all user
+	 * @access  Public
+	 */
+	@Get('all')
+	@UseGuards(AuthGuard('jwt'))
+	@Roles(roles)
+	@ApiOperation({ summary: 'Get all user' })
+
+	// Swagger Header [required]
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token'
+	})
+
+	// Swagger Parameter [optional]
+	@ApiQuery({
+		name: 'sortval',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
+
+	@ApiQuery({
+		name: 'sortby',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
+
+	@ApiQuery({
+		name: 'value',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
+
+	@ApiQuery({
+		name: 'fields',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
+
+	@ApiQuery({
+		name: 'limit',
+		required: false,
+		explode: true,
+		type: Number,
+		isArray: false
+	})
+
+	@ApiQuery({ 
+		name: 'offset', 
+		required: false, 
+		explode: true, 
+		type: Number, 
+		isArray: false 
+	})
+
+	async findAll(@Req() req, @Res() res) {
+		const user = await this.userService.findAll(req.query);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success get users`,
+			data: user
+		});
+	}
 }

@@ -18,6 +18,8 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { ProductService } from './product.service';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 
+var role: "ADMIN";
+
 @ApiTags('Products')
 @UseGuards(RolesGuard)
 @Controller('products')
@@ -31,7 +33,7 @@ export class ProductController {
 	 */
 	@Post()
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(role)
 	@ApiOperation({ summary: 'Create new product' })
 	@ApiHeader({
 		name: 'x-auth-token',
@@ -54,7 +56,7 @@ export class ProductController {
 	 */
 	@Get()
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(role)
 	@ApiOperation({ summary: 'Get all product & Search anything' })
 
 	// Swagger Header [required]
@@ -128,7 +130,7 @@ export class ProductController {
 	 **/
 	@Get('find')
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(role)
 
 	@ApiOperation({ summary: 'Search and show one' })
 
@@ -163,7 +165,7 @@ export class ProductController {
 	 */
 	@Get(':id')
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(role)
 	@ApiOperation({ summary: 'Get product by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
@@ -185,7 +187,7 @@ export class ProductController {
 	 **/
 	@Patch(':id')
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(role)
 	@ApiOperation({ summary: 'Update product by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
@@ -211,7 +213,7 @@ export class ProductController {
 	 **/
 	@Delete(':id')
 	@UseGuards(AuthGuard('jwt'))
-	@Roles('Administrator')
+	@Roles(role)
 	@ApiOperation({ summary: 'Delete product' })
 	@ApiHeader({
 		name: 'x-auth-token',

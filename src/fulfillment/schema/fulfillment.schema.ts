@@ -18,9 +18,9 @@ export const FulfillmentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
     }],
-    category: [{
+    topic: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Topic'
     }], 
     short_content: {
         type: String,

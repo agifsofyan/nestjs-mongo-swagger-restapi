@@ -12,53 +12,53 @@ import {
 	UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { FulfillmentService } from './fulfillment.service';
-import { CreateFulfillmentDTO, UpdateFulfillmentDTO } from './dto/fulfillment.dto';
+import { TopicService } from './topic.service';
+import { CreateTopicDTO, UpdateTopicDTO } from './dto/topic.dto';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
 var role: "ADMIN";
 
-@ApiTags('Fulfillments')
+@ApiTags('Categories')
 @UseGuards(RolesGuard)
-@Controller('fulfillments')
-export class FulfillmentController {
-	constructor(private readonly fulfillmentService: FulfillmentService) { }
+@Controller('categories')
+export class TopicController {
+	constructor(private readonly topicService: TopicService) { }
 
 	/**
-	 * @route   POST /api/v1/fulfillments
-	 * @desc    Create a new fulfillment
+	 * @route   POST /api/v1/topics
+	 * @desc    Create a new topic
 	 * @access  Public
 	 */
 	@Post()
 	@UseGuards(AuthGuard('jwt'))
 	@Roles(role)
-	@ApiOperation({ summary: 'Create new fulfillment' })
+	@ApiOperation({ summary: 'Create new topic' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
 	})
 
-	async create(@Res() res, @Body() createFulfillmentDto: CreateFulfillmentDTO) {
-		const fulfillment = await this.fulfillmentService.create(createFulfillmentDto);
+	async create(@Res() res, @Body() createTopicDto: CreateTopicDTO) {
+		const topic = await this.topicService.create(createTopicDto);
 
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
-			message: 'The Fulfillment has been successfully created.',
-			data: fulfillment
+			message: 'The Topic has been successfully created.',
+			data: topic
 		});
 	}
 
 	/**
-	 * @route   GET /api/v1/fulfillments
-	 * @desc    Get all fulfillment
+	 * @route   GET /api/v1/topics
+	 * @desc    Get all topic
 	 * @access  Public
 	 */
 	@Get()
 	@UseGuards(AuthGuard('jwt'))
 	@Roles(role)
-	@ApiOperation({ summary: 'Get all fulfillment' })
+	@ApiOperation({ summary: 'Get all topic' })
 
 	// Swagger Header [required]
 	@ApiHeader({
@@ -116,45 +116,45 @@ export class FulfillmentController {
 	})
 
 	async findAll(@Req() req, @Res() res) {
-		const fulfillment = await this.fulfillmentService.findAll(req.query);
+		const topic = await this.topicService.findAll(req.query);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get fulfillments`,
-			data: fulfillment
+			message: `Success get topics`,
+			data: topic
 		});
 	}
 
 	/**
-	 * @route    Get /api/v1/fulfillments/:id
-	 * @desc     Get fulfillment by ID
+	 * @route    Get /api/v1/topics/:id
+	 * @desc     Get topic by ID
 	 * @access   Public
 	 */
 	@Get(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles(role)
-	@ApiOperation({ summary: 'Get fulfillment by id' })
+	@ApiOperation({ summary: 'Get topic by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
 	 	description: 'token'
 	})
 	async findById(@Param('id') id: string, @Res() res)  {
-		const fulfillment = await this.fulfillmentService.findById(id);
+		const topic = await this.topicService.findById(id);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get fulfillment by id ${id}`,
-			data: fulfillment
+			message: `Success get topic by id ${id}`,
+			data: topic
 		});
 	}
 	
 	/**
-	 * @route   Patch /api/v1/fulfillments/:id
-	 * @desc    Update fulfillment by Id
+	 * @route   Patch /api/v1/topics/:id
+	 * @desc    Update topic by Id
 	 * @access  Public
 	 **/
 	@Patch(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles(role)
-	@ApiOperation({ summary: 'Update fulfillment by id' })
+	@ApiOperation({ summary: 'Update topic by id' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
@@ -162,36 +162,36 @@ export class FulfillmentController {
 	async update(
 		@Param('id') id: string,
 		@Res() res,
-		@Body() updateFulfillmentDto: UpdateFulfillmentDTO
+		@Body() updateTopicDto: UpdateTopicDTO
 	) {
-		const fulfillment = await this.fulfillmentService.update(id, updateFulfillmentDto);
+		const topic = await this.topicService.update(id, updateTopicDto);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: 'The Fulfillment has been successfully updated.',
-			data: fulfillment
+			message: 'The Topic has been successfully updated.',
+			data: topic
 		});
 	}
 
 	/**
-	 * @route   Delete /api/v1/fulfillments/:id
-	 * @desc    Delete fulfillment by ID
+	 * @route   Delete /api/v1/topics/:id
+	 * @desc    Delete topic by ID
 	 * @access  Public
 	 **/
 	@Delete(':id')
 	@UseGuards(AuthGuard('jwt'))
 	@Roles(role)
-	@ApiOperation({ summary: 'Delete fulfillment' })
+	@ApiOperation({ summary: 'Delete topic' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
 	})
 	async delete(@Param('id') id: string, @Res() res){
-		const fulfillment = await this.fulfillmentService.delete(id);
+		const topic = await this.topicService.delete(id);
 		
-		if (fulfillment == 'ok') {
+		if (topic == 'ok') {
 			return res.status(HttpStatus.OK).json({
 				statusCode: HttpStatus.OK,
-				message: `Success remove fulfillment by id ${id}`
+				message: `Success remove topic by id ${id}`
 			});
 		}
 	}

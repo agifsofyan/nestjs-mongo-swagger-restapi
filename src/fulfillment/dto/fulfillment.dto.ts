@@ -17,7 +17,7 @@ export class CreateFulfillmentDTO {
 
     // Fullfillment or Blog [type]
     @ApiProperty({
-        example: 'false', // false to blog. true to fulfillment
+        example: false, // false to blog. true to fulfillment
         description: 'Is Fulfillment',
         format: 'boolean'
     })
@@ -55,7 +55,7 @@ export class CreateFulfillmentDTO {
     })
     product: [string]; // in array 
 
-    // Category
+    // Topic
     @IsNotEmpty()
     @ApiProperty({
         example: [
@@ -65,7 +65,7 @@ export class CreateFulfillmentDTO {
         description: 'Select From Field Category',
         format: 'array'
     })
-    category: [string]; // in array
+    topic: [string]; // in array
 
     // Content
     @IsNotEmpty()
@@ -75,7 +75,7 @@ export class CreateFulfillmentDTO {
         description: 'Content',
         format: 'string'
     })
-    content: string; 
+    content: string;
 
     // Images
     @ApiProperty({

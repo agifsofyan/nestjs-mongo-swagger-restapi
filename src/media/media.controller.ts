@@ -26,6 +26,8 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 import { editFileName, imageFileFilter } from './helper/file-upload.helper';
 
+var role: "ADMIN";
+
 @ApiTags('Uploads')
 @UseGuards(RolesGuard)
 @Controller('uploads')
@@ -38,7 +40,7 @@ export class MediaController {
      */
     @Post()
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
     @ApiOperation({ summary: 'Single Upload' })
 
     @ApiHeader({
@@ -89,7 +91,7 @@ export class MediaController {
 	 * @access  Public
 	 */
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
     @ApiOperation({ summary: 'Multiple Upload' })
 
     @ApiHeader({
@@ -143,7 +145,7 @@ export class MediaController {
 	 * @access  Public
 	 */
     @UseGuards(AuthGuard('jwt'))
-    @Roles('Administrator')
+    @Roles(role)
     @ApiOperation({ summary: 'Get Image' })
     @ApiHeader({
       name: 'x-auth-token',

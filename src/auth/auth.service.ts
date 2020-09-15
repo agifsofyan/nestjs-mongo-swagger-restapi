@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
-//import { sign } from 'jsonwebtoken';
 
 import { v4 } from 'uuid';
 import { Request } from 'express';
@@ -26,7 +25,6 @@ export class AuthService {
     }
 
     async createAccessToken(userId: string) {
-        //const accessToken = sign({ userId }, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRATION_TIME });
         const accessToken = this.jwtService.sign({ userId });
         return this.encryptText(accessToken);
     }

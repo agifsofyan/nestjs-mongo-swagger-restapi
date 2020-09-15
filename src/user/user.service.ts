@@ -13,6 +13,7 @@ import { IUser } from './interfaces/user.interface';
 import { UserLoginDTO } from './dto/login.dto';
 import { AuthService } from '../auth/auth.service';
 import { RefreshAccessTokenDTO } from '../auth/dto/refresh-access-token.dto';
+import { Query } from '../utils/OptQuery';
 
 @Injectable()
 export class UserService {
@@ -72,4 +73,51 @@ export class UserService {
             accessToken: await this.authService.createAccessToken(user._id)
         }
     }
+
+    async findAll(options: Query): Promise<IUser[]> {
+		const offset = (options.offset == 0 ? options.offset : (options.offset - 1));
+		const skip = offset * options.limit;
+		const sortval = (options.sortval == 'asc') ? 1 : -1;
+
+		if (options.sortby){
+			if (options.fields) {
+
+				return await this.userModel
+					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+                    .sort({ [options.sortby]: sortval })
+                    // .populate('roles')
+
+			} else {
+
+				return await this.userModel
+					.find()
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+					.sort({ [options.sortby]: sortval })
+					// .populate('roles')
+
+			}
+		}else{
+			if (options.fields) {
+
+				return await this.userModel
+					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+					.sort({ 'created_at': 'desc' })
+					// .populate('roles')
+
+			} else {
+
+				return await this.userModel
+					.find()
+					.skip(Number(skip))
+					.limit(Number(options.limit))
+					.sort({ 'created_at': 'desc' })
+					// .populate('roles')
+			}
+		}
+	}
 }

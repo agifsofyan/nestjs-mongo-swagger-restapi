@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface ICategory extends Document {
+export interface ITopic extends Document {
      name: string; // Unique
      // slug: string; // Unique
 }

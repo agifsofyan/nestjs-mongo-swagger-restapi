@@ -3,7 +3,7 @@ import * as slug from 'mongoose-slug-updater';
 
 mongoose.plugin(slug);
 
-export const CategorySchema = new mongoose.Schema({
+export const TopicSchema = new mongoose.Schema({
     name: {
         type: String, 
         required: true,
@@ -15,7 +15,7 @@ export const CategorySchema = new mongoose.Schema({
         unique: true,
     }
 },{ 
-	collection: 'categories',
+	collection: 'topics',
 	versionKey: false, 
 	timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }, 
 });

@@ -6,10 +6,20 @@ export const UserSchema = new mongoose.Schema({
     email: { type: String, required: true },
     phone_number: { type: String, required: true },
     password: {type: String, required: true },
-    roles: { type: [String], default: ['user'] },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date }
-}, { versionKey: false, collection: 'admins' });
+    // roles: { 
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Role'
+    // },
+    roles: {
+        type: String,
+        enum: ['SALES', 'ADMIN', 'CONTENT', 'FINANCE', 'MENTOR', 'IT', 'SUPERADMIN'],
+        default: 'SALES'
+    }
+}, { 
+    collection: 'administrators',
+    versionKey: false, 
+	timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } 
+});
 
 UserSchema.pre('save', async function(next: mongoose.HookNextFunction) {
     try {

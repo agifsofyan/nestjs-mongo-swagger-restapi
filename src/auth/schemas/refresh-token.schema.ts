@@ -9,4 +9,4 @@ export const RefreshTokenSchema = new mongoose.Schema({
     refreshToken: { type: String, required: true },
     ip: { type: String, required: true },
     browser: { type: String, required: true }
-}, { collection: 'admin_refresh_tokens' });
+}, { collection: 'admins_refresh_tokens' });

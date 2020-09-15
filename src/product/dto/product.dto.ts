@@ -3,7 +3,7 @@ import {
     MinLength,
     IsString,
     IsEnum,
-    IsDate
+    IsDate,
 } from 'class-validator';
 // import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
@@ -230,11 +230,11 @@ export class CreateProductDTO {
     // ReSeller
     //  @IsString()
      @ApiProperty({
-         example: "",
-         description: 'Re Seller',
+         example: "Aminah",
+         description: 'Reseller name',
          format: 'string'
-     })
-     reseller: string;
+    })
+    reseller: string;
     
     // Image Bonus URL
     @ApiProperty({

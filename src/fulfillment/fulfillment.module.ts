@@ -6,9 +6,9 @@ import { FulfillmentController } from './fulfillment.controller';
 import { FulfillmentService } from './fulfillment.service';
 import { FulfillmentSchema } from './schema/fulfillment.schema';
 
-import { CategoryModule } from '../category/category.module';
-import { CategoryService } from '../category/category.service';
-import { CategorySchema } from '../category/schema/category.schema';
+import { TopicModule } from '../topic/topic.module';
+import { TopicService } from '../topic/topic.service';
+import { TopicSchema } from '../topic/schema/topic.schema';
 
 import { ProductModule } from '../product/product.module';
 import { ProductService } from '../product/product.service';
@@ -18,14 +18,14 @@ import { ProductSchema } from '../product/schema/product.schema';
   imports: [
 		MongooseModule.forFeature([
       { name: 'Fulfillment', schema: FulfillmentSchema },
-      { name: 'Category', schema: CategorySchema },
+      { name: 'Topic', schema: TopicSchema },
       { name: 'Product', schema: ProductSchema }
     ]),
     AuthModule,
-    CategoryModule,
+    TopicModule,
     ProductModule
 	],
   controllers: [FulfillmentController],
-  providers: [FulfillmentService, CategoryService, ProductService]
+  providers: [FulfillmentService, TopicService, ProductService]
 })
 export class FulfillmentModule {}

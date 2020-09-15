@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 
 import { IProduct } from './interface/product.interface';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
-import { CategoryService } from '../category/category.service';
+import { TopicService } from '../topic/topic.service';
 import { Query } from '../utils/OptQuery';
 import { ReverseString } from '../utils/StringManipulation';
 import { TimeValidation } from '../utils/CustomValidation';
@@ -19,7 +19,7 @@ export class ProductService {
 
 	constructor(
 		@InjectModel('Product') private readonly productModel: Model<IProduct>,
-		private readonly categoryService: CategoryService
+		private readonly topicService: TopicService
 	) {}
 
 	async create(createProductDto: CreateProductDTO): Promise<IProduct> {
@@ -34,13 +34,13 @@ export class ProductService {
         	throw new BadRequestException('That product slug is already exist.')
 		}
 
-		var arrayCategory = createProductDto.topic
+		var arrayTopic = createProductDto.topic
 
-		console.log('arrayCategory:', arrayCategory)
+		console.log('arrayTopic:', arrayTopic)
 
-		for (let i = 0; i < arrayCategory.length; i++) {
-			const isCategoryExist = await this.categoryService.findById(arrayCategory[i])
-			if (! isCategoryExist) {
+		for (let i = 0; i < arrayTopic.length; i++) {
+			const isTopicExist = await this.topicService.findById(arrayTopic[i])
+			if (! isTopicExist) {
 				throw new BadRequestException()
 			}
 		}
@@ -124,7 +124,7 @@ export class ProductService {
 	async findById(id: string): Promise<IProduct> {
 	 	let result
 		try{
-			result = await this.productModel.findById(id).populate('category')
+			result = await this.productModel.findById(id).populate('topic')
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
@@ -137,7 +137,7 @@ export class ProductService {
 	}
 
 	async findOne(options: object): Promise<IProduct> {
-		const product = await this.productModel.findOne(options).populate('category')
+		const product = await this.productModel.findOne(options).populate('topic')
 
 		if(!product){
 			throw new NotFoundException(`Could nod find product with your condition`)
@@ -191,7 +191,7 @@ export class ProductService {
 		}
 
 		await this.productModel.findByIdAndUpdate(id, updateProductDto);
-		return await this.productModel.findById(id).populate('category')
+		return await this.productModel.findById(id).populate('topic')
 	}
 
 	async delete(id: string): Promise<string> {

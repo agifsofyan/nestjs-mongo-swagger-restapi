@@ -11,7 +11,7 @@ import { IFulfillment } from './interface/fulfillment.interface';
 import { CreateFulfillmentDTO, UpdateFulfillmentDTO } from './dto/fulfillment.dto';
 import { Query } from '../utils/OptQuery';
 
-import { CategoryService } from '../category/category.service';
+import { TopicService } from '../topic/topic.service';
 import { ProductService } from '../product/product.service';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class FulfillmentService {
 
 	constructor(
 		@InjectModel('Fulfillment') private readonly fulfillmentModel: Model<IFulfillment>,
-		private readonly categoryService: CategoryService,
+		private readonly topicService: TopicService,
 		private readonly productService: ProductService
 	) {}
 
@@ -42,11 +42,11 @@ export class FulfillmentService {
 			}
 		}
 
-		var arrayCategory = createFulfillmentDto.category
+		var arrayTopic = createFulfillmentDto.topic
 
-		for (let i = 0; i < arrayCategory.length; i++) {
-			const isCategoryExist = await this.categoryService.findById(arrayCategory[i])
-			if (! isCategoryExist) {
+		for (let i = 0; i < arrayTopic.length; i++) {
+			const isTopicExist = await this.topicService.findById(arrayTopic[i])
+			if (! isTopicExist) {
 				throw new BadRequestException()
 			}
 		}
@@ -67,7 +67,7 @@ export class FulfillmentService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ [options.sortby]: sortval })
-					.populate('category')
+					.populate('topic')
 					.populate('product')
 
 			} else {
@@ -77,7 +77,7 @@ export class FulfillmentService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ [options.sortby]: sortval })
-					.populate('category')
+					.populate('topic')
 					.populate('product')
 
 			}
@@ -89,7 +89,7 @@ export class FulfillmentService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ 'updated_at': 'desc' })
-					.populate('category')
+					.populate('topic')
 					.populate('product')
 
 			} else {
@@ -99,7 +99,7 @@ export class FulfillmentService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ 'updated_at': 'desc' })
-					.populate('category')
+					.populate('topic')
 					.populate('product')
 
 			}
@@ -144,11 +144,11 @@ export class FulfillmentService {
 			}
 		}
 		
-		var arrayCategory = updateFulfillmentDto.category
+		var arrayTopic = updateFulfillmentDto.topic
 
-		for (let i = 0; i < arrayCategory.length; i++) {
-			const isCategoryExist = await this.categoryService.findById(arrayCategory[i])
-			if (! isCategoryExist) {
+		for (let i = 0; i < arrayTopic.length; i++) {
+			const isTopicExist = await this.topicService.findById(arrayTopic[i])
+			if (! isTopicExist) {
 				throw new BadRequestException()
 			}
 		}

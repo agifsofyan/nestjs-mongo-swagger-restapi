@@ -14,8 +14,6 @@ export interface IOrder extends Document {
     payment_status: string;
     paid_at: Date;
     due_date: Date;
-    //customer_id: string;
     product: productOrder[];
-    // product_id: string;
     agent_id: string;
 }

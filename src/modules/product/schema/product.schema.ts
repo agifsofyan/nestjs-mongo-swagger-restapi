@@ -30,7 +30,7 @@ export const ProductSchema = new mongoose.Schema({
     },
     topic: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Topic'
     }],
 
     image_url: String,

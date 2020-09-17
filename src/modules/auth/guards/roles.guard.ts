@@ -24,6 +24,8 @@ export class RolesGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException();
     }
 
+    console.log('user-role', user.role)
+
     if(user.role === '' || user.role === undefined){
       throw new UnauthorizedException('role not valid');
     }

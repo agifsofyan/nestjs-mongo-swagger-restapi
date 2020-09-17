@@ -5,7 +5,7 @@ const {
 	DB_USER, 
 	DB_PASS, 
 	DB_HOST, 
-	DB_PORT, 
+	BACKOFFICE_API_PORT, 
 	DB_NAME, 
 	DB_AUTH,
 	JWT_SECRET,
@@ -13,7 +13,7 @@ const {
 	JWT_ENCRYPT_SECRETKEY
 } = process.env;
 
-const uri = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=${DB_AUTH}`;
+const uri = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${BACKOFFICE_API_PORT}/${DB_NAME}?authSource=${DB_AUTH}`;
 
 export const Connection = MongooseModule.forRoot(uri, {
 	useNewUrlParser: true,

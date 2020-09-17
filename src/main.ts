@@ -3,23 +3,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-// import { NestFastifyApplication } from '@nestjs/platform-fastify';
-// import { FastifyAdapterConf } from './config/multer.configuration';
-
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule, { cors: true });
+	const app = await NestFactory.create(AppModule);
 
-	// const app: INestApplication = await NestFactory.create<NestFastifyApplication>(
-    //     AppModule,
-    //     // FastifyAdapterConf,
-    // );
-    app.enableCors();
+    app.enableCors({
+		origin: "*",
+		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		allowedHeaders: "Content-Type, Accept",
+	});
 
-	// app.enableCors({
-	// 	origin: "*",
-	// 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-	// 	allowedHeaders: "Content-Type, Accept",
-	// });
 
 	app.useGlobalPipes(new ValidationPipe());
 	app.setGlobalPrefix('/api/v1')

@@ -21,7 +21,7 @@ export interface IProduct extends Document {
           start_time: string;
           end_time: string;
           client_url: string;
-     }
+     };
      sale_method: string; // enum
      product_redirect: string; // Array
      reseller: string; // ref: User (Id & Name)

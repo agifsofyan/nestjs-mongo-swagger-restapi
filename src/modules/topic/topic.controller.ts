@@ -14,7 +14,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { TopicService } from './topic.service';
 import { CreateTopicDTO, UpdateTopicDTO } from './dto/topic.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 //import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -216,5 +216,48 @@ export class TopicController {
 				message: `Success remove topic by id ${id}`
 			});
 		}
+	}
+
+	/**
+	 * @route   Get /api/v1/topics/find
+	 * @desc    Search topic by name
+	 * @access  Public
+	 **/
+
+	@Get('find')
+	
+	@Roles(role)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Search and show' })
+
+	@ApiHeader({
+	 	name: 'x-auth-token',
+	 	description: 'token'
+	})
+
+	@ApiBody({
+		required: false,
+		description: 'search anything name',
+		type: Object,
+		isArray: false
+	})
+
+	// @ApiQuery({
+	// 	name: 'search anything name',
+	// 	required: false,
+	// 	explode: true,
+	// 	type: String,
+	// 	isArray: false
+	// })
+
+	async search(@Res() res, @Body() search: any) {
+		const topic = await this.topicService.search(search);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success search topic`,
+			total: topic.length,
+			data: topic
+		});
 	}
 }

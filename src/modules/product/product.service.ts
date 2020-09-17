@@ -122,41 +122,31 @@ export class ProductService {
 	}
 
 	async findById(id: string): Promise<IProduct> {
-	 	let data
+	 	let result
 		try{
-			data = await this.productModel.findById(id).populate('topic')
+			result = await this.productModel.findById(id).populate('topic')
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
 
-		if(!data){
+		if(!result){
 			throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
 
-		return data
-	}
-
-	async findOne(options: object): Promise<IProduct> {
-		const product = await this.productModel.findOne(options).populate('topic')
-
-		if(!product){
-			throw new NotFoundException(`Could nod find product with your condition`)
-		}
-
-		return product
+		return result
 	}
 
 	async update(id: string, updateProductDto: UpdateProductDTO): Promise<IProduct> {
-		let data;
+		let result;
 		
 		// Check ID
 		try{
-			data = await this.productModel.findById(id).exec()
+			result = await this.productModel.findById(id).exec()
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 
-	 	if(!data){
+	 	if(!result){
 	 		throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 		 
@@ -167,7 +157,7 @@ export class ProductService {
 		// create Product Code
 		var makeCode = ReverseString(name) // to convert Product Code
 
-		data.code = makeCode
+		result.code = makeCode
 
 		if(start_time){
 
@@ -184,10 +174,10 @@ export class ProductService {
 		}
 
 		if (date !== undefined || date !== '') {
-			data.webinar.date = date;
-			data.webinar.start_time = start_time;
-			data.webinar.end_time = end_time;
-			data.webinar.client_url = client_url;
+			result.webinar.date = date;
+			result.webinar.start_time = start_time;
+			result.webinar.end_time = end_time;
+			result.webinar.client_url = client_url;
 		}
 
 		await this.productModel.findByIdAndUpdate(id, updateProductDto);
@@ -201,5 +191,15 @@ export class ProductService {
 		}catch(err){
 			throw new NotImplementedException('The product could not be deleted')
 		}
+	}
+
+	async search(value: string): Promise<IProduct[]> {
+		const product = await this.productModel.find({"type": {$regex: ".*" + value + ".*"}})
+
+		if(!product){
+			throw new NotFoundException(`Could nod find product with your condition`)
+		}
+
+		return product
 	}
 }

@@ -5,7 +5,7 @@ export interface IFulfillment extends Document {
      isFullfillment: boolean;
      cover_img: string;
      product: [string]; 
-     category: [string]; 
+     topic: [string]; 
      short_content: string; 
      content: string;
      images: [string];

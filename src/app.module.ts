@@ -11,6 +11,8 @@ import { FulfillmentModule } from './modules/fulfillment/fulfillment.module';
 import { TopicModule } from './modules/topic/topic.module';
 import { RoleModule } from './modules/role/role.module';
 
+import { SellerModule } from './modules/seller/seller.module';
+
 @Module({
 	imports: [
 		Connection,
@@ -20,7 +22,8 @@ import { RoleModule } from './modules/role/role.module';
 		TopicModule,
 		FulfillmentModule,
 		MediaModule,
-		RoleModule
+		RoleModule,
+		SellerModule
 	],
 	controllers: [AppController],
   	providers: [AppService],

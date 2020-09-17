@@ -24,14 +24,12 @@ export class RolesGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException();
     }
 
-    console.log('user-role', user.role)
-
     if(user.role === '' || user.role === undefined){
       throw new UnauthorizedException('role not valid');
     }
 
     if(roles[0] !== user.role.adminType){
-      throw new ForbiddenException(`Forbidden for admin ${user.role.adminType}`);
+      throw new ForbiddenException(`Forbidden for role ${user.role.adminType}`);
     }
 
     return user && user.roles && hasRole();

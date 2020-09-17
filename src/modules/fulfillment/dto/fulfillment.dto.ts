@@ -62,7 +62,7 @@ export class CreateFulfillmentDTO {
             "5f59442b7aebd32d4f1f0167",
             "5f59443c7aebd32d4f1f0168"
         ],
-        description: 'Select From Field Category',
+        description: 'Select From Field Topic',
         format: 'array'
     })
     topic: [string]; // in array

@@ -14,7 +14,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FulfillmentService } from './fulfillment.service';
 import { CreateFulfillmentDTO, UpdateFulfillmentDTO } from './dto/fulfillment.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 //import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -162,6 +162,7 @@ export class FulfillmentController {
 	 * @desc    Update fulfillment by Id
 	 * @access  Public
 	 **/
+
 	@Put(':id')
 	
 	@Roles(role)
@@ -213,5 +214,40 @@ export class FulfillmentController {
 				message: `Success remove fulfillment by id ${id}`
 			});
 		}
+	}
+
+	/**
+	 * @route   Get /api/v1/fulfillments/find
+	 * @desc    Select fulfillment by name
+	 * @access  Public
+	 **/
+
+	@Get('find')
+	
+	@Roles(role)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Search and show' })
+
+	@ApiHeader({
+	 	name: 'x-auth-token',
+	 	description: 'token'
+	})
+
+	@ApiBody({
+		required: false,
+		description: 'search anything name',
+		type: Object,
+		isArray: false
+	})
+
+	async search(@Res() res, @Body() search: any) {
+		const fullfillment = await this.fulfillmentService.search(search);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success search fullfillment`,
+			total: fullfillment.length,
+			data: fullfillment
+		});
 	}
 }

@@ -124,4 +124,14 @@ export class RoleService {
 			throw new NotImplementedException('The role could not be deleted');
 		}
 	}
+
+	async search(value: string): Promise<IRole[]> {
+		const role = await this.roleModel.find({"type": {$regex: ".*" + value + ".*"}})
+
+		if(!role){
+			throw new NotFoundException(`Could nod find role with your condition`)
+		}
+
+		return role
+	}
 }

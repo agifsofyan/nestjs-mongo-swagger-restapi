@@ -78,31 +78,31 @@ export class TopicService {
 	}
 
 	async findById(id: string): Promise<ITopic> {
-	 	let data;
+	 	let result;
 		try{
-		    data = await this.topicModel.findById(id);
+		    result = await this.topicModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
-		if(!data){
+		if(!result){
 			throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
-		return data;
+		return result;
 	}
 
 	async update(id: string, updateTopicDto: UpdateTopicDTO): Promise<ITopic> {
-		let data;
+		let result;
 		
 		// Check ID
 		try{
-		    data = await this.topicModel.findById(id);
+		    result = await this.topicModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
-		if(!data){
+		if(!result){
 			throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
@@ -117,5 +117,15 @@ export class TopicService {
 		}catch(err){
 			throw new NotImplementedException('The topic could not be deleted');
 		}
+	}
+
+	async search(value: string): Promise<ITopic[]> {
+		const role = await this.topicModel.find({"type": {$regex: ".*" + value + ".*"}})
+
+		if(!role){
+			throw new NotFoundException(`Could nod find topic with your condition`)
+		}
+
+		return role
 	}
 }

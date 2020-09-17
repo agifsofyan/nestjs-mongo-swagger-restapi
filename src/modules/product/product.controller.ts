@@ -11,7 +11,7 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -134,57 +134,18 @@ export class ProductController {
 	}
 
 	/**
-	 * @route    GET
-	 * @desc     Get product by condition (filter)
-	 * @access   Public
+	 * @route   Get /api/v1/products/:id
+	 * @desc    Get product by Id
+	 * @access  Public
 	 **/
 
-	@Get('find')
-	
 	@Roles(role)
 	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Search and show one' })
+	@ApiOperation({ summary: 'Search and show' })
 
 	@ApiHeader({
 	 	name: 'x-auth-token',
-	 	description: 'token'
-	})
-
-	// Swagger Parameter [optional]
-	@ApiQuery({
-		name: 'search anything',
-		required: false,
-		explode: true,
-		type: String,
-		isArray: false
-	})
-
-	async findOne(@Res() res, @Body() body){
-		const filter = body;
-		const product = await this.productService.findOne(filter);
-		return res.status(HttpStatus.OK).json({
-			statusCode: HttpStatus.OK,
-			message: `Success get product`,
-			data: product
-		});
-	}
-
-	/**
-	 * @route    Get /api/v1/products/:id
-	 * @desc     Get product by ID
-	 * @access   Public
-	 */
-
-	@Get(':id')
-	
-	@Roles(role)
-	@UseGuards(AuthGuard('jwt'))
-
-	@ApiOperation({ summary: 'Get product by id' })
-
-	@ApiHeader({
-		name: 'x-auth-token',
 	 	description: 'token'
 	})
 
@@ -255,5 +216,40 @@ export class ProductController {
 				message: `Success remove product by id ${id}`
 			});
 		}
+	}
+
+	/**
+	 * @route   Get /api/v1/product/find
+	 * @desc    Search product by name
+	 * @access  Public
+	 **/
+
+	@Post('find')
+	
+	@Roles(role)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Search and show' })
+
+	@ApiHeader({
+	 	name: 'x-auth-token',
+	 	description: 'token'
+	})
+
+	@ApiBody({
+		required: false,
+		description: 'search anything name',
+		type: Object,
+		isArray: false
+	})
+
+	async search(@Res() res, @Body() search: any) {
+		const product = await this.productService.search(search);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success search product`,
+			total: product.length,
+			data: product
+		});
 	}
 }

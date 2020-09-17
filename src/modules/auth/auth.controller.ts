@@ -17,8 +17,8 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
-import { CreateUserDTO } from '../user/dto/create-user.dto';
-import { UserLoginDTO } from '../user/dto/login.dto';
+// import { CreateUserDTO } from '../user/dto/user.dto';
+import { AuthLoginDTO } from './dto/login.dto';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 
@@ -66,8 +66,8 @@ export class AuthController {
 
     @ApiOperation({ summary: 'Aministrator Login' })
 
-    async login(@Request() request, @Res() res, @Body() userLoginDTO: UserLoginDTO) {
-        const result = await this.authService.login(request, userLoginDTO)
+    async login(@Request() request, @Res() res, @Body() authLoginDTO: AuthLoginDTO) {
+        const result = await this.authService.login(request, authLoginDTO)
 
         return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,

@@ -74,3 +74,5 @@ export class CreateUserDTO {
     // })
     role: string;
 }
+
+export type UpdateUserDTO = Partial<CreateUserDTO>;

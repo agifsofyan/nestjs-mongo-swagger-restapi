@@ -1,29 +1,22 @@
 import { 
     Injectable, 
     BadRequestException, 
-    // NotFoundException
+    NotFoundException,
+    NotImplementedException
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-// import { Request } from 'express';
-// import * as bcrypt from 'bcrypt';
 
-import { CreateUserDTO } from './dto/create-user.dto';
+import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import { IUser } from './interface/user.interface';
-// import { UserLoginDTO } from './dto/login.dto';
-// import { AuthService } from '../auth/auth.service';
-// import { RefreshAccessTokenDTO } from '../auth/dto/refresh-access-token.dto';
 import { Query } from 'src/utils/OptQuery';
-
-import { CurrentUser } from './decorator/user.decorator';
 
 export type User = IUser
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectModel('User') private readonly userModel: Model<IUser>,
-        // private readonly authService: AuthService
+        @InjectModel('User') private readonly userModel: Model<IUser>
     ) {}
 
     async findByEmail(email: string): Promise<IUser | undefined> {
@@ -55,40 +48,23 @@ export class UserService {
         return user;
     }
 
-    // async login(req: Request, userLoginDTO: UserLoginDTO) {
-    //     let user = await this.userModel.findOne({ email: userLoginDTO.email });
-    //     if (!user) {
-    //         throw new NotFoundException('The email you\'ve entered does not exist.');
-    //     }
+    async update(id: string, updateUserDto: UpdateUserDTO): Promise<IUser> {
+		let data;
+		
+		// Check ID
+		try{
+		    data = await this.userModel.findById(id);
+		}catch(error){
+		    throw new NotFoundException(`Could nod find topic with id ${id}`);
+		}
 
-    //     // Verify password
-    //     const match = await bcrypt.compare(userLoginDTO.password, user.password);
-    //     if (!match) {
-    //         throw new NotFoundException('The password you\'ve entered is incorrect.');
-    //     }
+		if(!data){
+			throw new NotFoundException(`Could nod find topic with id ${id}`);
+		}
 
-    //     user = user.toObject();
-    //     delete user.password;
-
-    //     return {
-    //         user,
-    //         accessToken: await this.authService.createAccessToken(user._id),
-    //         refreshToken: await this.authService.createRefreshToken(req, user._id)
-    //     }
-    // }
-
-    // async refreshAccessToken(refreshAccessToken: RefreshAccessTokenDTO) {
-    //     const userId = await this.authService.findRefreshToken(refreshAccessToken.refreshToken);
-
-    //     const user = await this.userModel.findById(userId);
-    //     if (!user) {
-    //         throw new BadRequestException('User not found.');
-    //     }
-        
-    //     return {
-    //         accessToken: await this.authService.createAccessToken(user._id)
-    //     }
-    // }
+		await this.userModel.findByIdAndUpdate(id, updateUserDto);
+		return await this.userModel.findById(id).exec();
+	}
 
     async findAll(options: Query): Promise<IUser[]> {
         const offset = (options.offset == 0 ? options.offset : (options.offset - 1));
@@ -136,4 +112,38 @@ export class UserService {
             }
         }
     }
+
+    async findById(id: string): Promise<IUser> {
+        let data;
+       try{
+           data = await this.userModel.findById(id);
+       }catch(error){
+           throw new NotFoundException(`Could nod find user/administrator with id ${id}`);
+       }
+
+       if(!data){
+           throw new NotFoundException(`Could nod find user/administrator with id ${id}`);
+       }
+
+       return data;
+   }
+
+    async delete(id: string): Promise<string> {
+        try{
+            await this.userModel.findByIdAndRemove(id).exec();
+            return 'ok';
+        }catch(err){
+            throw new NotImplementedException('The user/administrator could not be deleted');
+        }
+    }
+
+    async search(value: string): Promise<IUser[]> {
+		const role = await this.userModel.find({"type": {$regex: ".*" + value + ".*"}})
+
+		if(!role){
+			throw new NotFoundException(`Could nod find user/administrator with your condition`)
+		}
+
+		return role
+	}
 }

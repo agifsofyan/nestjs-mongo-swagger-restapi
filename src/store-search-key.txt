@@ -1,0 +1,14 @@
+create serach key
+------------------
+
+1> product:
+db.products.createIndex( { name: "text", description: "text", headline: "text", feedback: "text", price: "text", date: "text", section: "text" } )
+
+2> topic:
+db.topicss.createIndex( { name: "text" } )
+
+3> fulfillment:
+db.fulfillments.createIndex( { name: "text", short_content: "text", content: "text" } )
+
+4> user:
+db.administrators.createIndex( { name: "text", email: "text", phone_number: "text", role: "text" } )

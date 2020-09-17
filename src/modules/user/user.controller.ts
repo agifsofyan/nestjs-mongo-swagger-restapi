@@ -4,11 +4,14 @@ import {
     Get,
     Res,
     Req,
-    Post,
-    Body,
+	Post,
+	Put,
+	Delete,
+	Body,
+	Param,
     HttpStatus
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
@@ -17,8 +20,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 //import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 import { UserService } from './user.service';
-import { CreateUserDTO } from './dto/create-user.dto';
-import { UserLoginDTO } from './dto/login.dto';
+import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import { RefreshAccessTokenDTO } from '../auth/dto/refresh-access-token.dto';
 
 var role: string = "SUPERADMIN";
@@ -47,6 +49,12 @@ export class UserController {
  //        	description: 'token.'
  //    })
 
+	/**
+	 * @route   Post /api/v1/users/:id
+	 * @desc    Create new Administrator
+	 * @access  Public
+	 **/
+
     async addUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
         const user = await this.userService.create(createUserDTO);
         return res.status(HttpStatus.CREATED).json({
@@ -54,41 +62,44 @@ export class UserController {
 			message: 'Aministrator created successfully.',
 			data: user
 		});
-    }
+	}
+	
+	/**
+	 * @route   Put /api/v1/users/:id
+	 * @desc    Update user by Id
+	 * @access  Public
+	 **/
 
-  //   /**
-  //    * @route   POST api/v1/users/login
-  //    * @desc    Authenticate user
-  //    * @access  Public
-  //    */
+	@Put(':id')
+	
+	@Roles(role)
+	@UseGuards(AuthGuard('jwt'))
 
-  //   @Post('login')
+	@ApiOperation({ summary: 'Update User/Administrator by id' })
 
-  //   @ApiOperation({ summary: 'Aministrator Login' })
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token.'
+	})
 
-  //   async login(@Req() req: Request, @Body() userLoginDTO: UserLoginDTO) {
-  //       return await this.userService.login(req, userLoginDTO);
-  //   }
+	async update(
+		@Param('id') id: string,
+		@Res() res,
+		@Body() updateUserDto: UpdateUserDTO
+	) {
+		const user = await this.userService.update(id, updateUserDto);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: 'The User/Administrator has been successfully updated.',
+			data: user
+		});
+	}
 
-  //   *
-  //    * @route   POST api/v1/users/refresh-access-token
-  //    * @desc    Refresh user access token
-  //    * @access  Public
-     
-
-  //   @Post('refresh-access-token')
-
-  //   @ApiOperation({ summary: 'Refresh Access Token' })
-
-  //   async refreshAccessToken(@Body() refreshAccessTokenDto: RefreshAccessTokenDTO) {
-  //       return await this.userService.refreshAccessToken(refreshAccessTokenDto);
-  //   }
-
-  //   /**
-	 // * @route   GET /api/v1/users/all
-	 // * @desc    Get all user
-	 // * @access  Public
-	 // */
+	/**
+	 * @route   Get /api/v1/users
+	 * @desc    Get all administrator
+	 * @access  Public
+	 **/
 
 	@Get()
 
@@ -162,17 +173,101 @@ export class UserController {
 		});
 	}
 
-	// @Get('whoami')
+	/**
+	 * @route    Get /api/v1/users/:id
+	 * @desc     Get user/administrator by ID
+	 * @access   Public
+	 */
 
-	// @Roles(role)
-	// //@UseGuards(JwtAuthGuard, RolesGuard)
-	// @UseGuards(AuthGuard('jwt'))
+	@Get(':id')
+	
+	@Roles(role)
+	@UseGuards(AuthGuard('jwt'))
 
-	// @ApiOperation({ summary: 'Who Am I' })
+	@ApiOperation({ summary: 'Get user by id' })
 
-	// // Swagger Header [required]
-	// @ApiHeader({
-	// 	name: 'x-auth-token',
-	// 	description: 'token'
+	@ApiHeader({
+		name: 'x-auth-token',
+	 	description: 'token'
+	})
+	async findById(@Param('id') id: string, @Res() res)  {
+		const user = await this.userService.findById(id);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success get user by id ${id}`,
+			data: user
+		});
+	}
+
+	/**
+	 * @route   Delete /api/v1/users/:id
+	 * @desc    Delete user/aadministrator by ID
+	 * @access  Public
+	 **/
+	 
+	@Delete(':id')
+	
+	@Roles(role)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Delete user/administrator' })
+
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token.'
+	})
+
+	async delete(@Param('id') id: string, @Res() res){
+		const user = await this.userService.delete(id);
+		
+		if (user == 'ok') {
+			return res.status(HttpStatus.OK).json({
+				statusCode: HttpStatus.OK,
+				message: `Success remove user/administrator by id ${id}`
+			});
+		}
+	}
+
+	/**
+	 * @route   Get /api/v1/users/find
+	 * @desc    Search user by name
+	 * @access  Public
+	 **/
+
+	@Get('find')
+	
+	@Roles(role)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Search and show' })
+
+	@ApiHeader({
+	 	name: 'x-auth-token',
+	 	description: 'token'
+	})
+
+	// @ApiQuery({
+	// 	name: 'search anything name',
+	// 	required: false,
+	// 	explode: true,
+	// 	type: String,
+	// 	isArray: false
 	// })
+
+	@ApiBody({
+		required: false,
+		description: 'search anything name',
+		type: Object,
+		isArray: false
+	})
+
+	async search(@Res() res, @Body() search: any) {
+		const user = await this.userService.search(search);
+		return res.status(HttpStatus.OK).json({
+			statusCode: HttpStatus.OK,
+			message: `Success search user`,
+			total: user.length,
+			data: user
+		});
+	}
 }

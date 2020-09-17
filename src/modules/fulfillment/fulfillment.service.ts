@@ -165,4 +165,14 @@ export class FulfillmentService {
 			throw new NotImplementedException('The fulfillment could not be deleted');
 		}
 	}
+
+	async search(value: string): Promise<IFulfillment[]> {
+		const fulfillment = await this.fulfillmentModel.find({"name": {$regex: ".*" + value + ".*"}})
+
+		if(!fulfillment){
+			throw new NotFoundException(`Could nod find fulfillment with your condition`)
+		}
+
+		return fulfillment
+	}
 }

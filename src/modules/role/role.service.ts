@@ -81,32 +81,32 @@ export class RoleService {
 	}
 
 	async findById(id: string): Promise<IRole> {
-	 	let result;
+	 	let data;
 		try{
-		    result = await this.roleModel.findById(id);
+		    data = await this.roleModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find role with id ${id}`);
 		}
 
-		if(!result){
+		if(!data){
 			throw new NotFoundException(`Could nod find role with id ${id}`);
 		}
 
-		return result;
+		return data;
 	}
 
 	async update(id: string, updateRoleDto: UpdateRoleDTO): Promise<IRole> {
 		console.log('updateRoleDto', updateRoleDto);
-		let result;
+		let data;
 		
 		// Check ID
 		try{
-		    result = await this.roleModel.findById(id);
+		    data = await this.roleModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find role with id ${id}`);
 		}
 
-		if(!result){
+		if(!data){
 			throw new NotFoundException(`Could nod find role with id ${id}`);
 		}
 

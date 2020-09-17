@@ -78,31 +78,31 @@ export class TopicService {
 	}
 
 	async findById(id: string): Promise<ITopic> {
-	 	let result;
+	 	let data;
 		try{
-		    result = await this.topicModel.findById(id);
+		    data = await this.topicModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
-		if(!result){
+		if(!data){
 			throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
-		return result;
+		return data;
 	}
 
 	async update(id: string, updateTopicDto: UpdateTopicDTO): Promise<ITopic> {
-		let result;
+		let data;
 		
 		// Check ID
 		try{
-		    result = await this.topicModel.findById(id);
+		    data = await this.topicModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 
-		if(!result){
+		if(!data){
 			throw new NotFoundException(`Could nod find topic with id ${id}`);
 		}
 

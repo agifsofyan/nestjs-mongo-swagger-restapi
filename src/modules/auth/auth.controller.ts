@@ -46,11 +46,11 @@ export class AuthController {
 
   //       const user = await this.userService.create(createUserDTO)
 
-  //       const result = await this.authService.createToken(user)
+  //       const data = await this.authService.createToken(user)
 
   //       return res.status(HttpStatus.CREATED).json({
 		// 	statusCode: HttpStatus.CREATED,
-		// 	result
+		// 	data
 		// });
   //   }
 
@@ -95,7 +95,7 @@ export class AuthController {
 
         return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
-			result: user
+			data: user
 		});
     }
 }

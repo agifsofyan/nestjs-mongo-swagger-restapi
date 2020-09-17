@@ -7,7 +7,7 @@ import {
 	Param, 
 	Body, 
 	Post,
-	Patch, 
+	Put, 
 	Delete,
 	UseGuards
 } from '@nestjs/common';
@@ -128,6 +128,7 @@ export class ProductController {
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success get products`,
+			total: product.length,
 			data: product
 		});
 	}
@@ -197,12 +198,12 @@ export class ProductController {
 	}
 	
 	/**
-	 * @route   Patch /api/v1/products/:id
+	 * @route   Put /api/v1/products/:id
 	 * @desc    Update product by Id
 	 * @access  Public
 	 **/
 
-	@Patch(':id')
+	@Put(':id')
 	
 	@Roles(role)
 	@UseGuards(AuthGuard('jwt'))

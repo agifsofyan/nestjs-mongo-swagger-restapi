@@ -7,7 +7,7 @@ import {
 	Param, 
 	Body, 
 	Post,
-	Patch, 
+	Put, 
 	Delete,
 	UseGuards
 } from '@nestjs/common';
@@ -126,6 +126,7 @@ export class FulfillmentController {
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success get fulfillments`,
+			total: fulfillment.length,
 			data: fulfillment
 		});
 	}
@@ -157,11 +158,11 @@ export class FulfillmentController {
 	}
 	
 	/**
-	 * @route   Patch /api/v1/fulfillments/:id
+	 * @route   Put /api/v1/fulfillments/:id
 	 * @desc    Update fulfillment by Id
 	 * @access  Public
 	 **/
-	@Patch(':id')
+	@Put(':id')
 	
 	@Roles(role)
 	@UseGuards(AuthGuard('jwt'))

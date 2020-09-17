@@ -157,6 +157,7 @@ export class UserController {
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success get users`,
+			total: user.length,
 			data: user
 		});
 	}

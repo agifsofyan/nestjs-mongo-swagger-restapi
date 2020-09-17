@@ -7,7 +7,7 @@ import {
 	Param, 
 	Body, 
 	Post,
-	Patch, 
+	Put, 
 	Delete,
 	UseGuards
 } from '@nestjs/common';
@@ -125,6 +125,7 @@ export class RoleController {
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success get roles`,
+			total: role.length,
 			data: role
 		});
 	}
@@ -157,12 +158,12 @@ export class RoleController {
 	}
 	
 	/**
-	 * @route   Patch /api/v1/roles/:id
+	 * @route   Put /api/v1/roles/:id
 	 * @desc    Update role by Id
 	 * @access  Public
 	 **/
 
-	@Patch(':id')
+	@Put(':id')
 
 	@UseGuards(AuthGuard('jwt'))
 	@Roles(role)

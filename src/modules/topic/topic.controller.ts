@@ -7,7 +7,7 @@ import {
 	Param, 
 	Body, 
 	Post,
-	Patch, 
+	Put, 
 	Delete,
 	UseGuards
 } from '@nestjs/common';
@@ -127,6 +127,7 @@ export class TopicController {
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success get topics`,
+			total: topic.length,
 			data: topic
 		});
 	}
@@ -158,12 +159,12 @@ export class TopicController {
 	}
 	
 	/**
-	 * @route   Patch /api/v1/topics/:id
+	 * @route   Put /api/v1/topics/:id
 	 * @desc    Update topic by Id
 	 * @access  Public
 	 **/
 
-	@Patch(':id')
+	@Put(':id')
 	
 	@Roles(role)
 	@UseGuards(AuthGuard('jwt'))

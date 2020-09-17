@@ -122,18 +122,18 @@ export class ProductService {
 	}
 
 	async findById(id: string): Promise<IProduct> {
-	 	let result
+	 	let data
 		try{
-			result = await this.productModel.findById(id).populate('topic')
+			data = await this.productModel.findById(id).populate('topic')
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
 
-		if(!result){
+		if(!data){
 			throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
 
-		return result
+		return data
 	}
 
 	async findOne(options: object): Promise<IProduct> {
@@ -147,16 +147,16 @@ export class ProductService {
 	}
 
 	async update(id: string, updateProductDto: UpdateProductDTO): Promise<IProduct> {
-		let result;
+		let data;
 		
 		// Check ID
 		try{
-			result = await this.productModel.findById(id).exec()
+			data = await this.productModel.findById(id).exec()
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 
-	 	if(!result){
+	 	if(!data){
 	 		throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 		 
@@ -167,7 +167,7 @@ export class ProductService {
 		// create Product Code
 		var makeCode = ReverseString(name) // to convert Product Code
 
-		result.code = makeCode
+		data.code = makeCode
 
 		if(start_time){
 
@@ -184,10 +184,10 @@ export class ProductService {
 		}
 
 		if (date !== undefined || date !== '') {
-			result.webinar.date = date;
-			result.webinar.start_time = start_time;
-			result.webinar.end_time = end_time;
-			result.webinar.client_url = client_url;
+			data.webinar.date = date;
+			data.webinar.start_time = start_time;
+			data.webinar.end_time = end_time;
+			data.webinar.client_url = client_url;
 		}
 
 		await this.productModel.findByIdAndUpdate(id, updateProductDto);

@@ -107,31 +107,31 @@ export class FulfillmentService {
 	}
 
 	async findById(id: string): Promise<IFulfillment> {
-	 	let result;
+	 	let data;
 		try{
-		    result = await this.fulfillmentModel.findById(id);
+		    data = await this.fulfillmentModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find fulfillment with id ${id}`);
 		}
 
-		if(!result){
+		if(!data){
 			throw new NotFoundException(`Could nod find fulfillment with id ${id}`);
 		}
 
-		return result;
+		return data;
 	}
 
 	async update(id: string, updateFulfillmentDto: UpdateFulfillmentDTO): Promise<IFulfillment> {
-		let result;
+		let data;
 		
 		// Check ID
 		try{
-		    result = await this.fulfillmentModel.findById(id);
+		    data = await this.fulfillmentModel.findById(id);
 		}catch(error){
 		    throw new NotFoundException(`Could nod find fulfillment with id ${id}`);
 		}
 
-		if(!result){
+		if(!data){
 			throw new NotFoundException(`Could nod find fulfillment with id ${id}`);
 		}
 

@@ -11,8 +11,8 @@ export const TopicSchema = new mongoose.Schema({
     },
     slug: {
         type: String,
-        unique: true,
-	    slug: "name"
+	    slug: "name",
+        unique: true
     }
 },{ 
 	collection: 'topics',

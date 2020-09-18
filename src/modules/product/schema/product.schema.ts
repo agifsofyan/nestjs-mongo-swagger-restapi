@@ -4,6 +4,18 @@ import * as slug from 'mongoose-slug-updater';
 mongoose.plugin(slug);
 
 export const ProductSchema = new mongoose.Schema({
+    webinar: {
+	date: String,
+	start_time: String,
+	end_time: String,
+	client_url: String,
+    },
+
+    feature: {
+	feature_onheader: String,
+	feature_onpage: String,
+    },
+
     code: {
         type: String,
         unique: true
@@ -46,16 +58,10 @@ export const ProductSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
+    sale_price: String,
 
     created_by: String,
     updated_by: String,
-
-    webinar: {
-        date: Date,
-        start_time: String,
-        end_time: String,
-        client_url: String
-    },
 
     sale_method: {
         type: String,

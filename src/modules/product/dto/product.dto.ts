@@ -118,9 +118,18 @@ export class CreateProductDTO {
     @ApiProperty({
         example: "150000",
         description: 'Price',
-        format: 'string'
+        format: 'number'
     })
     price: string;
+
+    // sale_price
+    @IsString()
+    @ApiProperty({
+	example: "100000",
+	description: 'Sale Price',
+	format: 'number'
+    })
+    sale_price: string;
 
     // Topic
     @IsNotEmpty()
@@ -172,7 +181,7 @@ export class CreateProductDTO {
     //@IsDate()
     //@Type(() => Date)
     @ApiProperty({  
-    	example: "2020-10-25",
+    	example: "2020-09-16T04:12:54.173Z",
         description: 'Webinar Date',                     
         format: 'date',                 
 	type: 'string'                                    
@@ -264,10 +273,28 @@ export class CreateProductDTO {
     // @IsString()
     @ApiProperty({
         example: 'Section in the paragraf of young generation in the world',
-	description: 'section',
+	description: 'Section',
         format: 'string'
     })
     section: string;
+
+    // Feaure Product on Page
+    @IsString()
+    @ApiProperty({
+	example: "Feature Product on Page in Here, in paragraph format like description",
+	description: "Feature On Page",
+	format: "string"
+    })
+    feature_onpage: string;
+
+    // Feature On Header
+    @IsString()
+    @ApiProperty({
+	example: "Feature Product on Header in here,in paragraph format like description",
+	description: "Feature On Header",
+	format: "string"	
+    })
+    feature_onheader: string;
 }
 
 export type UpdateProductDTO = Partial<CreateProductDTO>;

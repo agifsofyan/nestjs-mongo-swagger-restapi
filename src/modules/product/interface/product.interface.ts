@@ -12,6 +12,7 @@ export interface IProduct extends Document {
      feedback: string;
      time_period: string;
      price: string;
+     sale_price: string;
      image_url: string; // Array
      video_link: string;
      created_by: string;
@@ -29,4 +30,8 @@ export interface IProduct extends Document {
      image_text_url: [string];
      image_product_url: [string];
      section: string;
+     feature: {
+     	feature_onpage: string;
+     	feature_onheader: string;
+     };
 }

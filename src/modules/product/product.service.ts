@@ -25,7 +25,15 @@ export class ProductService {
 	async create(createProductDto: CreateProductDTO): Promise<IProduct> {
 		const product = new this.productModel(createProductDto)
 
-		const { name, date, start_time, end_time, client_url } = createProductDto
+		const { 
+			name, 
+			start_time, 
+			end_time, 
+			client_url, 
+			date,
+			feature_onheader,
+			feature_onpage
+		} = createProductDto
 				
 		// Check if product name is already exist
 		const isProductSlugExist = await this.productModel.findOne({ slug: product.slug })
@@ -50,25 +58,30 @@ export class ProductService {
 
 		product.code = makeCode
 
-		if(start_time){
+		//if(start_time){
 
-			const checkStartTime = TimeValidation(start_time)
-			const checkEndTime = TimeValidation(end_time)
+		//	const checkStartTime = TimeValidation(start_time)
+		//	const checkEndTime = TimeValidation(end_time)
 
-			if(!checkStartTime) {
-				throw new BadRequestException('Start time field not valid, ex: 09:59')
-			}
+		//	if(!checkStartTime) {
+		//		throw new BadRequestException('Start time field not valid, ex: 09:59')
+		//	}
 
-			if(!checkEndTime){
-				throw new BadRequestException('End time field not valid, ex: 10:59')
-			}
-		}
+		//	if(!checkEndTime){
+		//		throw new BadRequestException('End time field not valid, ex: 10:59')
+		//	}
+		//}
 
 		if (date !== undefined || date !== '') {
 			product.webinar.date = date;
 			product.webinar.start_time = start_time;
 			product.webinar.end_time = end_time;
 			product.webinar.client_url = client_url;
+		}
+
+		if(feature_onpage !== '' || feature_onheader !== ''){
+			product.feature.feature_onpage = feature_onpage;
+			product.feature.feature_onheader = feature_onheader;
 		}
 
 		return await product.save()

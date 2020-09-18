@@ -21,7 +21,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 var role: string = "ADMIN";
 
-@ApiTags('Topicd')
+@ApiTags('Topics')
 @UseGuards(RolesGuard)
 @Controller('topics')
 export class TopicController {

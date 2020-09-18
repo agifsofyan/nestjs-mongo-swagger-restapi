@@ -139,10 +139,12 @@ export class ProductController {
 	 * @access  Public
 	 **/
 
+	@Get(':id')
+
 	@Roles(role)
 	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Search and show' })
+	@ApiOperation({ summary: 'Get Product By Id' })
 
 	@ApiHeader({
 	 	name: 'x-auth-token',

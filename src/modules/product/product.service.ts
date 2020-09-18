@@ -11,7 +11,7 @@ import { IProduct } from './interface/product.interface';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 import { TopicService } from '../topic/topic.service';
 import { Query } from 'src/utils/OptQuery';
-import { ReverseString } from 'src/utils/StringManipulation';
+import { ReverseString, RandomStr } from 'src/utils/StringManipulation';
 import { TimeValidation } from 'src/utils/CustomValidation';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class ProductService {
 		const product = new this.productModel(createProductDto)
 
 		const { 
-			name, 
+			name,
 			start_time, 
 			end_time, 
 			client_url, 
@@ -55,6 +55,12 @@ export class ProductService {
 		
 		// create Product Code
 		var makeCode = ReverseString(name) // to convert Product Code
+		
+		const isCodeExists = await this.productModel.findOne({ code: makeCode })
+
+		if(isCodeExists){
+			product.code = makeCode+RandomStr()
+		}
 
 		product.code = makeCode
 
@@ -88,18 +94,37 @@ export class ProductService {
 	}
 
 	async findAll(options: Query): Promise<IProduct[]> {
-		const offset = (options.offset == 0 ? options.offset : (options.offset - 1))
-		const skip = offset * options.limit
-		const sortval = (options.sortval == 'asc') ? 1 : -1
+		const { 
+			offset, 
+			limit, 
+			sortby, 
+			sortval, 
+			fields, 
+			value, 
+			optFields, 
+			optVal 
+} = options;
+		const offsets = (offset == 0 ? offset : (offset - 1))
+		const skip = offsets * limit
+		const sortvals = (sortval == 'asc') ? 1 : -1
 
-		if (options.sortby){
-			if (options.fields) {
+		var filter: object = { [fields]: value  }
+
+		if(optFields){
+			if(!fields){
+				filter = { [optFields]: optVal }
+			}
+			filter = { [fields]: value, [optFields]: optVal }
+		}
+
+		if (sortby){
+			if (fields) {
 
 				return await this.productModel
-					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
+					.find(filter)
 					.skip(Number(skip))
-					.limit(Number(options.limit))
-					.sort({ [options.sortby]: sortval })
+					.limit(Number(limit))
+					.sort({ [sortby]: sortvals })
 					.populate('topic')
 
 			} else {
@@ -108,7 +133,7 @@ export class ProductService {
 					.find()
 					.skip(Number(skip))
 					.limit(Number(options.limit))
-					.sort({ [options.sortby]: sortval })
+					.sort({ [options.sortby]: sortvals })
 					.populate('topic')
 
 			}
@@ -116,7 +141,7 @@ export class ProductService {
 			if (options.fields) {
 
 				return await this.productModel
-					.find({ $where: `/^${options.value}.*/.test(this.${options.fields})` })
+					.find(filter)
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ 'updated_at': 'desc' })
@@ -125,11 +150,12 @@ export class ProductService {
 			} else {
 
 				return await this.productModel
-					.find()
+					.find(filter)
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ 'updated_at': 'desc' })
 					.populate('topic')
+					.populate('product_redirect')
 			}
 		}
 	}
@@ -137,7 +163,9 @@ export class ProductService {
 	async findById(id: string): Promise<IProduct> {
 	 	let result
 		try{
-			result = await this.productModel.findById(id).populate('topic')
+			result = await this.productModel.findById(id)
+				.populate('topic')
+				.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
@@ -145,6 +173,9 @@ export class ProductService {
 		if(!result){
 			throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
+
+		let r = Math.random().toString(36).substring(10);
+console.log("random", r);
 
 		return result
 	}

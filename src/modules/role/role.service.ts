@@ -126,7 +126,7 @@ export class RoleService {
 	}
 
 	async search(value: string): Promise<IRole[]> {
-		const role = await this.roleModel.find({"type": {$regex: ".*" + value + ".*"}})
+		const role = await this.roleModel.find({"adminType": {$regex: ".*" + value + ".*"}})
 
 		if(!role){
 			throw new NotFoundException(`Could nod find role with your condition`)

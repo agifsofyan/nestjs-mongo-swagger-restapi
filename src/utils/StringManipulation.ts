@@ -25,22 +25,25 @@ export const Slugify = (str) => {
         .replace(/\-\-+/g, '-');        // Replace multiple - with single -
 }
 
-// export const StringPlusUnique = (str) => {
-// 	if (! /^([A-Z0-9-]{1,})$/.test(str)) {
-// 		return str + '-1'
-// 	} else {
-// 		var dashIndex = str.indexOf("-")
+export const RandomStr = () => {
+	return Math.random().toString(36).substring(7);
+}
 
-// 		var afterDash = str.substr(dashIndex);
+export const ForceToCode = (str) => {
+ 	if (! /^([A-Z0-9-]{1,})$/.test(str)) {
+ 		return str + '-1'
+ 	} else {
+ 		var dashIndex = str.indexOf("-")
 
-// 		if (/^([0-9]{1,})$/.test(afterDash)) {
-// 			var toNumber = Number(afterDash) + 1
-// 			return str + '-' + toNumber
-// 		}else{
-// 			return str + '-2'
-// 		}
+		var afterDash = str.substr(dashIndex);
 
+ 		if (/^([0-9]{1,})$/.test(afterDash)) {
+ 			var toNumber = Number(afterDash) + 1
+ 			return str + '-' + toNumber
+ 		}else{
+ 			return str + '-2'
+ 		}
 
-// 		return afterDash
-// 	}
-// }
+ 		return afterDash
+ 	}
+}

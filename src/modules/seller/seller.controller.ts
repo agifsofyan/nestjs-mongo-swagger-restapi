@@ -9,7 +9,8 @@ import {
 	Delete,
 	Body,
 	Param,
-    HttpStatus
+    HttpStatus,
+    NotFoundException
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -18,6 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserService } from '../user/user.service';
+import { RoleService } from '../role/role.service';
 
 var role: string = "ADMIN";
 
@@ -25,7 +27,10 @@ var role: string = "ADMIN";
 @UseGuards(RolesGuard)
 @Controller('sellers')
 export class SellerController {
-    constructor(private readonly userService: UserService) {}
+    constructor(
+	    private readonly userService: UserService,
+	    private readonly roleService: RoleService
+    ) {}
 
 	@Get()
 
@@ -41,12 +46,23 @@ export class SellerController {
 	})
 	
 	async findAll(@Req() req, @Res() res) {
-		const user = await this.userService.findAll(req.query);
+		const checkSellerRole = await this.roleService.search('SALES')
+
+		if(!checkSellerRole){
+			throw new NotFoundException(`Not Found Sales(Seller) Roles`)
+		}
+
+		const roleId = checkSellerRole[0]._id
+
+		const options: object = { role: roleId }
+
+		const data = await this.userService.find(options);
+		
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success get users`,
-			total: user.length,
-			data: user
+			total: data.length,
+			data: data
 		});
 	}
 

@@ -5,4 +5,7 @@ export class Query {
 	value?: string;
 	sortby?: string;
 	sortval?: string;
+
+	optFields?: string;
+	optVal?: string;
 }

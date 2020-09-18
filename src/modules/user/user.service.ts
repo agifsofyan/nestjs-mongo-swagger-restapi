@@ -122,7 +122,7 @@ export class UserService {
        }
 
        if(!data){
-           throw new NotFoundException(`Could nod find user/administrator with id ${id}`);
+           throw new NotFoundException(`Conestjs mongodb tutorialsuld nod find user/administrator with id ${id}`);
        }
 
        return data;
@@ -137,13 +137,33 @@ export class UserService {
         }
     }
 
-    async search(value: string): Promise<IUser[]> {
-		const role = await this.userModel.find({"type": {$regex: ".*" + value + ".*"}})
+    async findOne(options: object): Promise<IUser> {
+	const data = await this.userModel.findOne(options).populate('role')
 
-		if(!role){
+	if(!data){
+		throw new NotFoundException(`Could nod find user/administrator with your condition.`)
+	}
+
+	return data
+    }
+
+    async find(options: object): Promise<IUser[]> {
+	const data = await this.userModel.find(options)
+
+	if(!data){
+		throw new NotFoundException(`Could not find user/administrator`)
+	}
+
+	return data
+    }
+
+    async search(value: string): Promise<IUser[]> {
+		const data = await this.userModel.find({"name": {$regex: ".*" + value + ".*"}})
+
+		if(!data){
 			throw new NotFoundException(`Could nod find user/administrator with your condition`)
 		}
 
-		return role
+		return data
 	}
 }

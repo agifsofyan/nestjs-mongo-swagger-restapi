@@ -69,7 +69,10 @@ export const ProductSchema = new mongoose.Schema({
 	    default: "normal"
     },
 
-    product_redirect: String, // Array
+    product_redirect: {
+	type: mongoose.Schema.Types.ObjectId,
+	ref: 'Product'
+    }, // Array
 
     reseller: String, // ref: User (Id & Name)
 

@@ -163,7 +163,15 @@ export class ProductService {
 	 		throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 		 
-		const { name, date, start_time, end_time, client_url } = updateProductDto
+		const { 
+			name, 
+			date, 
+			start_time, 
+			end_time, 
+			client_url,
+			feature_onheader,
+			feature_onpage
+		} = updateProductDto
 				
 		// Check if product name is already exist
 		
@@ -172,25 +180,30 @@ export class ProductService {
 
 		result.code = makeCode
 
-		if(start_time){
+		//if(start_time){
 
-			const checkStartTime = TimeValidation(start_time)
-			const checkEndTime = TimeValidation(end_time)
+		//	const checkStartTime = TimeValidation(start_time)
+		//	const checkEndTime = TimeValidation(end_time)
 
-			if(!checkStartTime) {
-				throw new BadRequestException('Start time field not valid, ex: 09:59')
-			}
+		//	if(!checkStartTime) {
+		//		throw new BadRequestException('Start time field not valid, ex: 09:59')
+		//	}
 
-			if(!checkEndTime){
-				throw new BadRequestException('End time field not valid, ex: 10:59')
-			}
-		}
+		//	if(!checkEndTime){
+		//		throw new BadRequestException('End time field not valid, ex: 10:59')
+		//	}
+		//}
 
 		if (date !== undefined || date !== '') {
 			result.webinar.date = date;
 			result.webinar.start_time = start_time;
 			result.webinar.end_time = end_time;
 			result.webinar.client_url = client_url;
+		}
+
+		if(feature_onheader !== '' || feature_onpage !== ''){
+			result.feature.feature_onheader = feature_onheader;
+			result.feature.feature_onpage = feature_onpage;
 		}
 
 		await this.productModel.findByIdAndUpdate(id, updateProductDto);

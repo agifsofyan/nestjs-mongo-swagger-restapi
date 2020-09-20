@@ -2,10 +2,16 @@ import {
   Injectable, 
   ExecutionContext, 
   ForbiddenException, 
-  UnauthorizedException 
+  UnauthorizedException,
+  CanActivate,
+  Inject,
+  forwardRef
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+
+import { UserService } from '../../user/user.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class RolesGuard extends AuthGuard('jwt') {
@@ -14,25 +20,27 @@ export class RolesGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err: any, user: any, info: Error, context: ExecutionContext) {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const roles = this.reflector.get<string[]>('role', context.getHandler());
     if (!roles) {
       return true;
     }
 
-    const hasRole = () => user.roles.some((role: any) => roles.includes(role));
-    if (!user) {
+    const userRole = user.role.map(r => r.adminType)
+
+    const hasRole = () => userRole.some((role: any) => roles.includes(role));
+    if (!hasRole) {
       throw new UnauthorizedException();
     }
 
-    if(user.role === '' || user.role === undefined){
-      throw new UnauthorizedException('role not valid');
+    // console.log('user.role', user.role)
+
+    // console.log('roles', roles)
+
+    if (!(user.role && hasRole())) {
+       throw new ForbiddenException('Forbidden');
     }
 
-    if(roles[0] !== user.role.adminType){
-      throw new ForbiddenException(`Forbidden for role ${user.role.adminType}`);
-    }
-
-    return user && user.roles && hasRole();
+    return user && userRole && hasRole();
   }
 
  }

@@ -13,12 +13,16 @@ import { LocalStrategy } from './strategy/local.strategy';
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { RolesGuard } from './guards/roles.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
     ConfigModule,
+    UserModule,
+    //forwardRef(() => UserModule),
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'RefreshToken', schema: RefreshTokenSchema },
@@ -27,11 +31,9 @@ import { MongooseModule } from '@nestjs/mongoose';
       secret: JWT_SECRET_KEY,
       signOptions: { expiresIn: JWT_EXPIRATION_TIME },
     }),
-
-    UserModule
-  
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService],
+  //providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService],
+  providers: [AuthService, UserService, RolesGuard, JwtAuthGuard, JwtStrategy],
   controllers: [AuthController]
 })
 export class AuthModule {}

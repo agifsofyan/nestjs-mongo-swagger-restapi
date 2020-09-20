@@ -14,12 +14,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FulfillmentService } from './fulfillment.service';
 import { CreateFulfillmentDTO, UpdateFulfillmentDTO } from './dto/fulfillment.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-//import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
-var role: string = "ADMIN";
+var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
 @ApiTags('Fulfillments')
 @UseGuards(RolesGuard)
@@ -34,7 +33,7 @@ export class FulfillmentController {
 	 */
 	@Post()
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Create new fulfillment' })
@@ -61,7 +60,7 @@ export class FulfillmentController {
 	 */
 	@Get()
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get all fulfillment' })
@@ -138,7 +137,7 @@ export class FulfillmentController {
 	 */
 	@Get(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get fulfillment by id' })
@@ -165,7 +164,7 @@ export class FulfillmentController {
 
 	@Put(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Update fulfillment by id' })
@@ -195,7 +194,7 @@ export class FulfillmentController {
 	 **/
 	@Delete(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Delete fulfillment' })
@@ -217,14 +216,14 @@ export class FulfillmentController {
 	}
 
 	/**
-	 * @route   Get /api/v1/fulfillments/find
+	 * @route   Get /api/v1/fulfillments/find/search
 	 * @desc    Select fulfillment by name
 	 * @access  Public
 	 **/
 
-	@Get('find')
+	@Get('find/search')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
@@ -234,11 +233,17 @@ export class FulfillmentController {
 	 	description: 'token'
 	})
 
-	@ApiBody({
-		required: false,
-		description: 'search anything name',
-		type: Object,
-		isArray: false
+	// @ApiBody({
+	// 	required: false,
+	// 	description: 'search anything name',
+	// 	type: Object,
+	// 	isArray: false
+	// })
+
+	@ApiProperty({
+		example: 'Something',
+		description: 'Search',
+		format: 'string'
 	})
 
 	async search(@Res() res, @Body() search: any) {

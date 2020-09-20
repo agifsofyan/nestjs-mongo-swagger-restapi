@@ -17,14 +17,13 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
-// import { CreateUserDTO } from '../user/dto/user.dto';
 import { AuthLoginDTO } from './dto/login.dto';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 
-var role: string = "ADMIN";
+var inRole = ["SUPERADMIN", "IT", "ADMIN", "SALES", "CONTENT", "FINANCE", "MENTOR"];
 
 @ApiTags('Auth')
 @UseGuards(RolesGuard)
@@ -38,30 +37,12 @@ export class AuthController {
 
     @UsePipes(ValidationPipe)
 
-  //   @Post('register')
-
-  //   @ApiOperation({ summary: 'Register' })
-
-  //   async postRegister(@Res() res, @Body() createUserDTO: CreateUserDTO) {
-
-  //       const user = await this.userService.create(createUserDTO)
-
-  //       const data = await this.authService.createToken(user)
-
-  //       return res.status(HttpStatus.CREATED).json({
-		// 	statusCode: HttpStatus.CREATED,
-		// 	data
-		// });
-  //   }
-
     /**
-     * @route   POST api/v1/users/login
+     * @route   POST api/v1/auth/login
      * @desc    Authenticate user
      * @access  Public
      */
 
-
-    // @UseGuards(LocalAuthGuard)
     @Post('login')
 
     @ApiOperation({ summary: 'Aministrator Login' })
@@ -75,14 +56,20 @@ export class AuthController {
 		});
     }
 
+    /**
+     * @route   POST api/v1/auth/me
+     * @desc    Get Authenticate user
+     * @access  Public
+     */
+
     @Get('me')
     @UseGuards(AuthGuard('jwt'))
-    @Roles(role)
+    @Roles(...inRole)
 
     @ApiOperation({ summary: 'who am i' })
     
     @ApiHeader({
-	    name: 'Authorization',
+	    name: 'x-auth-token',
 	    description: 'token.'
     })
 

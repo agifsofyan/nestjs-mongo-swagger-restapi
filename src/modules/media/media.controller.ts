@@ -23,11 +23,10 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-//import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 import { editFileName, imageFileFilter } from './helper/file-upload.helper';
 
-var role: string = "ADMIN";
+var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
 @ApiTags('Uploads')
 @UseGuards(RolesGuard)
@@ -41,7 +40,7 @@ export class MediaController {@UseGuards(AuthGuard('jwt'))
      */
     @Post()
     
-    @Roles(role)
+    @Roles(...inRole)
     @UseGuards(AuthGuard('jwt'))
 
     @ApiOperation({ summary: 'Single Upload' })
@@ -95,7 +94,7 @@ export class MediaController {@UseGuards(AuthGuard('jwt'))
 
     @Post('multiple')
     
-    @Roles(role)
+    @Roles(...inRole)
     @UseGuards(AuthGuard('jwt'))
 
     @ApiOperation({ summary: 'Multiple Upload' })
@@ -153,7 +152,7 @@ export class MediaController {@UseGuards(AuthGuard('jwt'))
 
     @Get(':imgpath')
     
-    @Roles(role)
+    @Roles(...inRole)
     @UseGuards(AuthGuard('jwt'))
 
     @ApiOperation({ summary: 'Get Image' })

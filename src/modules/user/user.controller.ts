@@ -11,19 +11,18 @@ import {
 	Param,
     HttpStatus
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-//import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 import { UserService } from './user.service';
 import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import { RefreshAccessTokenDTO } from '../auth/dto/refresh-access-token.dto';
 
-var role: string = "SUPERADMIN";
+var inRole = ["SUPERADMIN", "IT"];
 
 @ApiTags('Users')
 @UseGuards(RolesGuard)
@@ -38,16 +37,15 @@ export class UserController {
 	 */
     @Post()
     
-	// @Roles(role)
-	//@UseGuards(JwtAuthGuard, RolesGuard)
-	// @UseGuards(AuthGuard('jwt'))
+	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
 
-	// @ApiOperation({ summary: 'Add new administrator' })
+	@ApiOperation({ summary: 'Add new administrator' })
 
-	// @ApiHeader({
- //        	name: 'x-auth-token',
- //        	description: 'token.'
- //    })
+	@ApiHeader({
+        	name: 'x-auth-token',
+        	description: 'token.'
+    })
 
 	/**
 	 * @route   Post /api/v1/users/:id
@@ -72,7 +70,7 @@ export class UserController {
 
 	@Put(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Update User/Administrator by id' })
@@ -103,7 +101,7 @@ export class UserController {
 
 	@Get()
 
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get all user' })
@@ -181,7 +179,7 @@ export class UserController {
 
 	@Get(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get user by id' })
@@ -207,7 +205,7 @@ export class UserController {
 	 
 	@Delete(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Delete user/administrator' })
@@ -229,14 +227,14 @@ export class UserController {
 	}
 
 	/**
-	 * @route   Get /api/v1/users/find
+	 * @route   Get /api/v1/users/find/search
 	 * @desc    Search user by name
 	 * @access  Public
 	 **/
 
-	@Get('find')
+	@Get('find/search')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
@@ -247,18 +245,24 @@ export class UserController {
 	})
 
 	// @ApiQuery({
-	// 	name: 'search anything name',
+	// 	name: 'search',
 	// 	required: false,
 	// 	explode: true,
 	// 	type: String,
 	// 	isArray: false
 	// })
 
-	@ApiBody({
-		required: false,
-		description: 'search anything name',
-		type: Object,
-		isArray: false
+	// @ApiBody({
+	// 	required: false,
+	// 	description: 'search anything name',
+	// 	type: Object,
+	// 	isArray: false
+	// })
+
+	@ApiProperty({
+		example: 'Admin Content',
+		description: 'Search',
+		format: 'string'
 	})
 
 	async search(@Res() res, @Body() search: any) {

@@ -14,12 +14,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { TopicService } from './topic.service';
 import { CreateTopicDTO, UpdateTopicDTO } from './dto/topic.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-//import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
-var role: string = "ADMIN";
+var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
 @ApiTags('Topics')
 @UseGuards(RolesGuard)
@@ -35,7 +34,7 @@ export class TopicController {
 
 	@Post()
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Create new topic' })
@@ -62,7 +61,7 @@ export class TopicController {
 
 	@Get()
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get all topic' })
@@ -140,7 +139,7 @@ export class TopicController {
 
 	@Get(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get topic by id' })
@@ -166,7 +165,7 @@ export class TopicController {
 
 	@Put(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Update topic by id' })
@@ -197,7 +196,7 @@ export class TopicController {
 	 
 	@Delete(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Delete topic' })
@@ -219,14 +218,14 @@ export class TopicController {
 	}
 
 	/**
-	 * @route   Get /api/v1/topics/find
+	 * @route   Get /api/v1/topics/find/search
 	 * @desc    Search topic by name
 	 * @access  Public
 	 **/
 
-	@Get('find')
+	@Get('find/search')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
@@ -250,6 +249,12 @@ export class TopicController {
 	// 	type: String,
 	// 	isArray: false
 	// })
+
+	@ApiProperty({
+		example: 'Career',
+		description: 'Search',
+		format: 'string'
+	})
 
 	async search(@Res() res, @Body() search: any) {
 		const topic = await this.topicService.search(search);

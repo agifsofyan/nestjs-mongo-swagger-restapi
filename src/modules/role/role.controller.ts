@@ -14,11 +14,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { RoleService } from './role.service';
 import { CreateRoleDTO, UpdateRoleDTO } from './dto/role.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
-var role: string = 'SUPERADMIN'
+var inRole = ["SUPERADMIN", "IT"];
 
 @ApiTags('Roles')
 @UseGuards(RolesGuard)
@@ -34,7 +34,7 @@ export class RoleController {
 	@Post()
 
 	@UseGuards(AuthGuard('jwt'))
-	@Roles(role)
+	@Roles(...inRole)
 
 	@ApiOperation({ summary: 'Create new role' })
 
@@ -61,7 +61,7 @@ export class RoleController {
 	@Get()
 
 	@UseGuards(AuthGuard('jwt'))
-	@Roles(role)
+	@Roles(...inRole)
 	
 	@ApiOperation({ summary: 'Get all role' })
 
@@ -139,7 +139,7 @@ export class RoleController {
 	@Get(':id')
 
 	@UseGuards(AuthGuard('jwt'))
-	@Roles(role)
+	@Roles(...inRole)
 
 	@ApiOperation({ summary: 'Get role by id' })
 
@@ -166,7 +166,7 @@ export class RoleController {
 	@Put(':id')
 
 	@UseGuards(AuthGuard('jwt'))
-	@Roles(role)
+	@Roles(...inRole)
 
 	@ApiOperation({ summary: 'Update role by id' })
 
@@ -197,7 +197,7 @@ export class RoleController {
 	@Delete(':id')
 
 	@UseGuards(AuthGuard('jwt'))
-	@Roles(role)
+	@Roles(...inRole)
 
 	@ApiOperation({ summary: 'Delete role' })
 
@@ -218,14 +218,14 @@ export class RoleController {
 	}
 
 	/**
-	 * @route   Get /api/v1/roles/find
+	 * @route   Get /api/v1/roles/find/search
 	 * @desc    Seacrh role by name
 	 * @access  Public
 	 **/
 
-	@Get('find')
+	@Get('find/search')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
@@ -235,11 +235,17 @@ export class RoleController {
 	 	description: 'token'
 	})
 
-	@ApiBody({
-		required: false,
-		description: 'search anything name',
-		type: Object,
-		isArray: false
+	// @ApiBody({
+	// 	required: false,
+	// 	description: 'search anything name',
+	// 	type: Object,
+	// 	isArray: false
+	// })
+
+	@ApiProperty({
+		example: 'ADMIN',
+		description: 'Search',
+		format: 'string'
 	})
 
 	async search(@Res() res, @Body() search: any) {

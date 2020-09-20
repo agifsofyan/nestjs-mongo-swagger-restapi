@@ -15,12 +15,11 @@ import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-//import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 import { ProductService } from './product.service';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 
-var role: string = "ADMIN";
+var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
 @ApiTags('Products')
 @UseGuards(RolesGuard)
@@ -36,7 +35,7 @@ export class ProductController {
 
 	@Post()
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Create new product' })
@@ -63,7 +62,7 @@ export class ProductController {
 
 	@Get()
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get all product & Search anything' })
@@ -141,7 +140,7 @@ export class ProductController {
 
 	@Get(':id')
 
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get Product By Id' })
@@ -168,7 +167,7 @@ export class ProductController {
 
 	@Put(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Update product by id' })
@@ -199,7 +198,7 @@ export class ProductController {
 
 	@Delete(':id')
 
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Delete product' })
@@ -221,14 +220,14 @@ export class ProductController {
 	}
 
 	/**
-	 * @route   Get /api/v1/product/find
+	 * @route   Get /api/v1/product/find/search
 	 * @desc    Search product by name
 	 * @access  Public
 	 **/
 
-	@Post('find')
+	@Post('find/search')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
@@ -238,11 +237,17 @@ export class ProductController {
 	 	description: 'token'
 	})
 
-	@ApiBody({
-		required: false,
-		description: 'search anything name',
-		type: Object,
-		isArray: false
+	// @ApiBody({
+	// 	required: false,
+	// 	description: 'search anything name',
+	// 	type: Object,
+	// 	isArray: false
+	// })
+
+	@ApiProperty({
+		example: 'Army',
+		description: 'Search',
+		format: 'string'
 	})
 
 	async search(@Res() res, @Body() search: any) {

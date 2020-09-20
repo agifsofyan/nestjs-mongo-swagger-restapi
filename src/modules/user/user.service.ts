@@ -138,23 +138,23 @@ export class UserService {
     }
 
     async findOne(options: object): Promise<IUser> {
-	const data = await this.userModel.findOne(options).populate('role')
+    	const data = await this.userModel.findOne(options).populate('role')
 
-	if(!data){
-		throw new NotFoundException(`Could nod find user/administrator with your condition.`)
-	}
+    	if(!data){
+    		throw new NotFoundException(`Could nod find user/administrator with your condition.`)
+    	}
 
-	return data
+    	return data
     }
 
     async find(options: object): Promise<IUser[]> {
-	const data = await this.userModel.find(options)
+    	const data = await this.userModel.find(options)
 
-	if(!data){
-		throw new NotFoundException(`Could not find user/administrator`)
-	}
+    	if(!data){
+    		throw new NotFoundException(`Could not find user/administrator`)
+    	}
 
-	return data
+    	return data
     }
 
     async search(value: string): Promise<IUser[]> {

@@ -20,33 +20,33 @@ export enum RolesEnum {
 
 export class CreateUserDTO {
     // Name
-    // @ApiProperty({
-    //     example: 'Dinda',
-    //     description: 'Name',
-    //     format: 'string'
-    // })
+    @ApiProperty({
+        example: 'Dinda',
+        description: 'Name',
+        format: 'string'
+    })
     @IsNotEmpty()
     @IsString()
     @MinLength(4)
 	readonly name: string;
 
     // Email
-    // @ApiProperty({
-    //     example: 'admin@email.com',
-    //     description: 'Email',
-    //     format: 'string'
-    // })
+    @ApiProperty({
+        example: 'admin@email.com',
+        description: 'Email',
+        format: 'string'
+    })
     @IsNotEmpty()
     @IsString()
     @IsEmail()
     readonly email: string;
 
     // No Hp
-    // @ApiProperty({
-    //     example: '08989900272',
-    //     description: 'Phone Number',
-    //     format: 'number'
-    // })
+    @ApiProperty({
+        example: '08989900272',
+        description: 'Phone Number',
+        format: 'number'
+    })
     @IsNotEmpty()
     @IsString()
     @MinLength(9)
@@ -54,25 +54,23 @@ export class CreateUserDTO {
     readonly phone_number: string;
 
     // Password
-    // @ApiProperty({
-    //     example: 'Ascd8@129',
-    //     description: 'Password',
-    //     format: 'string'
-    // })
+    @ApiProperty({
+        example: 'Ascd8@129',
+        description: 'Password',
+        format: 'string'
+    })
     @IsNotEmpty()
     @IsString()
     @MinLength(6)
     password: string;
 
     // Role
-    // @IsEnum(RolesEnum, { message: 'Type value is: SALES | ADMIN | CONTENT | FINANCE | MENTOR | IT | SUPERADMIN' })
-    // @ApiProperty({
-    //     example: 'ADMIN',
-    //     description: 'Role',
-    //     format: 'string',
-    //     enum: ['SALES', 'ADMIN', 'CONTENT', 'FINANCE', 'MENTOR', 'IT', 'SUPERADMIN']
-    // })
-    role: string;
+    @ApiProperty({
+        example: ['5f62ad8f15e250bb46a7d301', '5f62ad8315e250bb46a7d300'],
+        description: 'Role Id',
+        format: 'array string'
+    })
+    role: [string];
 }
 
 export type UpdateUserDTO = Partial<CreateUserDTO>;

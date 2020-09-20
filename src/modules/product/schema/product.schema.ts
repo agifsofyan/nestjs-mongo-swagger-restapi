@@ -5,15 +5,15 @@ mongoose.plugin(slug);
 
 export const ProductSchema = new mongoose.Schema({
     webinar: {
-	date: String,
-	start_time: String,
-	end_time: String,
-	client_url: String,
+    	date: String,
+    	start_time: String,
+    	end_time: String,
+    	client_url: String,
     },
 
     feature: {
-	feature_onheader: String,
-	feature_onpage: String,
+    	feature_onheader: String,
+    	feature_onpage: String,
     },
 
     code: {
@@ -70,9 +70,10 @@ export const ProductSchema = new mongoose.Schema({
     },
 
     product_redirect: {
-	type: mongoose.Schema.Types.ObjectId,
-	ref: 'Product'
-    }, // Array
+    	type: mongoose.Schema.Types.ObjectId,
+    	ref: 'Product',
+        index: true
+    },
 
     reseller: String, // ref: User (Id & Name)
 
@@ -91,4 +92,20 @@ export const ProductSchema = new mongoose.Schema({
 	collection: 'products',
 	versionKey: false, 
 	timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }, 
+});
+
+ProductSchema.virtual('ProductRedirect', {
+    ref: 'Product',
+    localField: 'product_redirect',
+    foreignField: '_id',
+    justOne: true, // default is false
+    default: 'false'
+});
+
+ProductSchema.virtual('TopicDocument', {
+    ref: 'Topic',
+    localField: 'topic',
+    foreignField: '_id',
+    justOne: true, // default is false
+    default: 'false'
 });

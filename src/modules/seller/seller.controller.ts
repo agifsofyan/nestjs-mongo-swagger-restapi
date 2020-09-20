@@ -14,14 +14,13 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-// import { Request } from 'express';
 
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserService } from '../user/user.service';
 import { RoleService } from '../role/role.service';
 
-var role: string = "ADMIN";
+var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
 @ApiTags('Sellers')
 @UseGuards(RolesGuard)
@@ -34,7 +33,7 @@ export class SellerController {
 
 	@Get()
 
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get all user' })
@@ -60,7 +59,7 @@ export class SellerController {
 		
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get users`,
+			message: `Success get seller`,
 			total: data.length,
 			data: data
 		});
@@ -74,7 +73,7 @@ export class SellerController {
 
 	@Get(':id')
 	
-	@Roles(role)
+	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Get user by id' })
@@ -87,7 +86,7 @@ export class SellerController {
 		const user = await this.userService.findById(id);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get user by id ${id}`,
+			message: `Success get seller by id ${id}`,
 			data: user
 		});
 	}

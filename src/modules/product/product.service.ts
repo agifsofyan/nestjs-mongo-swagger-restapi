@@ -103,7 +103,8 @@ export class ProductService {
 			value, 
 			optFields, 
 			optVal 
-} = options;
+		} = options;
+
 		const offsets = (offset == 0 ? offset : (offset - 1))
 		const skip = offsets * limit
 		const sortvals = (sortval == 'asc') ? 1 : -1
@@ -125,7 +126,8 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(limit))
 					.sort({ [sortby]: sortvals })
-					.populate('topic')
+					.populate('topic', ['_id', 'name', 'slug'])
+					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
 
 			} else {
 
@@ -134,7 +136,8 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ [options.sortby]: sortvals })
-					.populate('topic')
+					.populate('topic', ['_id', 'name', 'slug'])
+					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
 
 			}
 		}else{
@@ -145,7 +148,8 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ 'updated_at': 'desc' })
-					.populate('topic')
+					.populate('topic', ['_id', 'name', 'slug'])
+					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
 
 			} else {
 
@@ -154,8 +158,8 @@ export class ProductService {
 					.skip(Number(skip))
 					.limit(Number(options.limit))
 					.sort({ 'updated_at': 'desc' })
-					.populate('topic')
-					.populate('product_redirect')
+					.populate('topic', ['_id', 'name', 'slug'])
+					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
 			}
 		}
 	}
@@ -164,7 +168,7 @@ export class ProductService {
 	 	let result
 		try{
 			result = await this.productModel.findById(id)
-				.populate('topic')
+				.populate('topic', ['_id', 'name', 'slug'])
 				.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`)
@@ -173,9 +177,6 @@ export class ProductService {
 		if(!result){
 			throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
-
-		let r = Math.random().toString(36).substring(10);
-console.log("random", r);
 
 		return result
 	}
@@ -203,11 +204,15 @@ console.log("random", r);
 			feature_onheader,
 			feature_onpage
 		} = updateProductDto
-				
-		// Check if product name is already exist
 		
 		// create Product Code
 		var makeCode = ReverseString(name) // to convert Product Code
+
+		const isCodeExists = await this.productModel.findOne({ code: makeCode })
+
+		if (isCodeExists) {
+			result.code = makeCode + RandomStr()
+		}
 
 		result.code = makeCode
 

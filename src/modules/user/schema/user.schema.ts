@@ -6,10 +6,10 @@ export const UserSchema = new mongoose.Schema({
     email: { type: String, required: true },
     phone_number: { type: String, required: true },
     password: {type: String, required: true },
-    role: { 
+    role: [{ 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role'
-    },
+    }],
 }, { 
     collection: 'administrators',
     versionKey: false, 

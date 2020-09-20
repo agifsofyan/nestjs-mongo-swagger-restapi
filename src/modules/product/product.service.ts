@@ -32,7 +32,8 @@ export class ProductService {
 			client_url, 
 			date,
 			feature_onheader,
-			feature_onpage
+			feature_onpage,
+			product_redirect
 		} = createProductDto
 				
 		// Check if product name is already exist
@@ -47,10 +48,15 @@ export class ProductService {
 		console.log('arrayTopic:', arrayTopic)
 
 		for (let i = 0; i < arrayTopic.length; i++) {
-			const isTopicExist = await this.topicService.findById(arrayTopic[i])
-			if (! isTopicExist) {
-				throw new BadRequestException()
+			const topicFound = await this.topicService.findById(arrayTopic[i])
+			if (!topicFound) {
+				throw new BadRequestException('Topic Id not found')
 			}
+		}
+
+		const productFound = await this.productModel.findById(product_redirect)
+		if (!productFound) {
+			throw new BadRequestException('Product Id not found')
 		}
 		
 		// create Product Code
@@ -195,16 +201,40 @@ export class ProductService {
 	 		throw new NotFoundException(`Could nod find product with id ${id}`);
 		}
 		 
-		const { 
-			name, 
-			date, 
-			start_time, 
-			end_time, 
+		const {
+			name,
+			start_time,
+			end_time,
 			client_url,
+			date,
 			feature_onheader,
-			feature_onpage
+			feature_onpage,
+			product_redirect
 		} = updateProductDto
-		
+
+		// Check if product name is already exist
+		const isProductSlugExist = await this.productModel.findOne({ slug: result.slug })
+
+		if (isProductSlugExist) {
+			throw new BadRequestException('That product slug is already exist.')
+		}
+
+		var arrayTopic = updateProductDto.topic
+
+		console.log('arrayTopic:', arrayTopic)
+
+		for (let i = 0; i < arrayTopic.length; i++) {
+			const topicFound = await this.topicService.findById(arrayTopic[i])
+			if (!topicFound) {
+				throw new BadRequestException('Topic Id not found')
+			}
+		}
+
+		const productFound = await this.productModel.findById(product_redirect)
+		if (!productFound) {
+			throw new BadRequestException('Product Id not found')
+		}
+
 		// create Product Code
 		var makeCode = ReverseString(name) // to convert Product Code
 
@@ -215,20 +245,6 @@ export class ProductService {
 		}
 
 		result.code = makeCode
-
-		//if(start_time){
-
-		//	const checkStartTime = TimeValidation(start_time)
-		//	const checkEndTime = TimeValidation(end_time)
-
-		//	if(!checkStartTime) {
-		//		throw new BadRequestException('Start time field not valid, ex: 09:59')
-		//	}
-
-		//	if(!checkEndTime){
-		//		throw new BadRequestException('End time field not valid, ex: 10:59')
-		//	}
-		//}
 
 		if (date !== undefined || date !== '') {
 			result.webinar.date = date;

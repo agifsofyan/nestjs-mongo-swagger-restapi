@@ -12,7 +12,7 @@ import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 import { TopicService } from '../topic/topic.service';
 import { Query } from 'src/utils/OptQuery';
 import { ReverseString, RandomStr } from 'src/utils/StringManipulation';
-import { TimeValidation } from 'src/utils/CustomValidation';
+// import { TimeValidation } from 'src/utils/CustomValidation';
 
 @Injectable()
 export class ProductService {

@@ -43,7 +43,5 @@ export const ForceToCode = (str) => {
  		}else{
  			return str + '-2'
  		}
-
- 		return afterDash
  	}
 }

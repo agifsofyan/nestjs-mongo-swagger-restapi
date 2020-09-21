@@ -20,7 +20,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Topics')
+@ApiTags('Topics - [SUPERADMIN & ADMIN]')
 @UseGuards(RolesGuard)
 @Controller('topics')
 export class TopicController {

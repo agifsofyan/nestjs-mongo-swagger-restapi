@@ -19,13 +19,13 @@ export interface IProduct extends Document {
      updated_by: string;
      webinar: {
           date: string;
+          duration: string;
           start_time: string;
           end_time: string;
           client_url: string;
      };
      sale_method: string; // enum
      product_redirect: string; // Array
-     //reseller: string; // ref: User (Id & Name)
      agent: [string]; // Customer Service
      image_bonus_url: [string];
      image_text_url: [string];

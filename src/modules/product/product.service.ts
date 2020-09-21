@@ -11,8 +11,8 @@ import { IProduct } from './interface/product.interface';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 import { TopicService } from '../topic/topic.service';
 import { Query } from 'src/utils/OptQuery';
-import { ReverseString, RandomStr, Slugify } from 'src/utils/StringManipulation';
-// import { TimeValidation } from 'src/utils/CustomValidation';
+import { ReverseString, RandomStr, Slugify, StrToUnix, UnixToStr } from 'src/utils/StringManipulation';
+import { TimeValidation } from 'src/utils/CustomValidation';
 
 @Injectable()
 export class ProductService {
@@ -27,8 +27,8 @@ export class ProductService {
 
 		const { 
 			name,
-			start_time, 
-			end_time, 
+			duration,
+			start_time,
 			client_url, 
 			date,
 			feature_onheader,
@@ -39,14 +39,20 @@ export class ProductService {
 			slug
 		} = createProductDto
 				
-		// Check if product name is already exist
-		const makeSlug = Slugify(slug)
-		const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
-        	
-		if (isSlugExist) {
-        	throw new BadRequestException('That product slug is already exist.')
+		/** Product Slug Start */
+		if(slug){
+			const makeSlug = Slugify(slug)
+			console.log('makeSlug', makeSlug)
+			const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
+				
+			if (isSlugExist) {
+				throw new BadRequestException('That product slug is already exist.')
+			}
+			result.slug = makeSlug
+		}else{
+			throw new BadRequestException('Slug is required.')
 		}
-		result.slug = makeSlug
+		/** Product Slug End */
 		
 		// Check Topic ID
 		var arrayTopic = topic
@@ -72,7 +78,7 @@ export class ProductService {
 			}
 		}
 		
-		// create Product Code
+		/** Product Code Start */
 		var makeCode = ReverseString(name) // to convert Product Code
 		
 		const isCodeExists = await this.productModel.findOne({ code: makeCode })
@@ -81,32 +87,54 @@ export class ProductService {
 			result.code = makeCode+RandomStr()
 		}
 		result.code = makeCode
+		/** Product Code End */
 
-		//if(start_time){
-
-		//	const checkStartTime = TimeValidation(start_time)
-		//	const checkEndTime = TimeValidation(end_time)
-
-		//	if(!checkStartTime) {
-		//		throw new BadRequestException('Start time field not valid, ex: 09:59')
-		//	}
-
-		//	if(!checkEndTime){
-		//		throw new BadRequestException('End time field not valid, ex: 10:59')
-		//	}
-		//}
-
-		if (date !== undefined || date !== '') {
+		/** Webinar Start */
+		if (date) {
 			result.webinar.date = date;
+		}
+
+		if(start_time && duration){
+
+			const startTimeFormat = TimeValidation(start_time)
+
+			if(!startTimeFormat) {
+				throw new BadRequestException('Time field not valid, ex: 09:59')
+			}
+			
 			result.webinar.start_time = start_time;
-			result.webinar.end_time = end_time;
+			var startTimeUnix = StrToUnix(start_time)
+
+			const durationFormat = TimeValidation(duration)
+
+			if(!durationFormat) {
+				throw new BadRequestException('Duration field not valid, ex: 09:59')
+			}
+			
+			result.webinar.duration = duration;
+			var durationUnix = StrToUnix(duration)
+
+			var endTimeUnix = startTimeUnix + durationUnix
+
+			var endTimeFormat = UnixToStr(endTimeUnix)
+
+			result.webinar.end_time = endTimeFormat
+		}
+
+		if (client_url) {
 			result.webinar.client_url = client_url;
 		}
+		/** Webinar End */
 
-		if(feature_onpage !== '' || feature_onheader !== ''){
+		/** Feature Start */
+		if(feature_onpage){
 			result.feature.feature_onpage = feature_onpage;
+		}
+		
+		if(feature_onheader){
 			result.feature.feature_onheader = feature_onheader;
 		}
+		/** Feature End */
 
 		return await result.save()
 	}
@@ -220,10 +248,10 @@ export class ProductService {
 		 
 		const {
 			name,
-			start_time,
-			end_time,
-			client_url,
 			date,
+			duration,
+			start_time,
+			client_url,
 			feature_onheader,
 			feature_onpage,
 			product_redirect,
@@ -232,61 +260,100 @@ export class ProductService {
 			slug
 		} = updateProductDto
 
-		// Check if product name is already exist
-		const makeSlug = Slugify(slug)
-		const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
-        	
-		if (isSlugExist) {
-        	throw new BadRequestException('That product slug is already exist.')
+		/** Product Slug Start */
+		if(name){
+			if(slug){
+				const makeSlug = Slugify(slug)
+				console.log('makeSlug', makeSlug)
+				const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
+					
+				if (isSlugExist) {
+					throw new BadRequestException('That product slug is already exist.')
+				}
+				result.slug = makeSlug
+			}else{
+				throw new BadRequestException('Name and Slug is required together')
+			}
+			/** Product Slug End */
 		}
-		result.slug = makeSlug
 
+		
 		// Check Topic ID
-		var arrayTopic = topic
-		for (let i = 0; i < arrayTopic.length; i++) {
-			const topicFound = await this.topicService.findById(arrayTopic[i])
-			if (!topicFound) {
-				throw new BadRequestException('Topic Id not found')
+		if(topic){
+			var arrayTopic = topic
+			for (let i = 0; i < arrayTopic.length; i++) {
+				const topicFound = await this.topicService.findById(arrayTopic[i])
+				if (!topicFound) {
+					throw new BadRequestException('Topic Id not found')
+				}
 			}
 		}
 
 		// Check Product_Redirect ID
-		const productFound = await this.productModel.findById(product_redirect)
-		if (!productFound) {
-			throw new BadRequestException('Product Id not found')
-		}
-
-		// Check Agent (User) ID
-		var arrayAgent = agent
-		for (let i = 0; i < arrayAgent.length; i++) {
-			const agentFound = await this.productModel.findById(arrayAgent[i])
-			if (!agentFound) {
-				throw new BadRequestException('Agent Id not found')
+		if(product_redirect){
+			const productFound = await this.productModel.findById(product_redirect)
+			if (!productFound) {
+				throw new BadRequestException('Product Id not found')
 			}
 		}
 
-		// create Product Code
-		var makeCode = ReverseString(name) // to convert Product Code
-
-		const isCodeExists = await this.productModel.findOne({ code: makeCode })
-
-		if (isCodeExists) {
-			result.code = makeCode + RandomStr()
+		// Check Agent (User) ID
+		if(agent){
+			var arrayAgent = agent
+			for (let i = 0; i < arrayAgent.length; i++) {
+				const agentFound = await this.productModel.findById(arrayAgent[i])
+				if (!agentFound) {
+					throw new BadRequestException('Agent Id not found')
+				}
+			}
 		}
 
-		result.code = makeCode
-
-		if (date !== undefined || date !== '') {
+		/** Webinar Start */
+		if (date) {
 			result.webinar.date = date;
+		}
+
+		if(start_time && duration){
+
+			const startTimeFormat = TimeValidation(start_time)
+
+			if(!startTimeFormat) {
+				throw new BadRequestException('Time field not valid, ex: 09:59')
+			}
+			
 			result.webinar.start_time = start_time;
-			result.webinar.end_time = end_time;
+			var startTimeUnix = StrToUnix(start_time)
+
+			const durationFormat = TimeValidation(duration)
+
+			if(!durationFormat) {
+				throw new BadRequestException('Duration field not valid, ex: 09:59')
+			}
+			
+			result.webinar.duration = duration;
+			var durationUnix = StrToUnix(duration)
+
+			var endTimeUnix = startTimeUnix + durationUnix
+
+			var endTimeFormat = UnixToStr(endTimeUnix)
+
+			result.webinar.end_time = endTimeFormat
+		}
+
+		if (client_url) {
 			result.webinar.client_url = client_url;
 		}
+		/** Webinar End */
 
-		if(feature_onheader !== '' || feature_onpage !== ''){
-			result.feature.feature_onheader = feature_onheader;
+		/** Feature Start */
+		if(feature_onpage){
 			result.feature.feature_onpage = feature_onpage;
 		}
+		
+		if(feature_onheader){
+			result.feature.feature_onheader = feature_onheader;
+		}
+		/** Feature End */
 
 		await this.productModel.findByIdAndUpdate(id, updateProductDto);
 		return await this.productModel.findById(id).populate('topic')

@@ -188,6 +188,15 @@ export class CreateProductDTO {
     })                                     
     date: string;
 
+    // Duration
+    //@IsString()
+    @ApiProperty({
+        example: "01:59",
+        description: 'Duration',
+        format: 'string'
+    })
+    duration: string;
+
     // Start Time
     //@IsString()
     @ApiProperty({
@@ -199,12 +208,12 @@ export class CreateProductDTO {
 
     // End Time
     //@IsString()
-    @ApiProperty({
-        example: "21:32",
-        description: 'End At',
-        format: 'string'
-    })
-    end_time: string;
+    // @ApiProperty({
+    //     example: "21:32",
+    //     description: 'End At',
+    //     format: 'string'
+    // })
+    // end_time: string;
 
      // Client Url
     // @IsString()
@@ -235,15 +244,6 @@ export class CreateProductDTO {
         format: 'string'
     })
     product_redirect: string;
-
-    // ReSeller
-    //  @IsString()
-    //  @ApiProperty({
-    //      example: "Aminah",
-    //      description: 'Reseller name',
-    //      format: 'string'
-    // })
-    // reseller: string;
 
     // Agent / Customer Service
     @ApiProperty({

@@ -24,7 +24,7 @@ import { RefreshAccessTokenDTO } from '../auth/dto/refresh-access-token.dto';
 
 var inRole = ["SUPERADMIN", "IT"];
 
-@ApiTags('Users')
+@ApiTags('Users - [SUPERADMIN]')
 @UseGuards(RolesGuard)
 @Controller('users')
 export class UserController {

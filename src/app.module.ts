@@ -12,6 +12,7 @@ import { TopicModule } from './modules/topic/topic.module';
 import { RoleModule } from './modules/role/role.module';
 
 import { AgentModule } from './modules/agent/agent.module';
+import { ResellerModule } from './modules/reseller/reseller.module';
 
 @Module({
 	imports: [
@@ -23,7 +24,8 @@ import { AgentModule } from './modules/agent/agent.module';
 		FulfillmentModule,
 		MediaModule,
 		RoleModule,
-		AgentModule
+		AgentModule,
+		ResellerModule
 	],
 	controllers: [AppController],
   	providers: [AppService],

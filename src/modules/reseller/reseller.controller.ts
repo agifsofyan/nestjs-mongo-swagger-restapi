@@ -12,58 +12,59 @@ import {
 	UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleService } from './role.service';
-import { CreateRoleDTO, UpdateRoleDTO } from './dto/role.dto';
+import { ResellerService } from './reseller.service';
+import { CreateResellerDTO, UpdateResellerDTO } from './dto/reseller.dto';
 import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
-var inRole = ["SUPERADMIN", "IT"];
+var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Roles - [SUPERADMIN]')
+@ApiTags('Resellers  - [SUPERADMIN & ADMIN]')
 @UseGuards(RolesGuard)
-@Controller('roles')
-export class RoleController {
-	constructor(private readonly roleService: RoleService) { }
+@Controller('resellers')
+export class ResellerController {
+	constructor(private readonly resellerService: ResellerService) { }
 
 	/**
-	 * @route   POST /api/v1/roles
-	 * @desc    Create a new role
+	 * @route   POST /api/v1/resellers
+	 * @desc    Create a new reseller
 	 * @access  Public
 	 */
+
 	@Post()
-
-	@UseGuards(AuthGuard('jwt'))
+	
 	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Create new role' })
-
+	@ApiOperation({ summary: 'Create new reseller' })
 	@ApiHeader({
 		name: 'x-auth-token',
 		description: 'token.'
 	})
 
-	async create(@Res() res, @Body() createRoleDto: CreateRoleDTO) {
-		const role = await this.roleService.create(createRoleDto);
+	async create(@Res() res, @Body() createResellerDto: CreateResellerDTO) {
+		const reseller = await this.resellerService.create(createResellerDto);
 
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
-			message: 'The Role has been successfully created.',
-			data: role
+			message: 'The Reseller has been successfully created.',
+			data: reseller
 		});
 	}
 
 	/**
-	 * @route   GET /api/v1/roles
-	 * @desc    Get all role
+	 * @route   GET /api/v1/resellers
+	 * @desc    Get all reseller
 	 * @access  Public
 	 */
-	@Get()
 
-	@UseGuards(AuthGuard('jwt'))
-	@Roles(...inRole)
+	@Get()
 	
-	@ApiOperation({ summary: 'Get all role' })
+	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Get all reseller' })
 
 	// Swagger Header [required]
 	@ApiHeader({
@@ -121,54 +122,53 @@ export class RoleController {
 	})
 
 	async findAll(@Req() req, @Res() res) {
-		const role = await this.roleService.findAll(req.query);
+		const reseller = await this.resellerService.findAll(req.query);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get roles`,
-			total: role.length,
-			data: role
+			message: `Success get resellers`,
+			total: reseller.length,
+			data: reseller
 		});
 	}
 
 	/**
-	 * @route    Get /api/v1/roles/:id
-	 * @desc     Get role by ID
+	 * @route    Get /api/v1/resellers/:id
+	 * @desc     Get reseller by ID
 	 * @access   Public
 	 */
 
 	@Get(':id')
-
-	@UseGuards(AuthGuard('jwt'))
+	
 	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Get role by id' })
+	@ApiOperation({ summary: 'Get reseller by id' })
 
 	@ApiHeader({
 		name: 'x-auth-token',
 	 	description: 'token'
 	})
-
 	async findById(@Param('id') id: string, @Res() res)  {
-		const role = await this.roleService.findById(id);
+		const reseller = await this.resellerService.findById(id);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get role by id ${id}`,
-			data: role
+			message: `Success get reseller by id ${id}`,
+			data: reseller
 		});
 	}
 	
 	/**
-	 * @route   Put /api/v1/roles/:id
-	 * @desc    Update role by Id
+	 * @route   Put /api/v1/resellers/:id
+	 * @desc    Update reseller by Id
 	 * @access  Public
 	 **/
 
 	@Put(':id')
-
-	@UseGuards(AuthGuard('jwt'))
+	
 	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Update role by id' })
+	@ApiOperation({ summary: 'Update reseller by id' })
 
 	@ApiHeader({
 		name: 'x-auth-token',
@@ -178,28 +178,28 @@ export class RoleController {
 	async update(
 		@Param('id') id: string,
 		@Res() res,
-		@Body() updateRoleDto: UpdateRoleDTO
+		@Body() updateResellerDto: UpdateResellerDTO
 	) {
-		const role = await this.roleService.update(id, updateRoleDto);
+		const reseller = await this.resellerService.update(id, updateResellerDto);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: 'The Role has been successfully updated.',
-			data: role
+			message: 'The Reseller has been successfully updated.',
+			data: reseller
 		});
 	}
 
 	/**
-	 * @route   Delete /api/v1/roles/:id
-	 * @desc    Delete role by ID
+	 * @route   Delete /api/v1/resellers/:id
+	 * @desc    Delete reseller by ID
 	 * @access  Public
 	 **/
-
+	 
 	@Delete(':id')
-
-	@UseGuards(AuthGuard('jwt'))
+	
 	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Delete role' })
+	@ApiOperation({ summary: 'Delete reseller' })
 
 	@ApiHeader({
 		name: 'x-auth-token',
@@ -207,19 +207,19 @@ export class RoleController {
 	})
 
 	async delete(@Param('id') id: string, @Res() res){
-		const role = await this.roleService.delete(id);
+		const reseller = await this.resellerService.delete(id);
 		
-		if (role == 'ok') {
+		if (reseller == 'ok') {
 			return res.status(HttpStatus.OK).json({
 				statusCode: HttpStatus.OK,
-				message: `Success remove role by id ${id}`
+				message: `Success remove reseller by id ${id}`
 			});
 		}
 	}
 
 	/**
-	 * @route   Get /api/v1/roles/find/search
-	 * @desc    Seacrh role by name
+	 * @route   Get /api/v1/resellers/find/search
+	 * @desc    Search reseller by name
 	 * @access  Public
 	 **/
 
@@ -235,26 +235,34 @@ export class RoleController {
 	 	description: 'token'
 	})
 
-	// @ApiBody({
+	@ApiBody({
+		required: false,
+		description: 'search anything name',
+		type: Object,
+		isArray: false
+	})
+
+	// @ApiQuery({
+	// 	name: 'search anything name',
 	// 	required: false,
-	// 	description: 'search anything name',
-	// 	type: Object,
+	// 	explode: true,
+	// 	type: String,
 	// 	isArray: false
 	// })
 
 	@ApiProperty({
-		example: 'ADMIN',
+		example: 'Career',
 		description: 'Search',
 		format: 'string'
 	})
 
 	async search(@Res() res, @Body() search: any) {
-		const role = await this.roleService.search(search);
+		const reseller = await this.resellerService.search(search);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success search role`,
-			total: role.length,
-			data: role
+			message: `Success search reseller`,
+			total: reseller.length,
+			data: reseller
 		});
 	}
 }

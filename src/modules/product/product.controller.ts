@@ -21,7 +21,7 @@ import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Products')
+@ApiTags('Products - [SUPERADMIN & ADMIN]')
 @UseGuards(RolesGuard)
 @Controller('products')
 export class ProductController {
@@ -50,7 +50,7 @@ export class ProductController {
 		return res.status(HttpStatus.CREATED).json({
 			statusCode: HttpStatus.CREATED,
 			message: 'The Product has been successfully created.',
-			data: product    	
+			data: product
 		});
 	}
 

@@ -40,6 +40,7 @@
     "fastify-multer": "^2.0.2",
     "fastify-multipart": "^3.2.0",
     "fastify-swagger": "^3.3.0",
+    "moment": "^2.28.0",
     "mongoose": "^5.10.5",
     "mongoose-slug-updater": "^3.2.3",
     "multer": "^1.4.2",
@@ -53,7 +54,8 @@
     "rxjs": "^6.6.3",
     "sharp": "^0.26.0",
     "swagger-ui-express": "^4.1.4",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "xendit-node": "^1.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",

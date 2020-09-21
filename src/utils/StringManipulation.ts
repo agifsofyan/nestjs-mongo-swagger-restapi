@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const ReverseString = (str) => {
     let makeArray = str.split(" ")
 
@@ -44,4 +46,12 @@ export const ForceToCode = (str) => {
  			return str + '-2'
  		}
  	}
+}
+
+export const StrToUnix = (str) => {
+	return moment(str).unix();
+}
+
+export const UnixToStr = (unix) => {
+	return moment(unix).format('HH:mm')
 }

@@ -5,7 +5,8 @@ import * as mongoose from 'mongoose';
 
 export const ProductSchema = new mongoose.Schema({
     webinar: {
-    	date: String,
+        date: String,
+        duration: String,
     	start_time: String,
     	end_time: String,
     	client_url: String,

@@ -28,7 +28,7 @@ import { editFileName, imageFileFilter } from './helper/file-upload.helper';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Uploads')
+@ApiTags('Uploads - [SUPERADMIN & ADMIN]')
 @UseGuards(RolesGuard)
 @Controller('uploads')
 export class MediaController {@UseGuards(AuthGuard('jwt'))

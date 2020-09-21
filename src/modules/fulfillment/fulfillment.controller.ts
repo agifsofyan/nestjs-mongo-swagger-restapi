@@ -20,7 +20,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Fulfillments')
+@ApiTags('Fulfillments - [SUPERADMIN & ADMIN]')
 @UseGuards(RolesGuard)
 @Controller('fulfillments')
 export class FulfillmentController {

@@ -18,7 +18,7 @@ import { RoleService } from '../role/role.service';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Agents')
+@ApiTags('Agents - [SUPERADMIN & ADMIN]')
 @UseGuards(RolesGuard)
 @Controller('agents')
 export class AgentController {

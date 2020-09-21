@@ -25,7 +25,8 @@ export interface IProduct extends Document {
      };
      sale_method: string; // enum
      product_redirect: string; // Array
-     reseller: string; // ref: User (Id & Name)
+     //reseller: string; // ref: User (Id & Name)
+     agent: [string]; // Customer Service
      image_bonus_url: [string];
      image_text_url: [string];
      image_product_url: [string];

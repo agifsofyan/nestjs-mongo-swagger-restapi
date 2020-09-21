@@ -4,15 +4,11 @@ import {
     Get,
     Res,
     Req,
-	Post,
-	Put,
-	Delete,
-	Body,
 	Param,
     HttpStatus,
     NotFoundException
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiHeader } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -22,10 +18,10 @@ import { RoleService } from '../role/role.service';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Sellers')
+@ApiTags('Agents')
 @UseGuards(RolesGuard)
-@Controller('sellers')
-export class SellerController {
+@Controller('agents')
+export class AgentController {
     constructor(
 	    private readonly userService: UserService,
 	    private readonly roleService: RoleService
@@ -36,7 +32,7 @@ export class SellerController {
 	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Get all user' })
+	@ApiOperation({ summary: 'Get all agent' })
 
 	// Swagger Header [required]
 	@ApiHeader({
@@ -48,7 +44,7 @@ export class SellerController {
 		const checkSellerRole = await this.roleService.search('SALES')
 
 		if(!checkSellerRole){
-			throw new NotFoundException(`Not Found Sales(Seller) Roles`)
+			throw new NotFoundException(`Not Found Agent(Sales) Roles`)
 		}
 
 		const roleId = checkSellerRole[0]._id
@@ -59,7 +55,7 @@ export class SellerController {
 		
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get seller`,
+			message: `Success get agents`,
 			total: data.length,
 			data: data
 		});
@@ -76,7 +72,7 @@ export class SellerController {
 	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Get user by id' })
+	@ApiOperation({ summary: 'Get Agent by id' })
 
 	@ApiHeader({
 		name: 'x-auth-token',
@@ -86,7 +82,7 @@ export class SellerController {
 		const user = await this.userService.findById(id);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success get seller by id ${id}`,
+			message: `Success get agent(sales) by id ${id}`,
 			data: user
 		});
 	}

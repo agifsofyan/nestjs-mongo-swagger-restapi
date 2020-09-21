@@ -75,7 +75,12 @@ export const ProductSchema = new mongoose.Schema({
         index: true
     },
 
-    reseller: String, // ref: User (Id & Name)
+    //reseller: String, // ref: User (Id & Name)
+
+    agent: [{
+        type: mongoose.Schema.Types.ObjectId,
+    	ref: 'User',
+    }],
 
     image_bonus_url: [{
 	    type: String
@@ -98,7 +103,7 @@ ProductSchema.virtual('ProductRedirect', {
     ref: 'Product',
     localField: 'product_redirect',
     foreignField: '_id',
-    justOne: true, // default is false
+    justOne: false, // default is false
     default: 'false'
 });
 
@@ -106,6 +111,14 @@ ProductSchema.virtual('TopicDocument', {
     ref: 'Topic',
     localField: 'topic',
     foreignField: '_id',
-    justOne: true, // default is false
+    justOne: false, // default is false
+    default: 'false'
+});
+
+ProductSchema.virtual('AgentDocument', {
+    ref: 'Agent',
+    localField: 'agent',
+    foreignField: '_id',
+    justOne: false, // default is false
     default: 'false'
 });

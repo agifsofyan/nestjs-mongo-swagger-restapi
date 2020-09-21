@@ -238,12 +238,20 @@ export class CreateProductDTO {
 
     // ReSeller
     //  @IsString()
-     @ApiProperty({
-         example: "Aminah",
-         description: 'Reseller name',
-         format: 'string'
-    })
-    reseller: string;
+    //  @ApiProperty({
+    //      example: "Aminah",
+    //      description: 'Reseller name',
+    //      format: 'string'
+    // })
+    // reseller: string;
+
+    // Agent / Customer Service
+    @ApiProperty({
+        example: ["assdedeededefedvfrvfvfv", "wqdedfvfefcmjpouupddw"],
+        description: 'Id Agent / Customer Service',
+        format: 'array'
+   })
+   agent: [string];
     
     // Image Bonus URL
     @ApiProperty({

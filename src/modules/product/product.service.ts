@@ -33,7 +33,9 @@ export class ProductService {
 			date,
 			feature_onheader,
 			feature_onpage,
-			product_redirect
+			product_redirect,
+			topic,
+			agent
 		} = createProductDto
 				
 		// Check if product name is already exist
@@ -42,11 +44,9 @@ export class ProductService {
 		if (isProductSlugExist) {
         	throw new BadRequestException('That product slug is already exist.')
 		}
-
-		var arrayTopic = createProductDto.topic
-
-		console.log('arrayTopic:', arrayTopic)
-
+		
+		// Check Topic ID
+		var arrayTopic = topic
 		for (let i = 0; i < arrayTopic.length; i++) {
 			const topicFound = await this.topicService.findById(arrayTopic[i])
 			if (!topicFound) {
@@ -54,9 +54,19 @@ export class ProductService {
 			}
 		}
 
+		// Check Product_Redirect ID
 		const productFound = await this.productModel.findById(product_redirect)
 		if (!productFound) {
 			throw new BadRequestException('Product Id not found')
+		}
+
+		// Check Agent (User) ID
+		var arrayAgent = agent
+		for (let i = 0; i < arrayAgent.length; i++) {
+			const agentFound = await this.productModel.findById(arrayAgent[i])
+			if (!agentFound) {
+				throw new BadRequestException('Agent Id not found')
+			}
 		}
 		
 		// create Product Code
@@ -134,6 +144,7 @@ export class ProductService {
 					.sort({ [sortby]: sortvals })
 					.populate('topic', ['_id', 'name', 'slug'])
 					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
+					.populate('agent', ['_id', 'name', 'email'])
 
 			} else {
 
@@ -144,6 +155,7 @@ export class ProductService {
 					.sort({ [options.sortby]: sortvals })
 					.populate('topic', ['_id', 'name', 'slug'])
 					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
+					.populate('agent', ['_id', 'name', 'email'])
 
 			}
 		}else{
@@ -156,6 +168,7 @@ export class ProductService {
 					.sort({ 'updated_at': 'desc' })
 					.populate('topic', ['_id', 'name', 'slug'])
 					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
+					.populate('agent', ['_id', 'name', 'email'])
 
 			} else {
 
@@ -166,6 +179,7 @@ export class ProductService {
 					.sort({ 'updated_at': 'desc' })
 					.populate('topic', ['_id', 'name', 'slug'])
 					.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
+					.populate('agent', ['_id', 'name', 'email'])
 			}
 		}
 	}
@@ -176,6 +190,7 @@ export class ProductService {
 			result = await this.productModel.findById(id)
 				.populate('topic', ['_id', 'name', 'slug'])
 				.populate('product_redirect', ['_id', 'name', 'slug', 'type', 'code', 'visibility'])
+				.populate('agent', ['_id', 'name', 'email'])
 		}catch(error){
 		    throw new NotFoundException(`Could nod find product with id ${id}`)
 		}
@@ -209,20 +224,16 @@ export class ProductService {
 			date,
 			feature_onheader,
 			feature_onpage,
-			product_redirect
+			product_redirect,
+			topic,
+			agent
 		} = updateProductDto
 
 		// Check if product name is already exist
 		const isProductSlugExist = await this.productModel.findOne({ slug: result.slug })
 
-		if (isProductSlugExist) {
-			throw new BadRequestException('That product slug is already exist.')
-		}
-
-		var arrayTopic = updateProductDto.topic
-
-		console.log('arrayTopic:', arrayTopic)
-
+		// Check Topic ID
+		var arrayTopic = topic
 		for (let i = 0; i < arrayTopic.length; i++) {
 			const topicFound = await this.topicService.findById(arrayTopic[i])
 			if (!topicFound) {
@@ -230,9 +241,19 @@ export class ProductService {
 			}
 		}
 
+		// Check Product_Redirect ID
 		const productFound = await this.productModel.findById(product_redirect)
 		if (!productFound) {
 			throw new BadRequestException('Product Id not found')
+		}
+
+		// Check Agent (User) ID
+		var arrayAgent = agent
+		for (let i = 0; i < arrayAgent.length; i++) {
+			const agentFound = await this.productModel.findById(arrayAgent[i])
+			if (!agentFound) {
+				throw new BadRequestException('Agent Id not found')
+			}
 		}
 
 		// create Product Code

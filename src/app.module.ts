@@ -14,6 +14,8 @@ import { RoleModule } from './modules/role/role.module';
 import { AgentModule } from './modules/agent/agent.module';
 import { ResellerModule } from './modules/reseller/reseller.module';
 
+import { XenditModule } from './modules/xendit-tests/xendit.module';
+
 @Module({
 	imports: [
 		Connection,
@@ -25,7 +27,8 @@ import { ResellerModule } from './modules/reseller/reseller.module';
 		MediaModule,
 		RoleModule,
 		AgentModule,
-		ResellerModule
+		ResellerModule,
+		XenditModule
 	],
 	controllers: [AppController],
   	providers: [AppService],

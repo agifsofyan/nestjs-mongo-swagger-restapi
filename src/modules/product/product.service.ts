@@ -42,9 +42,8 @@ export class ProductService {
 		/** Product Slug Start */
 		if(slug){
 			const makeSlug = Slugify(slug)
-			console.log('makeSlug', makeSlug)
 			const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
-				
+			console.log("isSlugExist", isSlugExist)
 			if (isSlugExist) {
 				throw new BadRequestException('That product slug is already exist.')
 			}
@@ -58,21 +57,25 @@ export class ProductService {
 		var arrayTopic = topic
 		for (let i = 0; i < arrayTopic.length; i++) {
 			const topicFound = await this.topicService.findById(arrayTopic[i])
+			console.log("topicFound", topicFound)
 			if (!topicFound) {
 				throw new BadRequestException('Topic Id not found')
 			}
 		}
 
 		// Check Product_Redirect ID
-		const productFound = await this.productModel.findById(product_redirect)
+		const productFound = await this.productModel.findOne({ id: product_redirect })
+		console.log("productFound", productFound)
 		if (!productFound) {
-			throw new BadRequestException('Product Id not found')
+			throw new BadRequestException('Product Id as product_redirect not found')
 		}
+		
 
 		// Check Agent (User) ID
 		var arrayAgent = agent
 		for (let i = 0; i < arrayAgent.length; i++) {
 			const agentFound = await this.productModel.findById(arrayAgent[i])
+			console.log("agentFound", agentFound)
 			if (!agentFound) {
 				throw new BadRequestException('Agent Id not found')
 			}
@@ -115,6 +118,7 @@ export class ProductService {
 			var durationUnix = StrToUnix(duration)
 
 			var endTimeUnix = startTimeUnix + durationUnix
+			console.log("endTimeUnix", endTimeUnix)
 
 			var endTimeFormat = UnixToStr(endTimeUnix)
 
@@ -264,7 +268,6 @@ export class ProductService {
 		if(name){
 			if(slug){
 				const makeSlug = Slugify(slug)
-				console.log('makeSlug', makeSlug)
 				const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
 					
 				if (isSlugExist) {
@@ -283,6 +286,7 @@ export class ProductService {
 			var arrayTopic = topic
 			for (let i = 0; i < arrayTopic.length; i++) {
 				const topicFound = await this.topicService.findById(arrayTopic[i])
+				console.log("topicFound", topicFound)
 				if (!topicFound) {
 					throw new BadRequestException('Topic Id not found')
 				}
@@ -291,9 +295,10 @@ export class ProductService {
 
 		// Check Product_Redirect ID
 		if(product_redirect){
-			const productFound = await this.productModel.findById(product_redirect)
+			const productFound = await this.productModel.findOne({ id: product_redirect })
+			console.log("productFound", productFound)
 			if (!productFound) {
-				throw new BadRequestException('Product Id not found')
+				throw new BadRequestException('Product Id as product_redirect not found')
 			}
 		}
 
@@ -302,6 +307,7 @@ export class ProductService {
 			var arrayAgent = agent
 			for (let i = 0; i < arrayAgent.length; i++) {
 				const agentFound = await this.productModel.findById(arrayAgent[i])
+				console.log("agentFound", agentFound)
 				if (!agentFound) {
 					throw new BadRequestException('Agent Id not found')
 				}
@@ -334,7 +340,8 @@ export class ProductService {
 			var durationUnix = StrToUnix(duration)
 
 			var endTimeUnix = startTimeUnix + durationUnix
-
+			console.log("endTimeUnix", endTimeUnix)
+			
 			var endTimeFormat = UnixToStr(endTimeUnix)
 
 			result.webinar.end_time = endTimeFormat

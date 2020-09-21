@@ -73,7 +73,24 @@ export class ProductController {
 		description: 'token'
 	})
 
-	// Swagger Parameter [optional]
+	// Swagger Parameter [optional] 2
+	@ApiQuery({
+		name: 'optFields',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
+	
+	@ApiQuery({
+		name: 'optVal',
+		required: false,
+		explode: true,
+		type: String,
+		isArray: false
+	})
+	
+	// Swagger Parameter [optional] 1
 	@ApiQuery({
 		name: 'sortval',
 		required: false,

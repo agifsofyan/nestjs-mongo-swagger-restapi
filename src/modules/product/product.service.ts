@@ -11,7 +11,7 @@ import { IProduct } from './interface/product.interface';
 import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 import { TopicService } from '../topic/topic.service';
 import { Query } from 'src/utils/OptQuery';
-import { ReverseString, RandomStr } from 'src/utils/StringManipulation';
+import { ReverseString, RandomStr, Slugify } from 'src/utils/StringManipulation';
 // import { TimeValidation } from 'src/utils/CustomValidation';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class ProductService {
 	) {}
 
 	async create(createProductDto: CreateProductDTO): Promise<IProduct> {
-		const product = new this.productModel(createProductDto)
+		const result = new this.productModel(createProductDto)
 
 		const { 
 			name,
@@ -35,15 +35,18 @@ export class ProductService {
 			feature_onpage,
 			product_redirect,
 			topic,
-			agent
+			agent,
+			slug
 		} = createProductDto
 				
 		// Check if product name is already exist
-		const isProductSlugExist = await this.productModel.findOne({ slug: product.slug })
+		const makeSlug = Slugify(slug)
+		const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
         	
-		if (isProductSlugExist) {
+		if (isSlugExist) {
         	throw new BadRequestException('That product slug is already exist.')
 		}
+		result.slug = makeSlug
 		
 		// Check Topic ID
 		var arrayTopic = topic
@@ -75,10 +78,9 @@ export class ProductService {
 		const isCodeExists = await this.productModel.findOne({ code: makeCode })
 
 		if(isCodeExists){
-			product.code = makeCode+RandomStr()
+			result.code = makeCode+RandomStr()
 		}
-
-		product.code = makeCode
+		result.code = makeCode
 
 		//if(start_time){
 
@@ -95,18 +97,18 @@ export class ProductService {
 		//}
 
 		if (date !== undefined || date !== '') {
-			product.webinar.date = date;
-			product.webinar.start_time = start_time;
-			product.webinar.end_time = end_time;
-			product.webinar.client_url = client_url;
+			result.webinar.date = date;
+			result.webinar.start_time = start_time;
+			result.webinar.end_time = end_time;
+			result.webinar.client_url = client_url;
 		}
 
 		if(feature_onpage !== '' || feature_onheader !== ''){
-			product.feature.feature_onpage = feature_onpage;
-			product.feature.feature_onheader = feature_onheader;
+			result.feature.feature_onpage = feature_onpage;
+			result.feature.feature_onheader = feature_onheader;
 		}
 
-		return await product.save()
+		return await result.save()
 	}
 
 	async findAll(options: Query): Promise<IProduct[]> {
@@ -226,11 +228,18 @@ export class ProductService {
 			feature_onpage,
 			product_redirect,
 			topic,
-			agent
+			agent,
+			slug
 		} = updateProductDto
 
 		// Check if product name is already exist
-		const isProductSlugExist = await this.productModel.findOne({ slug: result.slug })
+		const makeSlug = Slugify(slug)
+		const isSlugExist = await this.productModel.findOne({ slug: makeSlug })
+        	
+		if (isSlugExist) {
+        	throw new BadRequestException('That product slug is already exist.')
+		}
+		result.slug = makeSlug
 
 		// Check Topic ID
 		var arrayTopic = topic

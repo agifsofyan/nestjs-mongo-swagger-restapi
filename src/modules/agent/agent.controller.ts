@@ -42,14 +42,14 @@ export class AgentController {
 	
 	async findAll(@Req() req, @Res() res) {
 		const checkSellerRole = await this.roleService.search('SALES')
-
+		
 		if(!checkSellerRole){
 			throw new NotFoundException(`Not Found Agent(Sales) Roles`)
 		}
-
+		
 		const roleId = checkSellerRole[0]._id
-
-		const options: object = { role: roleId }
+		
+		const options: object = { role: [roleId] }
 
 		const data = await this.userService.find(options);
 		

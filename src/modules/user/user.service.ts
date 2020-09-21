@@ -148,7 +148,7 @@ export class UserService {
     }
 
     async find(options: object): Promise<IUser[]> {
-    	const data = await this.userModel.find(options)
+        const data = await this.userModel.find(options)
 
     	if(!data){
     		throw new NotFoundException(`Could not find user/administrator`)

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
-import * as slug from 'mongoose-slug-updater';
+// import * as slug from 'mongoose-slug-updater';
 
-mongoose.plugin(slug);
+// mongoose.plugin(slug);
 
 export const ProductSchema = new mongoose.Schema({
     webinar: {
@@ -32,7 +32,6 @@ export const ProductSchema = new mongoose.Schema({
     },
     slug: {
         type: String,
-        slug: 'slug',
 	    unique: true
     },
     visibility: {

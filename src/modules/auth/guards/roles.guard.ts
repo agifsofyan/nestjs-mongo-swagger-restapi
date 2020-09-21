@@ -10,9 +10,6 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 
-import { UserService } from '../../user/user.service';
-import { Observable } from 'rxjs';
-
 @Injectable()
 export class RolesGuard extends AuthGuard('jwt') {
   constructor(private readonly reflector: Reflector) {

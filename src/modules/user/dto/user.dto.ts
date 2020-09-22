@@ -6,7 +6,7 @@ import {
     IsEmail,
     IsEnum
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export enum RolesEnum { 
 	SALES = 'SALES', 
@@ -73,4 +73,26 @@ export class CreateUserDTO {
     role: [string];
 }
 
-export type UpdateUserDTO = Partial<CreateUserDTO>;
+export class UpdateUserDTO extends PartialType(CreateUserDTO) { }
+
+export class DeleteManyDTO {
+    // Delete multiple ID
+    @IsNotEmpty()
+    @ApiProperty({
+        example: ['5f699e87b92fbe5320a35a93', '5f699e8bb92fbe5320a35a94'],
+        description: 'Id',
+        format: 'array'
+    })
+    id: string[];
+}
+
+export class SearchDTO {
+    // Search
+    @IsNotEmpty()
+    @ApiProperty({
+        example: "Something",
+        description: 'Search By Name or Email',
+        format: 'string'
+    })
+    search: string;
+}

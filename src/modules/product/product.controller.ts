@@ -11,13 +11,25 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
+import { 
+	ApiTags, 
+	ApiOperation, 
+	ApiHeader, 
+	ApiQuery, 
+	ApiBody, 
+	ApiProperty 
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
 import { ProductService } from './product.service';
-import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
+import { 
+	CreateProductDTO, 
+	UpdateProductDTO,
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/product.dto';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
@@ -237,43 +249,60 @@ export class ProductController {
 	}
 
 	/**
-	 * @route   Get /api/v1/product/find/search
-	 * @desc    Search product by name
+	 * @route   Delete /api/v1/products/delete/multiple
+	 * @desc    Delete product by multiple ID
+	 * @access  Public
+	 **/
+
+	@Delete('delete/multiple')
+
+	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Delete multiple product' })
+
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token.'
+	})
+
+	async deleteMany(@Res() res, @Body() arrayId: DeleteManyDTO) {
+		//console.log(arrayId)
+		const product = await this.productService.deleteMany(arrayId);
+		if (product == 'ok') {
+			return res.status(HttpStatus.OK).json({
+				statusCode: HttpStatus.OK,
+				message: `Success remove product by id in: [${arrayId.id}]`
+			});
+		}
+	}
+
+	/**
+	 * @route   Post /api/v1/products/find/search
+	 * @desc    Search product by name or description
 	 * @access  Public
 	 **/
 
 	@Post('find/search')
-	
+
 	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
 
 	@ApiHeader({
-	 	name: 'x-auth-token',
-	 	description: 'token'
+		name: 'x-auth-token',
+		description: 'token'
 	})
 
-	// @ApiBody({
-	// 	required: false,
-	// 	description: 'search anything name',
-	// 	type: Object,
-	// 	isArray: false
-	// })
-
-	@ApiProperty({
-		example: 'Army',
-		description: 'Search',
-		format: 'string'
-	})
-
-	async search(@Res() res, @Body() search: any) {
-		const product = await this.productService.search(search);
+	async search(@Res() res, @Body() search: SearchDTO) {
+		// console.log(search)
+		const result = await this.productService.search(search);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success search product`,
-			total: product.length,
-			data: product
+			total: result.length,
+			data: result
 		});
 	}
 }

@@ -11,7 +11,13 @@ import {
 	Param,
     HttpStatus
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
+import { 
+	ApiTags, 
+	ApiOperation, 
+	ApiHeader, 
+	ApiQuery, 
+	ApiProperty 
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
@@ -19,8 +25,14 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
 import { UserService } from './user.service';
-import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import { RefreshAccessTokenDTO } from '../auth/dto/refresh-access-token.dto';
+
+import { 
+	CreateUserDTO, 
+	UpdateUserDTO, 
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/user.dto';
 
 var inRole = ["SUPERADMIN", "IT"];
 
@@ -227,21 +239,50 @@ export class UserController {
 	}
 
 	/**
-	 * @route   Get /api/v1/users/find/search
-	 * @desc    Search user by name
+	 * @route   Delete /api/v1/users/delete/multiple
+	 * @desc    Delete user/administrator by multiple ID
 	 * @access  Public
 	 **/
 
-	@Get('find/search')
-	
+	@Delete('delete/multiple')
+
+	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Delete multiple user/administrator' })
+
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token.'
+	})
+
+	async deleteMany(@Res() res, @Body() arrayId: DeleteManyDTO) {
+		//console.log(arrayId)
+		const user = await this.userService.deleteMany(arrayId);
+		if (user == 'ok') {
+			return res.status(HttpStatus.OK).json({
+				statusCode: HttpStatus.OK,
+				message: `Success remove user/administrator by id in: [${arrayId.id}]`
+			});
+		}
+	}
+
+	/**
+	 * @route   Post /api/v1/users/find/search
+	 * @desc    Search user/administrator by name or email
+	 * @access  Public
+	 **/
+
+	@Post('find/search')
+
 	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
 
 	@ApiHeader({
-	 	name: 'x-auth-token',
-	 	description: 'token'
+		name: 'x-auth-token',
+		description: 'token'
 	})
 
 	// @ApiQuery({
@@ -259,19 +300,14 @@ export class UserController {
 	// 	isArray: false
 	// })
 
-	@ApiProperty({
-		example: 'Admin Content',
-		description: 'Search',
-		format: 'string'
-	})
-
-	async search(@Res() res, @Body() search: any) {
-		const user = await this.userService.search(search);
+	async search(@Res() res, @Body() search: SearchDTO) {
+		// console.log(search)
+		const result = await this.userService.search(search);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success search user`,
-			total: user.length,
-			data: user
+			message: `Success search user/administrator`,
+			total: result.length,
+			data: result
 		});
 	}
 }

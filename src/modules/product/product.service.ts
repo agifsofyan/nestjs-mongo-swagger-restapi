@@ -4,15 +4,29 @@ import {
 	BadRequestException,
 	NotImplementedException 
 } from '@nestjs/common';
+
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
+import { 
+	CreateProductDTO, 
+	UpdateProductDTO,
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/product.dto';
+
 import { IProduct } from './interface/product.interface';
-import { CreateProductDTO, UpdateProductDTO } from './dto/product.dto';
 import { TopicService } from '../topic/topic.service';
 import { Query } from 'src/utils/OptQuery';
-import { ReverseString, RandomStr, Slugify, StrToUnix, UnixToStr } from 'src/utils/StringManipulation';
 import { TimeValidation } from 'src/utils/CustomValidation';
+
+import { 
+	ReverseString, 
+	RandomStr, 
+	Slugify, 
+	StrToUnix, 
+	UnixToStr 
+} from 'src/utils/StringManipulation';
 
 @Injectable()
 export class ProductService {
@@ -375,13 +389,27 @@ export class ProductService {
 		}
 	}
 
-	async search(value: string): Promise<IProduct[]> {
-		const product = await this.productModel.find({"type": {$regex: ".*" + value + ".*"}})
+	async deleteMany(arrayId: DeleteManyDTO): Promise<string> {
+		try {
+			await this.productModel.deleteMany({ _id: { $in: arrayId.id } });
+			return 'ok';
+		} catch (err) {
+			throw new NotImplementedException('The product could not be deleted');
+		}
+	}
 
-		if(!product){
-			throw new NotFoundException(`Could nod find product with your condition`)
+	async search(value: SearchDTO): Promise<IProduct[]> {
+		const result = await this.productModel.find({ 
+			$or: [
+				{ name: {$regex: ".*" + value.search + ".*", $options: "i"} }, 
+				{ description: {$regex: ".*" + value.search + ".*", $options: "i"} }
+			] 
+		})
+
+		if (!result) {
+			throw new NotFoundException("Your search was not found")
 		}
 
-		return product
+		return result
 	}
 }

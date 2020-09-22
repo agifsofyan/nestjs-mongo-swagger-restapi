@@ -6,7 +6,7 @@ import {
     IsDate,
 } from 'class-validator';
 // import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export enum EnumType { 
 	Webinar = 'webinar', 
@@ -305,4 +305,26 @@ export class CreateProductDTO {
     feature_onheader: string;
 }
 
-export type UpdateProductDTO = Partial<CreateProductDTO>;
+export class UpdateProductDTO extends PartialType(CreateProductDTO) { }
+
+export class DeleteManyDTO {
+    // Delete multiple ID
+    @IsNotEmpty()
+    @ApiProperty({
+        example: ['5f699e87b92fbe5320a35a93', '5f699e8bb92fbe5320a35a94'],
+        description: 'Id',
+        format: 'array'
+    })
+    id: string[];
+}
+
+export class SearchDTO {
+    // Search
+    @IsNotEmpty()
+    @ApiProperty({
+        example: "Bisnis",
+        description: 'Search By Name or Description',
+        format: 'string'
+    })
+    search: string;
+}

@@ -8,8 +8,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { ITopic } from './interface/topic.interface';
-import { CreateTopicDTO, UpdateTopicDTO } from './dto/topic.dto';
 import { Query } from 'src/utils/OptQuery';
+import { 
+	CreateTopicDTO, 
+	UpdateTopicDTO, 
+	DeleteManyDTO, 
+	SearchDTO 
+} from './dto/topic.dto';
 
 @Injectable()
 export class TopicService {
@@ -119,13 +124,24 @@ export class TopicService {
 		}
 	}
 
-	async search(value: string): Promise<ITopic[]> {
-		const role = await this.topicModel.find({"type": {$regex: ".*" + value + ".*"}})
+	async deleteMany(arrayId: DeleteManyDTO): Promise<string> {
+		try{
+			await this.topicModel.deleteMany({ _id: {$in: arrayId.id} });
+			return 'ok';
+		}catch(err){
+			throw new NotImplementedException('The topic could not be deleted');
+		}
+	}
 
-		if(!role){
-			throw new NotFoundException(`Could nod find topic with your condition`)
+	async search(value: SearchDTO): Promise<ITopic[]> {
+		const result = await this.topicModel.find({
+			"name": {$regex: ".*" + value.search + ".*", $options: "i"}
+		})
+
+		if(!result){
+			throw new NotFoundException("Your search was not found")
 		}
 
-		return role
+		return result
 	}
 }

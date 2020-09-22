@@ -2,7 +2,7 @@ import {
     IsNotEmpty,
     IsString
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateFulfillmentDTO {
     // Title
@@ -105,4 +105,27 @@ export class CreateFulfillmentDTO {
     podcash_url: string;
 }
 
-export type UpdateFulfillmentDTO = Partial<CreateFulfillmentDTO>;
+// export type UpdateFulfillmentDTO = Partial<CreateFulfillmentDTO>;
+export class UpdateFulfillmentDTO extends PartialType(CreateFulfillmentDTO) { }
+
+export class DeleteManyDTO {
+    // Delete multiple ID
+    @IsNotEmpty()
+    @ApiProperty({
+        example: ['5f699e87b92fbe5320a35a93', '5f699e8bb92fbe5320a35a94'],
+        description: 'Id',
+        format: 'array'
+    })
+    id: string[];
+}
+
+export class SearchDTO {
+    // Search
+    @IsNotEmpty()
+    @ApiProperty({
+        example: "Something",
+        description: 'Search By Name or Content',
+        format: 'string'
+    })
+    search: string;
+}

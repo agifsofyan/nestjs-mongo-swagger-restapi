@@ -8,7 +8,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { IFulfillment } from './interface/fulfillment.interface';
-import { CreateFulfillmentDTO, UpdateFulfillmentDTO } from './dto/fulfillment.dto';
+import { 
+	CreateFulfillmentDTO, 
+	UpdateFulfillmentDTO, 
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/fulfillment.dto';
 import { Query } from 'src/utils/OptQuery';
 
 import { TopicService } from '../topic/topic.service';
@@ -166,13 +171,27 @@ export class FulfillmentService {
 		}
 	}
 
-	async search(value: string): Promise<IFulfillment[]> {
-		const fulfillment = await this.fulfillmentModel.find({"name": {$regex: ".*" + value + ".*"}})
+	async deleteMany(arrayId: DeleteManyDTO): Promise<string> {
+		try {
+			await this.fulfillmentModel.deleteMany({ _id: { $in: arrayId.id } });
+			return 'ok';
+		} catch (err) {
+			throw new NotImplementedException('The fulfillment could not be deleted');
+		}
+	}
 
-		if(!fulfillment){
-			throw new NotFoundException(`Could nod find fulfillment with your condition`)
+	async search(value: SearchDTO): Promise<IFulfillment[]> {
+		const result = await this.fulfillmentModel.find({
+			$or: [
+				{ name: {$regex: ".*" + value.search + ".*", $options: "i"} },
+				{ content: {$regex: ".*" + value.search + ".*", $options: "i"} }
+			]
+		})
+
+		if (!result) {
+			throw new NotFoundException("Your search was not found")
 		}
 
-		return fulfillment
+		return result
 	}
 }

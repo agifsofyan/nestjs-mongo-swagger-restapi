@@ -8,7 +8,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { IRole } from './interface/role.interface';
-import { CreateRoleDTO, UpdateRoleDTO } from './dto/role.dto';
+import { 
+	CreateRoleDTO, 
+	UpdateRoleDTO,
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/role.dto';
 import { Query } from 'src/utils/OptQuery';
 
 @Injectable()
@@ -125,13 +130,24 @@ export class RoleService {
 		}
 	}
 
-	async search(value: string): Promise<IRole[]> {
-		const role = await this.roleModel.find({"adminType": {$regex: ".*" + value + ".*"}})
+	async deleteMany(arrayId: DeleteManyDTO): Promise<string> {
+		try {
+			await this.roleModel.deleteMany({ _id: { $in: arrayId.id } });
+			return 'ok';
+		} catch (err) {
+			throw new NotImplementedException('The role could not be deleted');
+		}
+	}
 
-		if(!role){
-			throw new NotFoundException(`Could nod find role with your condition`)
+	async search(value: SearchDTO): Promise<IRole[]> {
+		const result = await this.roleModel.find({
+			"adminType": {$regex: ".*" + value.search + ".*", $options: "i"}
+		})
+
+		if (!result) {
+			throw new NotFoundException("Your search was not found")
 		}
 
-		return role
+		return result
 	}
 }

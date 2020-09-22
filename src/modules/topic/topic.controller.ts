@@ -11,12 +11,25 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { TopicService } from './topic.service';
-import { CreateTopicDTO, UpdateTopicDTO } from './dto/topic.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
-import { Roles } from '../auth/decorators/roles.decorator';
+
+import { 
+	ApiTags, 
+	ApiOperation, 
+	ApiHeader, 
+	ApiQuery
+} from '@nestjs/swagger';
+
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../auth/decorators/roles.decorator';
+
+import { TopicService } from './topic.service';
+import { 
+	CreateTopicDTO, 
+	UpdateTopicDTO, 
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/topic.dto';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
@@ -218,12 +231,41 @@ export class TopicController {
 	}
 
 	/**
-	 * @route   Get /api/v1/topics/find/search
+	 * @route   Delete /api/v1/topics/delete/multiple
+	 * @desc    Delete topic by multiple ID
+	 * @access  Public
+	 **/
+
+	@Delete('delete/multiple')
+
+	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Delete multiple topic' })
+
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token.'
+	})
+
+	async deleteMany(@Res() res, @Body() arrayId: DeleteManyDTO) {
+		//console.log(arrayId)
+		const topic = await this.topicService.deleteMany(arrayId);
+		if (topic == 'ok') {
+			return res.status(HttpStatus.OK).json({
+				statusCode: HttpStatus.OK,
+				message: `Success remove topic by id in: [${arrayId.id}]`
+			});
+		}
+	}
+
+	/**
+	 * @route   Post /api/v1/topics/find/search
 	 * @desc    Search topic by name
 	 * @access  Public
 	 **/
 
-	@Get('find/search')
+	@Post('find/search')
 	
 	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
@@ -235,34 +277,14 @@ export class TopicController {
 	 	description: 'token'
 	})
 
-	@ApiBody({
-		required: false,
-		description: 'search anything name',
-		type: Object,
-		isArray: false
-	})
-
-	// @ApiQuery({
-	// 	name: 'search anything name',
-	// 	required: false,
-	// 	explode: true,
-	// 	type: String,
-	// 	isArray: false
-	// })
-
-	@ApiProperty({
-		example: 'Career',
-		description: 'Search',
-		format: 'string'
-	})
-
-	async search(@Res() res, @Body() search: any) {
-		const topic = await this.topicService.search(search);
+	async search(@Res() res, @Body() search: SearchDTO) {
+		console.log(search)
+		const result = await this.topicService.search(search);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success search topic`,
-			total: topic.length,
-			data: topic
+			total: result.length,
+			data: result
 		});
 	}
 }

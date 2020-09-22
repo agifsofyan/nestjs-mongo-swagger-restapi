@@ -11,12 +11,24 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
+import { 
+	ApiTags, 
+	ApiOperation, 
+	ApiHeader, 
+	ApiQuery, 
+	ApiBody, 
+	ApiProperty 
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { FulfillmentService } from './fulfillment.service';
-import { CreateFulfillmentDTO, UpdateFulfillmentDTO } from './dto/fulfillment.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { 
+	CreateFulfillmentDTO, 
+	UpdateFulfillmentDTO, 
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/fulfillment.dto';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
@@ -216,43 +228,60 @@ export class FulfillmentController {
 	}
 
 	/**
-	 * @route   Get /api/v1/fulfillments/find/search
-	 * @desc    Select fulfillment by name
+	 * @route   Delete /api/v1/fulfillments/delete/multiple
+	 * @desc    Delete fullfillment by multiple ID
 	 * @access  Public
 	 **/
 
-	@Get('find/search')
-	
+	@Delete('delete/multiple')
+
+	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Delete multiple fulfillment' })
+
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token.'
+	})
+
+	async deleteMany(@Res() res, @Body() arrayId: DeleteManyDTO) {
+		//console.log(arrayId)
+		const fullfillment = await this.fulfillmentService.deleteMany(arrayId);
+		if (fullfillment == 'ok') {
+			return res.status(HttpStatus.OK).json({
+				statusCode: HttpStatus.OK,
+				message: `Success remove fullfillment by id in: [${arrayId.id}]`
+			});
+		}
+	}
+
+	/**
+	 * @route   Post /api/v1/fulfillments/find/search
+	 * @desc    Search fulfillment by name or content
+	 * @access  Public
+	 **/
+
+	@Post('find/search')
+
 	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
 
 	@ApiHeader({
-	 	name: 'x-auth-token',
-	 	description: 'token'
+		name: 'x-auth-token',
+		description: 'token'
 	})
 
-	// @ApiBody({
-	// 	required: false,
-	// 	description: 'search anything name',
-	// 	type: Object,
-	// 	isArray: false
-	// })
-
-	@ApiProperty({
-		example: 'Something',
-		description: 'Search',
-		format: 'string'
-	})
-
-	async search(@Res() res, @Body() search: any) {
-		const fullfillment = await this.fulfillmentService.search(search);
+	async search(@Res() res, @Body() search: SearchDTO) {
+		// console.log(search)
+		const result = await this.fulfillmentService.search(search);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
-			message: `Success search fullfillment`,
-			total: fullfillment.length,
-			data: fullfillment
+			message: `Success search fulfillment`,
+			total: result.length,
+			data: result
 		});
 	}
 }

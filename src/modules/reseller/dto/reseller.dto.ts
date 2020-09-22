@@ -2,7 +2,7 @@ import {
     IsNotEmpty,
     IsString
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateResellerDTO {
     // Content
@@ -24,4 +24,26 @@ export class CreateResellerDTO {
     images: [string];
 }
 
-export type UpdateResellerDTO = Partial<CreateResellerDTO>;
+export class UpdateResellerDTO extends PartialType(CreateResellerDTO) { }
+
+export class DeleteManyDTO {
+    // Delete multiple ID
+    @IsNotEmpty()
+    @ApiProperty({
+        example: ['5f699e87b92fbe5320a35a93', '5f699e8bb92fbe5320a35a94'],
+        description: 'Id',
+        format: 'array'
+    })
+    id: string[];
+}
+
+export class SearchDTO {
+    // Search
+    @IsNotEmpty()
+    @ApiProperty({
+        example: "Something",
+        description: 'Search By Content',
+        format: 'string'
+    })
+    search: string;
+}

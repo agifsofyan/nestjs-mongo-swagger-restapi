@@ -8,7 +8,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { IReseller } from './interface/reseller.interface';
-import { CreateResellerDTO, UpdateResellerDTO } from './dto/reseller.dto';
+import { 
+	CreateResellerDTO, 
+	UpdateResellerDTO, 
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/reseller.dto';
 import { Query } from 'src/utils/OptQuery';
 
 @Injectable()
@@ -111,13 +116,24 @@ export class ResellerService {
 		}
 	}
 
-	async search(value: string): Promise<IReseller[]> {
-		const role = await this.resellerModel.find({"type": {$regex: ".*" + value + ".*"}})
+	async deleteMany(arrayId: DeleteManyDTO): Promise<string> {
+		try {
+			await this.resellerModel.deleteMany({ _id: { $in: arrayId.id } });
+			return 'ok';
+		} catch (err) {
+			throw new NotImplementedException('The reseller could not be deleted');
+		}
+	}
 
-		if(!role){
-			throw new NotFoundException(`Could nod find reseller with your condition`)
+	async search(value: SearchDTO): Promise<IReseller[]> {
+		const result = await this.resellerModel.find({
+			"content": {$regex: ".*" + value.search + ".*", $options: "i"}
+		})
+
+		if (!result) {
+			throw new NotFoundException("Your search was not found")
 		}
 
-		return role
+		return result
 	}
 }

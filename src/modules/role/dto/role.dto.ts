@@ -3,7 +3,7 @@ import {
     IsString,
     IsEnum
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export enum AdminType { 
 	SALES = 'SALES', 
@@ -36,4 +36,26 @@ export class CreateRoleDTO {
     readWrite: boolean;
 }
 
-export type UpdateRoleDTO = Partial<CreateRoleDTO>;
+export class UpdateRoleDTO extends PartialType(CreateRoleDTO) { }
+
+export class DeleteManyDTO {
+    // Delete multiple ID
+    @IsNotEmpty()
+    @ApiProperty({
+        example: ['5f699e87b92fbe5320a35a93', '5f699e8bb92fbe5320a35a94'],
+        description: 'Id',
+        format: 'array'
+    })
+    id: string[];
+}
+
+export class SearchDTO {
+    // Search
+    @IsNotEmpty()
+    @ApiProperty({
+        example: "Something",
+        description: 'Search By Admin Type',
+        format: 'string'
+    })
+    search: string;
+}

@@ -11,12 +11,24 @@ import {
 	Delete,
 	UseGuards
 } from '@nestjs/common';
+import { 
+	ApiTags, 
+	ApiOperation, 
+	ApiHeader, 
+	ApiQuery, 
+	ApiBody, 
+	ApiProperty 
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ResellerService } from './reseller.service';
-import { CreateResellerDTO, UpdateResellerDTO } from './dto/reseller.dto';
-import { ApiTags, ApiOperation, ApiHeader, ApiQuery, ApiBody, ApiProperty } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { 
+	CreateResellerDTO, 
+	UpdateResellerDTO,
+	DeleteManyDTO,
+	SearchDTO
+} from './dto/reseller.dto';
 
 var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
@@ -218,51 +230,60 @@ export class ResellerController {
 	}
 
 	/**
-	 * @route   Get /api/v1/resellers/find/search
-	 * @desc    Search reseller by name
+	 * @route   Delete /api/v1/resellers/delete/multiple
+	 * @desc    Delete reseller by multiple ID
 	 * @access  Public
 	 **/
 
-	@Get('find/search')
-	
+	@Delete('delete/multiple')
+
+	@Roles(...inRole)
+	@UseGuards(AuthGuard('jwt'))
+
+	@ApiOperation({ summary: 'Delete multiple reseller' })
+
+	@ApiHeader({
+		name: 'x-auth-token',
+		description: 'token.'
+	})
+
+	async deleteMany(@Res() res, @Body() arrayId: DeleteManyDTO) {
+		//console.log(arrayId)
+		const reseller = await this.resellerService.deleteMany(arrayId);
+		if (reseller == 'ok') {
+			return res.status(HttpStatus.OK).json({
+				statusCode: HttpStatus.OK,
+				message: `Success remove reseller by id in: [${arrayId.id}]`
+			});
+		}
+	}
+
+	/**
+	 * @route   Post /api/v1/resellers/find/search
+	 * @desc    Search reseller by content
+	 * @access  Public
+	 **/
+
+	@Post('find/search')
+
 	@Roles(...inRole)
 	@UseGuards(AuthGuard('jwt'))
 
 	@ApiOperation({ summary: 'Search and show' })
 
 	@ApiHeader({
-	 	name: 'x-auth-token',
-	 	description: 'token'
+		name: 'x-auth-token',
+		description: 'token'
 	})
 
-	@ApiBody({
-		required: false,
-		description: 'search anything name',
-		type: Object,
-		isArray: false
-	})
-
-	// @ApiQuery({
-	// 	name: 'search anything name',
-	// 	required: false,
-	// 	explode: true,
-	// 	type: String,
-	// 	isArray: false
-	// })
-
-	@ApiProperty({
-		example: 'Career',
-		description: 'Search',
-		format: 'string'
-	})
-
-	async search(@Res() res, @Body() search: any) {
-		const reseller = await this.resellerService.search(search);
+	async search(@Res() res, @Body() search: SearchDTO) {
+		// console.log(search)
+		const result = await this.resellerService.search(search);
 		return res.status(HttpStatus.OK).json({
 			statusCode: HttpStatus.OK,
 			message: `Success search reseller`,
-			total: reseller.length,
-			data: reseller
+			total: result.length,
+			data: result
 		});
 	}
 }

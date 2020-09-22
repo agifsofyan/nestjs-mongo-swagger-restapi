@@ -7,7 +7,12 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
+import { 
+    CreateUserDTO, 
+    UpdateUserDTO,
+    DeleteManyDTO,
+    SearchDTO
+} from './dto/user.dto';
 import { IUser } from './interface/user.interface';
 import { Query } from 'src/utils/OptQuery';
 
@@ -137,6 +142,15 @@ export class UserService {
         }
     }
 
+    async deleteMany(arrayId: DeleteManyDTO): Promise<string> {
+        try {
+            await this.userModel.deleteMany({ _id: { $in: arrayId.id } });
+            return 'ok';
+        } catch (err) {
+            throw new NotImplementedException('The user/administrator could not be deleted');
+        }
+    }
+
     async findOne(options: object): Promise<IUser> {
     	const data = await this.userModel.findOne(options).populate('role')
 
@@ -148,7 +162,7 @@ export class UserService {
     }
 
     async find(options: object): Promise<IUser[]> {
-        const data = await this.userModel.find(options)
+        const data = await this.userModel.find(options, {"_id": 1, "name": 1, "email": 1})
 
     	if(!data){
     		throw new NotFoundException(`Could not find user/administrator`)
@@ -157,13 +171,34 @@ export class UserService {
     	return data
     }
 
-    async search(value: string): Promise<IUser[]> {
-		const data = await this.userModel.find({"name": {$regex: ".*" + value + ".*"}})
+    async search(value: SearchDTO): Promise<IUser[]> {
+        const result = await this.userModel.find({
+            $or: [
+                { name: {$regex: ".*" + value.search + ".*", $options: "i"} },
+                { email: {$regex: ".*" + value.search + ".*", $options: "i"} }
+            ]
+        })
 
-		if(!data){
-			throw new NotFoundException(`Could nod find user/administrator with your condition`)
-		}
+        if (!result) {
+            throw new NotFoundException("Your search was not found")
+        }
 
-		return data
-	}
+        return result
+    }
+
+    async searchAgent(id: string, value: SearchDTO): Promise<IUser[]> {
+        const result = await this.userModel.find({
+	   role: {$in: [id]},
+	   $or: [
+                { name: {$regex: ".*" + value.search + ".*", $options: "i"} },
+                { email: {$regex: ".*" + value.search + ".*", $options: "i"} }
+           ]
+        },{"_id": 1, "name": 1, "email": 1})
+
+        if (!result) {
+            throw new NotFoundException("Your search was not found")
+        }
+
+        return result
+    }
 }

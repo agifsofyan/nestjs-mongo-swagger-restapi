@@ -123,7 +123,7 @@ export class CreateProductDTO {
     price: number;
 
     // sale_price
-    @IsString()
+    // @Min(4)
     @ApiProperty({
         example: 100000,
         description: 'Sale Price',

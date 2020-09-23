@@ -93,6 +93,11 @@ export const ProductSchema = new mongoose.Schema({
     }],
 
     section: String,
+
+    on_sale: {
+        type: Boolean,
+        default: false
+    }
 },{ 
 	collection: 'products',
 	versionKey: false, 

@@ -55,9 +55,9 @@ export class CreateProductDTO {
     @IsNotEmpty()
     @IsString()
     @ApiProperty({
-	example: 'Bisnis Market 2020',
-	description: 'Slug',
-	format: 'string'
+        example: 'Bisnis Market 2020',
+        description: 'Slug',
+        format: 'string'
     })
     slug: string;
 
@@ -88,7 +88,7 @@ export class CreateProductDTO {
     @MinLength(5)
     @ApiProperty({
         example: 'Bisnis Market to young generation in the world',
-	description: 'Full Description',
+	    description: 'Full Description',
         format: 'string'
     })
     description: string;
@@ -98,7 +98,7 @@ export class CreateProductDTO {
     // @MinLength(5)
     @ApiProperty({
         example: 'Why You Learn our',
-	description: 'Feedback (why your learn)',
+	    description: 'Feedback (why your learn)',
         format: 'string'
     })
     feedback: string;
@@ -125,9 +125,9 @@ export class CreateProductDTO {
     // sale_price
     @IsString()
     @ApiProperty({
-	example: "100000",
-	description: 'Sale Price',
-	format: 'number'
+        example: "100000",
+        description: 'Sale Price',
+        format: 'number'
     })
     sale_price: string;
 
@@ -184,7 +184,7 @@ export class CreateProductDTO {
     	example: "2020-09-16T04:12:54.173Z",
         description: 'Webinar Date',                     
         format: 'date',                 
-	type: 'string'                                    
+	    type: 'string'                                    
     })                                     
     date: string;
 
@@ -281,7 +281,7 @@ export class CreateProductDTO {
     // @IsString()
     @ApiProperty({
         example: 'Section in the paragraf of young generation in the world',
-	description: 'Section',
+	    description: 'Section',
         format: 'string'
     })
     section: string;
@@ -289,20 +289,28 @@ export class CreateProductDTO {
     // Feaure Product on Page
     @IsString()
     @ApiProperty({
-	example: "Feature Product on Page in Here, in paragraph format like description",
-	description: "Feature On Page",
-	format: "string"
+        example: "Feature Product on Page in Here, in paragraph format like description",
+        description: "Feature On Page",
+        format: "string"
     })
     feature_onpage: string;
 
     // Feature On Header
     @IsString()
     @ApiProperty({
-	example: "Feature Product on Header in here,in paragraph format like description",
-	description: "Feature On Header",
-	format: "string"	
+        example: "Feature Product on Header in here,in paragraph format like description",
+        description: "Feature On Header",
+        format: "string"	
     })
     feature_onheader: string;
+
+    // On Sale
+    @ApiProperty({
+        example: false,
+        description: "On Sale",
+        format: "boolean"
+    })
+    on_sale: boolean;
 }
 
 export class UpdateProductDTO extends PartialType(CreateProductDTO) { }

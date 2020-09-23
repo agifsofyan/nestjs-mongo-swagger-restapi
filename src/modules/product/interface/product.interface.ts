@@ -35,4 +35,5 @@ export interface IProduct extends Document {
      	feature_onpage: string;
      	feature_onheader: string;
      };
+     on_sale: boolean;
 }

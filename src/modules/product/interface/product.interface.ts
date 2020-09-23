@@ -11,8 +11,8 @@ export interface IProduct extends Document {
      description: string;
      feedback: string;
      time_period: string;
-     price: string;
-     sale_price: string;
+     price: number;
+     sale_price: number;
      image_url: string; // Array
      video_link: string;
      created_by: string;

@@ -55,10 +55,10 @@ export const ProductSchema = new mongoose.Schema({
     time_period: String,
 
     price: {
-        type: String, 
+        type: Number, 
         required: true
     },
-    sale_price: String,
+    sale_price: Number,
 
     created_by: String,
     updated_by: String,

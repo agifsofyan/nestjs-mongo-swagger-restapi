@@ -4,6 +4,7 @@ import {
     IsString,
     IsEnum,
     IsDate,
+    Min
 } from 'class-validator';
 // import { Type } from 'class-transformer';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
@@ -68,7 +69,7 @@ export class CreateProductDTO {
     @ApiProperty({
         example: 'publish',
         description: 'Visibility',
-        enum: ['publish', 'private'],
+        enum: ['publish', 'private', 'draft'],
         default: 'publish'
     })
     visibility: VisibilityEnum;
@@ -113,23 +114,22 @@ export class CreateProductDTO {
 
     // Price
     @IsNotEmpty()
-    @IsString()
-    @MinLength(4)
+    @Min(4)
     @ApiProperty({
-        example: "150000",
+        example: 150000,
         description: 'Price',
         format: 'number'
     })
-    price: string;
+    price: number;
 
     // sale_price
     @IsString()
     @ApiProperty({
-        example: "100000",
+        example: 100000,
         description: 'Sale Price',
         format: 'number'
     })
-    sale_price: string;
+    sale_price: number;
 
     // Topic
     @IsNotEmpty()

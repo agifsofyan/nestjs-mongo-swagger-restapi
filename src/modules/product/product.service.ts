@@ -18,7 +18,7 @@ import {
 import { IProduct } from './interface/product.interface';
 import { TopicService } from '../topic/topic.service';
 import { Query } from 'src/utils/OptQuery';
-import { TimeValidation } from 'src/utils/CustomValidation';
+import { TimeValidation, DecimalValidation } from 'src/utils/CustomValidation';
 
 import { 
 	ReverseString, 
@@ -50,7 +50,9 @@ export class ProductService {
 			product_redirect,
 			topic,
 			agent,
-			slug
+			slug,
+			price,
+			sale_price
 		} = createProductDto
 				
 		/** Product Slug Start */
@@ -153,6 +155,16 @@ export class ProductService {
 			result.feature.feature_onheader = feature_onheader;
 		}
 		/** Feature End */
+
+		/** Start Price and Sale Price*/
+		if(price && !DecimalValidation(price)){
+			throw new BadRequestException('Price must be number (decimal)')
+		}
+
+		if(sale_price && !DecimalValidation(sale_price)){
+			throw new BadRequestException('Sale price must be number (decimal)')
+		}
+		/** End Price */
 
 		return await result.save()
 	}
@@ -275,7 +287,9 @@ export class ProductService {
 			product_redirect,
 			topic,
 			agent,
-			slug
+			slug,
+			price,
+			sale_price
 		} = updateProductDto
 
 		/** Product Slug Start */
@@ -375,6 +389,16 @@ export class ProductService {
 			result.feature.feature_onheader = feature_onheader;
 		}
 		/** Feature End */
+
+		/** Start Price & Sale Price */
+		if(price && !DecimalValidation(price)){
+			throw new BadRequestException('Price must be number (decimal)')
+		}
+
+		if(sale_price && !DecimalValidation(sale_price)){
+			throw new BadRequestException('Sale price must be number (decimal)')
+		}
+		/** End Price */
 
 		await this.productModel.findByIdAndUpdate(id, updateProductDto);
 		return await this.productModel.findById(id).populate('topic')

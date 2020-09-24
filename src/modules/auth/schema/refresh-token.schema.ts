@@ -18,4 +18,4 @@ export const RefreshTokenSchema = new mongoose.Schema({
     	type: String, 
     	required: true 
     }
-}, { collection: 'admins_refresh_tokens' });
+}, { collection: 'admin_refresh_tokens' });

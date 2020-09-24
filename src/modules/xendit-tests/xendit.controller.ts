@@ -19,8 +19,8 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 // var inRole = ["SUPERADMIN", "IT", "ADMIN"];
 
-@ApiTags('Xenditss - [SUPERADMIN & ADMIN]')
-@UseGuards(RolesGuard)
+//@ApiTags('Xenditss - [SUPERADMIN & ADMIN]')
+//@UseGuards(RolesGuard)
 @Controller('xendits')
 export class XenditController {
     constructor(private readonly xenditService: XenditService) { }
@@ -30,7 +30,7 @@ export class XenditController {
 	// @Roles(...inRole)
 	// @UseGuards(AuthGuard('jwt'))
 
-	@ApiOperation({ summary: 'Test Xendit' })
+	//@ApiOperation({ summary: 'Test Xendit' })
 	// @ApiHeader({
 	// 	name: 'x-auth-token',
 	// 	description: 'token.'

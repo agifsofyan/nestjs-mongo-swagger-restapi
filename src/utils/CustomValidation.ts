@@ -3,3 +3,9 @@ export const TimeValidation = (str) => {
 
 	return timeRegex.test(str);
 }
+
+export const DecimalValidation = (str) => {
+	let decimalRegex = new RegExp("^[1-9]\d*(\.\d+)?$")
+
+	return decimalRegex.test(str)
+}

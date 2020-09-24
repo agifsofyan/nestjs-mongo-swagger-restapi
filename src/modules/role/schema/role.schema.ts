@@ -5,8 +5,8 @@ export const RoleSchema = new mongoose.Schema({
         type: String, 
         required: true,
         unique: true,
-	    enum: ['SALES', 'ADMIN', 'CONTENT', 'FINANCE', 'MENTOR', 'IT', 'SUPERADMIN'],
-	    default: "ADMIN"
+	   // enum: ['SALES', 'ADMIN', 'CONTENT', 'FINANCE', 'MENTOR', 'IT', 'SUPERADMIN'],
+	    //default: "ADMIN"
     },
     readWrite: {
         type: Boolean,

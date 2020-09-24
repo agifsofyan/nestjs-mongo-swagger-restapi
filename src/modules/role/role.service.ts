@@ -26,13 +26,16 @@ export class RoleService {
 
 		const { adminType } = createRoleDto
 
-		console.log('createRoleDto', createRoleDto);
+		//console.log('createRoleDto', createRoleDto);
+		const type = adminType.toUpperCase()
 
-		const AdminTypeExist = await this.roleModel.findOne({ adminType: adminType })
+		const AdminTypeExist = await this.roleModel.findOne({ adminType: type })
         	
 		if (AdminTypeExist) {
         	throw new BadRequestException('That Admin Type is already exist.')
 		}
+
+		createRole.adminType = type
 
 		return await createRole.save();
 	}
@@ -101,7 +104,7 @@ export class RoleService {
 	}
 
 	async update(id: string, updateRoleDto: UpdateRoleDTO): Promise<IRole> {
-		console.log('updateRoleDto', updateRoleDto);
+		//console.log('updateRoleDto', updateRoleDto);
 		let data;
 		
 		// Check ID
@@ -114,10 +117,15 @@ export class RoleService {
 		if(!data){
 			throw new NotFoundException(`Could nod find role with id ${id}`);
 		}
+		const { adminType } = updateRoleDto
 
-		const fbu = await this.roleModel.findByIdAndUpdate(id, updateRoleDto);
+		if(adminType){
+			updateRoleDto.adminType = adminType.toUpperCase()
+		}
 
-		console.log('fbu', fbu);
+		await this.roleModel.findByIdAndUpdate(id, updateRoleDto);
+
+		//console.log('fbu', fbu);
 		return await this.roleModel.findById(id).exec();
 	}
 
